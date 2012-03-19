@@ -164,8 +164,9 @@ public enum TarantinoError
     VCENTER_UNREGISTER_VM("VCENTER-2", "Could not unregiter the virtual machine from vCenter"),
 
     // DISK CONTROLLERS
-    ESXI_INCOMPATIBLE_DISK_CONTROLER("CNTRL-0",
-        "ESX can configure an SPARSE disk image in a SCSI controler"),
+    ESXI_INCOMPATIBLE_DISK_CONTROLER(
+        "CNTRL-0",
+        "ESX can not configure a SPARSE disk image using SCSI controler. Check the virtual machine template conversions or change the ''abiquo.diskController.primary'' property"),
 
     ESXI_RDM_DATASTORE_NOT_CONFIGURED("DRM-0", "Can't use the datastore for volume RDM, "
         + "and ''abiquo.esxi.datastoreRdm'' it is not configured."),
@@ -264,8 +265,8 @@ public enum TarantinoError
         // Outputs all errors in wiki table format
         for (TarantinoError error : errors)
         {
-            System.out.println(String.format("| %s | %s | %s |", error.code, error.message, error
-                .name()));
+            System.out.println(String.format("| %s | %s | %s |", error.code, error.message,
+                error.name()));
         }
     }
 }
