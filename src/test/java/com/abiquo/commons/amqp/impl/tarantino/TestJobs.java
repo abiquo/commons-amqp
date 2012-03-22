@@ -32,10 +32,12 @@ import com.abiquo.commons.amqp.impl.tarantino.domain.VirtualMachineDefinition;
 import com.abiquo.commons.amqp.impl.tarantino.domain.VirtualMachineDefinition.HardwareConfiguration;
 import com.abiquo.commons.amqp.impl.tarantino.domain.builder.ApplyVirtualMachineStateJobBuilder;
 import com.abiquo.commons.amqp.impl.tarantino.domain.builder.ReconfigureVirtualMachineJobBuilder;
+import com.abiquo.commons.amqp.impl.tarantino.domain.builder.RefreshVirtualMachineResourcesJobBuilder;
 import com.abiquo.commons.amqp.impl.tarantino.domain.builder.SnapshotVirtualMachineJobBuilder;
 import com.abiquo.commons.amqp.impl.tarantino.domain.builder.VirtualMachineDescriptionBuilder;
 import com.abiquo.commons.amqp.impl.tarantino.domain.operations.ApplyVirtualMachineStateOp;
 import com.abiquo.commons.amqp.impl.tarantino.domain.operations.ReconfigureVirtualMachineOp;
+import com.abiquo.commons.amqp.impl.tarantino.domain.operations.RefreshVirtualMachineResourcesOp;
 import com.abiquo.commons.amqp.impl.tarantino.domain.operations.SnapshotVirtualMachineOp;
 
 public class TestJobs
@@ -147,5 +149,14 @@ public class TestJobs
             .setVirtualMachineDefinition(vmbuilder) //
             .setNewVirtualMachineDefinition(newVmDef) //
             .buildReconfigureVirtualMachineDto();
+    }
+
+    public static RefreshVirtualMachineResourcesOp testRefreshVirtualMachineResources(
+        final VirtualMachineDescriptionBuilder vmbuilder)
+    {
+        return new RefreshVirtualMachineResourcesJobBuilder()
+            .connection(HypervisorType.TEST, "10.60.1.15", "root", "root") //
+            .setVirtualMachineDefinition(vmbuilder) //
+            .buildRefreshVirtualMachineResourcesDto();
     }
 }
