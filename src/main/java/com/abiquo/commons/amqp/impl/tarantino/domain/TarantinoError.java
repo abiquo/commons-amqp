@@ -158,6 +158,8 @@ public enum TarantinoError
     // External Disks
     ED_CAN_NOT_FIND_IDE_CONTROLLER("ED-0", "Can not find IDE controller in Virtual Machine"),
 
+    IDE_CONTROLLER_FULL("ED-1", "Can not attach more than 4 disks to IDE controller"),
+
     // vCENTER
 
     VCENTER_CONNECT("VCENTER-0", "Could not connect to vCenter"),
