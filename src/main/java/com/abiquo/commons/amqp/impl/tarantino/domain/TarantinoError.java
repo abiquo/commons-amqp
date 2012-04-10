@@ -98,6 +98,9 @@ public enum TarantinoError
     VIRTUAL_MACHINE_ALREADY_EXIST("VM-20",
         "A virtual machine with the same UUID already exists in the hypervisor"),
 
+    REFRESH_VIRTUAL_MACHINE_RESOURCES("VM-21",
+        "Could not refresh the resources of the virtual machine"),
+
     // NETWORK
     NETWORK_DECONFIGURE("NET-0",
         "Could not deconfigure the network resources of the virtual machine"),
