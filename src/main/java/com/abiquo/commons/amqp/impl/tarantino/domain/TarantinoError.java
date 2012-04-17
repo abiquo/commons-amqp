@@ -171,7 +171,7 @@ public enum TarantinoError
     // DISK CONTROLLERS
     ESXI_INCOMPATIBLE_DISK_CONTROLER(
         "CNTRL-0",
-        "ESX can not configure a SPARSE disk image using SCSI controler. Check the virtual machine template conversions or change the ''abiquo.diskController.primary'' property"),
+        "ESXi hosts cannot deploy a VMDK sparse using a SCSI disk controller (see ''abiquo.diskController.primary'' property)"),
 
     ESXI_RDM_DATASTORE_NOT_CONFIGURED("DRM-0", "Can't use the datastore for volume RDM, "
         + "and ''abiquo.esxi.datastoreRdm'' it is not configured."),
