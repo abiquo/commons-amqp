@@ -20,6 +20,10 @@
  */
 package com.abiquo.commons.amqp.impl.bpm.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 import org.codehaus.jackson.annotate.JsonTypeInfo;
 import org.codehaus.jackson.annotate.JsonTypeInfo.As;
 import org.codehaus.jackson.annotate.JsonTypeInfo.Id;
@@ -30,33 +34,63 @@ import com.abiquo.commons.amqp.util.JSONUtils;
 @JsonTypeInfo(use = Id.CLASS, include = As.PROPERTY, property = "@class")
 public class BPMRequest extends DatacenterRequest
 {
-    protected Sender sender = Sender.UNKNOWN;
+    public enum TYPE
+    {
+        PERSISTENT, CONVERSION;
+    }
 
-    protected Integer userId;
+    private String taskID;
+
+    private TYPE type;
+
+    private List<BPMJob> jobs;
+
+    public String getTaskID()
+    {
+        return taskID;
+    }
+
+    // needed for serialization
+    private void setTaskID(final String taskID)
+    {
+        this.taskID = taskID;
+    }
+
+    public TYPE getType()
+    {
+        return type;
+    }
+
+    public void setType(final TYPE type)
+    {
+        this.type = type;
+    }
+
+    public List<BPMJob> getJobs()
+    {
+        return jobs;
+    }
+
+    public void setJobs(final List<BPMJob> jobs)
+    {
+        this.jobs = jobs;
+    }
 
     public BPMRequest()
     {
-        this.sender = Sender.UNKNOWN;
+
     }
 
-    public Sender getSender()
+    public BPMRequest(final TYPE type)
     {
-        return sender;
+        this.setTaskID(UUID.randomUUID().toString());
+        this.jobs = new ArrayList<BPMJob>();
+        this.type = type;
     }
 
-    public void setSender(final Sender sender)
+    public void addJob(final BPMJob job)
     {
-        this.sender = sender;
-    }
-
-    public Integer getUserId()
-    {
-        return userId;
-    }
-
-    public void setUserId(final Integer userId)
-    {
-        this.userId = userId;
+        this.jobs.add(job);
     }
 
     public static BPMRequest fromByteArray(final byte[] bytes)

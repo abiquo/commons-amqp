@@ -25,12 +25,11 @@ import java.io.IOException;
 import com.abiquo.commons.amqp.impl.bpm.BPMRequestConsumer;
 import com.abiquo.commons.amqp.impl.bpm.BPMRequestProducer;
 import com.abiquo.commons.amqp.impl.bpm.ImageConverterRequestCallback;
-import com.abiquo.commons.amqp.impl.bpm.InitiatorRequestCallback;
 import com.abiquo.commons.amqp.impl.bpm.StatefulDiskRequestCallback;
+import com.abiquo.commons.amqp.impl.bpm.domain.BPMJob;
+import com.abiquo.commons.amqp.impl.bpm.domain.BPMJob.TYPE;
 import com.abiquo.commons.amqp.impl.bpm.domain.BPMRequest;
 import com.abiquo.commons.amqp.impl.bpm.domain.ImageConverterRequest;
-import com.abiquo.commons.amqp.impl.bpm.domain.InitiatorRequest;
-import com.abiquo.commons.amqp.impl.bpm.domain.Sender;
 import com.abiquo.commons.amqp.impl.bpm.domain.StatefulDiskRequest;
 
 public class BPMManualTest
@@ -63,15 +62,6 @@ public class BPMManualTest
             }
         });
 
-        bpmZero.addCallback(new InitiatorRequestCallback()
-        {
-            @Override
-            public void getInitiatorIQN(final InitiatorRequest request)
-            {
-                System.out.println(request.getClass());
-            }
-        });
-
         bpmZero.start();
 
         BPMRequestProducer p = new BPMRequestProducer("0");
@@ -79,25 +69,28 @@ public class BPMManualTest
 
         for (int i = 0; i < 10; i++)
         {
-            BPMRequest request =
-                new ImageConverterRequest(1, "klj", "lk", "asd", "asd", 2, 0, Sender.AM_DOWNLOAD);
-            request.setSender(Sender.AM_DOWNLOAD);
+            BPMRequest request = new BPMRequest(BPMRequest.TYPE.CONVERSION);
+            request.addJob(new ImageConverterRequest(1, "klj", "lk", "asd", "asd", 2, 0));
 
             p.publish(request);
         }
 
         for (int i = 0; i < 10; i++)
         {
-            BPMRequest request = new StatefulDiskRequest();
-            request.setSender(Sender.PERSISTENT);
+            BPMRequest request = new BPMRequest(BPMRequest.TYPE.PERSISTENT);
+            BPMJob job = new StatefulDiskRequest();
+            job.setType(TYPE.DUMP_TO_VOLUME);
+            request.addJob(job);
 
             p.publish(request);
         }
 
         for (int i = 0; i < 10; i++)
         {
-            BPMRequest request = new InitiatorRequest();
-            request.setSender(Sender.INITIATOR);
+            BPMRequest request = new BPMRequest(BPMRequest.TYPE.PERSISTENT);
+            BPMJob job = new StatefulDiskRequest();
+            job.setType(TYPE.DUMP_TO_DISK);
+            request.addJob(job);
 
             p.publish(request);
         }

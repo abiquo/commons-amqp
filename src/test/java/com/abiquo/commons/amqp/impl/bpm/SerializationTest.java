@@ -23,10 +23,11 @@ package com.abiquo.commons.amqp.impl.bpm;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import com.abiquo.commons.amqp.impl.bpm.domain.BPMJob;
+import com.abiquo.commons.amqp.impl.bpm.domain.BPMJob.TYPE;
 import com.abiquo.commons.amqp.impl.bpm.domain.BPMRequest;
 import com.abiquo.commons.amqp.impl.bpm.domain.BPMResponse;
 import com.abiquo.commons.amqp.impl.bpm.domain.ImageConverterRequest;
-import com.abiquo.commons.amqp.impl.bpm.domain.Sender;
 import com.abiquo.commons.amqp.impl.bpm.domain.StatefulDiskRequest;
 import com.abiquo.commons.amqp.impl.datacenter.domain.DatacenterNotification;
 
@@ -36,21 +37,24 @@ public class SerializationTest
     public void test_BPMRequestInheritance()
     {
         ImageConverterRequest imageRequest = new ImageConverterRequest();
-        String serialization = new String(imageRequest.toByteArray());
+        StatefulDiskRequest statefulRequest =
+            new StatefulDiskRequest(1, "", "", 1, 22L, 22, TYPE.DUMP_TO_DISK);
+        BPMRequest req = new BPMRequest(BPMRequest.TYPE.PERSISTENT);
+        req.addJob(imageRequest);
+        req.addJob(statefulRequest);
+        String serialization = new String(req.toByteArray());
 
         BPMRequest deserialization = BPMRequest.fromByteArray(serialization.getBytes());
         Assert.assertNotNull(deserialization);
-        Assert.assertTrue(deserialization instanceof ImageConverterRequest);
-        Assert.assertFalse(deserialization instanceof StatefulDiskRequest);
+        Assert.assertTrue(deserialization instanceof BPMRequest);
 
-        StatefulDiskRequest statefulRequest =
-            new StatefulDiskRequest(1, "", "", 1, 22L, 22, Sender.PERSISTENT_BUNDLE);
-        serialization = new String(statefulRequest.toByteArray());
+        BPMJob job1 = req.getJobs().get(0);
+        Assert.assertTrue(job1 instanceof ImageConverterRequest);
+        Assert.assertFalse(job1 instanceof StatefulDiskRequest);
 
-        deserialization = BPMRequest.fromByteArray(serialization.getBytes());
-        Assert.assertNotNull(deserialization);
-        Assert.assertTrue(deserialization instanceof StatefulDiskRequest);
-        Assert.assertFalse(deserialization instanceof ImageConverterRequest);
+        BPMJob job2 = req.getJobs().get(1);
+        Assert.assertTrue(job2 instanceof StatefulDiskRequest);
+        Assert.assertFalse(job2 instanceof ImageConverterRequest);
     }
 
     @Test

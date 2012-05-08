@@ -20,9 +20,7 @@
  */
 package com.abiquo.commons.amqp.impl.bpm.domain;
 
-import com.abiquo.commons.amqp.util.JSONUtils;
-
-public class ImageConverterRequest extends BPMRequest
+public class ImageConverterRequest extends BPMJob
 {
     private String imagePathSource;
 
@@ -49,34 +47,32 @@ public class ImageConverterRequest extends BPMRequest
 
     public ImageConverterRequest(final Integer userId, final String sourcePath,
         final String destPath, final String source, final String dest, final Integer enterpriseId,
-        final int conversionId, final Sender sender)
+        final int conversionId)
     {
-        this.userId = userId;
         this.imagePathSource = sourcePath;
         this.imagePathDest = destPath;
         this.sourceFormat = source;
         this.destFormat = dest;
         this.conversionId = conversionId;
         this.enterpriseId = enterpriseId;
-        this.sender = sender;
+        this.setType(TYPE.CONVERSION);
     }
 
     public ImageConverterRequest(final Integer userId, final String sourcePath,
         final String destPath, final String source, final String dest, final Integer enterpriseId,
         final int conversionId, final Integer virtualMachineId, final String templateName,
-        final String userCreation, final Sender sender)
+        final String userCreation)
     {
-        this.userId = userId;
         this.imagePathSource = sourcePath;
         this.imagePathDest = destPath;
         this.sourceFormat = source;
         this.destFormat = dest;
         this.conversionId = conversionId;
         this.enterpriseId = enterpriseId;
-        this.sender = sender;
         this.virtualMachineId = virtualMachineId;
         this.creationUser = userCreation;
         this.templateName = templateName;
+        this.setType(TYPE.CONVERSION);
     }
 
     public String getImagePathSource()
@@ -169,8 +165,4 @@ public class ImageConverterRequest extends BPMRequest
         this.templateName = templateName;
     }
 
-    public static ImageConverterRequest fromByteArray(final byte[] bytes)
-    {
-        return JSONUtils.deserialize(bytes, ImageConverterRequest.class);
-    }
 }

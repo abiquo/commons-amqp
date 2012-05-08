@@ -20,9 +20,8 @@
  */
 package com.abiquo.commons.amqp.impl.bpm.domain;
 
-import com.abiquo.commons.amqp.util.JSONUtils;
 
-public class StatefulDiskRequest extends BPMRequest
+public class StatefulDiskRequest extends BPMJob
 {
     private String storagePoolTarget;
 
@@ -51,15 +50,14 @@ public class StatefulDiskRequest extends BPMRequest
 
     public StatefulDiskRequest(final Integer userId, final String storagePoolTarget,
         final String diskPath, final int nodeId, final Long volumeSize, final int enterpriseId,
-        final Sender sender)
+        final TYPE type)
     {
-        this.userId = userId;
         this.storagePoolTarget = storagePoolTarget;
         this.diskPath = diskPath;
         this.nodeId = nodeId;
         this.volumeSize = volumeSize;
         this.enterpriseId = enterpriseId;
-        this.sender = sender;
+        this.setType(type);
     }
 
     public String getStoragePoolTarget()
@@ -152,8 +150,4 @@ public class StatefulDiskRequest extends BPMRequest
         this.mustPowerOnWhenFinish = mustPowerOnWhenFinish;
     }
 
-    public static StatefulDiskRequest fromByteArray(final byte[] bytes)
-    {
-        return JSONUtils.deserialize(bytes, StatefulDiskRequest.class);
-    }
 }

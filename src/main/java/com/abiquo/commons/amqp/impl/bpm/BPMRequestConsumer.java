@@ -23,9 +23,9 @@ package com.abiquo.commons.amqp.impl.bpm;
 import java.util.Set;
 
 import com.abiquo.commons.amqp.consumer.RequestBasedCallback;
+import com.abiquo.commons.amqp.impl.bpm.domain.BPMJob;
 import com.abiquo.commons.amqp.impl.bpm.domain.BPMRequest;
 import com.abiquo.commons.amqp.impl.bpm.domain.ImageConverterRequest;
-import com.abiquo.commons.amqp.impl.bpm.domain.InitiatorRequest;
 import com.abiquo.commons.amqp.impl.bpm.domain.StatefulDiskRequest;
 import com.abiquo.commons.amqp.impl.datacenter.DatacenterRequestConfiguration.RequestType;
 import com.abiquo.commons.amqp.impl.datacenter.DatacenterRequestConsumer;
@@ -49,17 +49,26 @@ public class BPMRequestConsumer extends DatacenterRequestConsumer
     protected void consume(final DatacenterRequest request,
         final Set<RequestBasedCallback> callbacks)
     {
-        if (request instanceof ImageConverterRequest)
+        if (request instanceof BPMRequest)
         {
-            consume((ImageConverterRequest) request, callbacks);
-        }
-        else if (request instanceof StatefulDiskRequest)
-        {
-            consume((StatefulDiskRequest) request, callbacks);
-        }
-        else if (request instanceof InitiatorRequest)
-        {
-            consume((InitiatorRequest) request, callbacks);
+            for (BPMJob job : ((BPMRequest) request).getJobs())
+            {
+                if (job instanceof ImageConverterRequest)
+                {
+                    Set<RequestBasedCallback> jobCallbacks =
+                        callbacksMap.get(ImageConverterRequest.class);
+                    consume((ImageConverterRequest) job, jobCallbacks);
+                    // TODO ACK JOB
+                }
+                else if (job instanceof StatefulDiskRequest)
+                {
+                    Set<RequestBasedCallback> jobCallbacks =
+                        callbacksMap.get(StatefulDiskRequest.class);
+                    consume((StatefulDiskRequest) job, jobCallbacks);
+                    // TODO ACK JOB
+                }
+            }
+            // TODO ACK TASK
         }
     }
 
@@ -80,25 +89,17 @@ public class BPMRequestConsumer extends DatacenterRequestConsumer
         {
             StatefulDiskRequestCallback realCallback = (StatefulDiskRequestCallback) callback;
 
-            switch (request.getSender())
+            switch (request.getType())
             {
-                case PERSISTENT:
+                case DUMP_TO_VOLUME:
                     realCallback.dumpDiskToVolume(request);
                     break;
 
-                case PERSISTENT_BUNDLE:
+                case DUMP_TO_DISK:
                     realCallback.dumpVolumeToDisk(request);
                     break;
             }
         }
     }
 
-    protected void consume(final InitiatorRequest request, final Set<RequestBasedCallback> callbacks)
-    {
-        for (RequestBasedCallback callback : callbacks)
-        {
-            InitiatorRequestCallback realCallback = (InitiatorRequestCallback) callback;
-            realCallback.getInitiatorIQN(request);
-        }
-    }
 }
