@@ -50,7 +50,7 @@ public class StatefulDiskRequest extends BPMJob
 
     public StatefulDiskRequest(final Integer userId, final String storagePoolTarget,
         final String diskPath, final int nodeId, final Long volumeSize, final int enterpriseId,
-        final TYPE type)
+        final BPMJobType type)
     {
         this.storagePoolTarget = storagePoolTarget;
         this.diskPath = diskPath;

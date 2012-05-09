@@ -24,7 +24,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import com.abiquo.commons.amqp.impl.bpm.domain.BPMJob;
-import com.abiquo.commons.amqp.impl.bpm.domain.BPMJob.TYPE;
+import com.abiquo.commons.amqp.impl.bpm.domain.BPMJob.BPMJobType;
 import com.abiquo.commons.amqp.impl.bpm.domain.BPMRequest;
 import com.abiquo.commons.amqp.impl.bpm.domain.BPMResponse;
 import com.abiquo.commons.amqp.impl.bpm.domain.ImageConverterRequest;
@@ -38,8 +38,8 @@ public class SerializationTest
     {
         ImageConverterRequest imageRequest = new ImageConverterRequest();
         StatefulDiskRequest statefulRequest =
-            new StatefulDiskRequest(1, "", "", 1, 22L, 22, TYPE.DUMP_TO_DISK);
-        BPMRequest req = new BPMRequest(BPMRequest.TYPE.PERSISTENT);
+            new StatefulDiskRequest(1, "", "", 1, 22L, 22, BPMJobType.DUMP_VOLUME_TO_DISK);
+        BPMRequest req = new BPMRequest(BPMRequest.BPMRequestType.PERSISTENT);
         req.addJob(imageRequest);
         req.addJob(statefulRequest);
         String serialization = new String(req.toByteArray());

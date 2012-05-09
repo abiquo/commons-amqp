@@ -9,42 +9,45 @@ import org.codehaus.jackson.annotate.JsonTypeInfo.Id;
 @JsonTypeInfo(use = Id.CLASS, include = As.PROPERTY, property = "@class")
 public class BPMJob
 {
-    public enum TYPE
+    public enum BPMJobType
     {
-        CONVERSION, // any conversion type [V2V]
-        DUMP_TO_VOLUME, // perisistent [MECHA]
-        DUMP_TO_DISK, // instance of persistent (1 of 2) [MECHA]
-        FROM_RAW_TO_ORIGIN, // instance of persistent (2 of 2) [V2V]
-        INSTANCE; // from conversion instance to origin format [V2V]
+        /** A disk conversion job (v2v script) */
+        DISK_CONVERSION,
+
+        /** A fill volume job, for persistent creation (mechadora script) */
+        DUMP_DISK_TO_VOLUME,
+
+        /** Disk dump from volume, for persistent instances (mechadora script) */
+        DUMP_VOLUME_TO_DISK,
     }
 
-    private String jobID;
+    private String jobId;
 
-    private TYPE type;
+    private BPMJobType type;
 
-    public String getJobID()
+    public BPMJob()
     {
-        return jobID;
+        this.setJobId(UUID.randomUUID().toString());
+    }
+
+    public String getJobId()
+    {
+        return jobId;
     }
 
     // needed for serialization
-    private void setJobID(final String jobID)
+    private void setJobId(final String jobId)
     {
-        this.jobID = jobID;
+        this.jobId = jobId;
     }
 
-    public TYPE getType()
+    public BPMJobType getType()
     {
         return type;
     }
 
-    public void setType(final TYPE type)
+    public void setType(final BPMJobType type)
     {
         this.type = type;
-    }
-
-    public BPMJob()
-    {
-        this.setJobID(UUID.randomUUID().toString());
     }
 }

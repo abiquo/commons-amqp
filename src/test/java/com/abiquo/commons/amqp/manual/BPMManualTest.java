@@ -27,7 +27,7 @@ import com.abiquo.commons.amqp.impl.bpm.BPMRequestProducer;
 import com.abiquo.commons.amqp.impl.bpm.ImageConverterRequestCallback;
 import com.abiquo.commons.amqp.impl.bpm.StatefulDiskRequestCallback;
 import com.abiquo.commons.amqp.impl.bpm.domain.BPMJob;
-import com.abiquo.commons.amqp.impl.bpm.domain.BPMJob.TYPE;
+import com.abiquo.commons.amqp.impl.bpm.domain.BPMJob.BPMJobType;
 import com.abiquo.commons.amqp.impl.bpm.domain.BPMRequest;
 import com.abiquo.commons.amqp.impl.bpm.domain.ImageConverterRequest;
 import com.abiquo.commons.amqp.impl.bpm.domain.StatefulDiskRequest;
@@ -69,7 +69,7 @@ public class BPMManualTest
 
         for (int i = 0; i < 10; i++)
         {
-            BPMRequest request = new BPMRequest(BPMRequest.TYPE.CONVERSION);
+            BPMRequest request = new BPMRequest(BPMRequest.BPMRequestType.CONVERSION);
             request.addJob(new ImageConverterRequest(1, "klj", "lk", "asd", "asd", 2, 0));
 
             p.publish(request);
@@ -77,9 +77,9 @@ public class BPMManualTest
 
         for (int i = 0; i < 10; i++)
         {
-            BPMRequest request = new BPMRequest(BPMRequest.TYPE.PERSISTENT);
+            BPMRequest request = new BPMRequest(BPMRequest.BPMRequestType.PERSISTENT);
             BPMJob job = new StatefulDiskRequest();
-            job.setType(TYPE.DUMP_TO_VOLUME);
+            job.setType(BPMJobType.DUMP_DISK_TO_VOLUME);
             request.addJob(job);
 
             p.publish(request);
@@ -87,9 +87,9 @@ public class BPMManualTest
 
         for (int i = 0; i < 10; i++)
         {
-            BPMRequest request = new BPMRequest(BPMRequest.TYPE.PERSISTENT);
+            BPMRequest request = new BPMRequest(BPMRequest.BPMRequestType.PERSISTENT);
             BPMJob job = new StatefulDiskRequest();
-            job.setType(TYPE.DUMP_TO_DISK);
+            job.setType(BPMJobType.DUMP_VOLUME_TO_DISK);
             request.addJob(job);
 
             p.publish(request);

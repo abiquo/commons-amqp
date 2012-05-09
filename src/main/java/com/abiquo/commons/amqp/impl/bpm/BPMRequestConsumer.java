@@ -91,11 +91,11 @@ public class BPMRequestConsumer extends DatacenterRequestConsumer
 
             switch (request.getType())
             {
-                case DUMP_TO_VOLUME:
+                case DUMP_DISK_TO_VOLUME:
                     realCallback.dumpDiskToVolume(request);
                     break;
 
-                case DUMP_TO_DISK:
+                case DUMP_VOLUME_TO_DISK:
                     realCallback.dumpVolumeToDisk(request);
                     break;
             }

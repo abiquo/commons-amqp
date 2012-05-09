@@ -34,34 +34,50 @@ import com.abiquo.commons.amqp.util.JSONUtils;
 @JsonTypeInfo(use = Id.CLASS, include = As.PROPERTY, property = "@class")
 public class BPMRequest extends DatacenterRequest
 {
-    public enum TYPE
+    public enum BPMRequestType
     {
         PERSISTENT, CONVERSION;
     }
 
-    private String taskID;
+    private String taskId;
 
-    private TYPE type;
+    private BPMRequestType type;
 
     private List<BPMJob> jobs;
 
-    public String getTaskID()
+    public BPMRequest()
     {
-        return taskID;
+    }
+
+    public BPMRequest(final BPMRequestType type)
+    {
+        this.setTaskId(UUID.randomUUID().toString());
+        this.jobs = new ArrayList<BPMJob>();
+        this.type = type;
+    }
+
+    public void addJob(final BPMJob job)
+    {
+        this.jobs.add(job);
+    }
+
+    public String getTaskId()
+    {
+        return taskId;
     }
 
     // needed for serialization
-    private void setTaskID(final String taskID)
+    private void setTaskId(final String taskId)
     {
-        this.taskID = taskID;
+        this.taskId = taskId;
     }
 
-    public TYPE getType()
+    public BPMRequestType getType()
     {
         return type;
     }
 
-    public void setType(final TYPE type)
+    public void setType(final BPMRequestType type)
     {
         this.type = type;
     }
@@ -74,23 +90,6 @@ public class BPMRequest extends DatacenterRequest
     public void setJobs(final List<BPMJob> jobs)
     {
         this.jobs = jobs;
-    }
-
-    public BPMRequest()
-    {
-
-    }
-
-    public BPMRequest(final TYPE type)
-    {
-        this.setTaskID(UUID.randomUUID().toString());
-        this.jobs = new ArrayList<BPMJob>();
-        this.type = type;
-    }
-
-    public void addJob(final BPMJob job)
-    {
-        this.jobs.add(job);
     }
 
     public static BPMRequest fromByteArray(final byte[] bytes)

@@ -55,7 +55,7 @@ public class ImageConverterRequest extends BPMJob
         this.destFormat = dest;
         this.conversionId = conversionId;
         this.enterpriseId = enterpriseId;
-        this.setType(TYPE.CONVERSION);
+        this.setType(BPMJobType.DISK_CONVERSION);
     }
 
     public ImageConverterRequest(final Integer userId, final String sourcePath,
@@ -72,7 +72,7 @@ public class ImageConverterRequest extends BPMJob
         this.virtualMachineId = virtualMachineId;
         this.creationUser = userCreation;
         this.templateName = templateName;
-        this.setType(TYPE.CONVERSION);
+        this.setType(BPMJobType.DISK_CONVERSION);
     }
 
     public String getImagePathSource()
