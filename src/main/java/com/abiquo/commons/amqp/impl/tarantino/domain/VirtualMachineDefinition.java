@@ -167,6 +167,8 @@ public class VirtualMachineDefinition
 
         protected String rdPassword;
 
+        protected String keyMap;
+
         protected List<VirtualNIC> virtualNICs;
 
         public void setRdPort(final int rdport)
@@ -187,6 +189,16 @@ public class VirtualMachineDefinition
         public void setRdPassword(final String rdPassword)
         {
             this.rdPassword = rdPassword;
+        }
+
+        public String getKeyMap()
+        {
+            return keyMap;
+        }
+
+        public void setKeyMap(final String keyMap)
+        {
+            this.keyMap = keyMap;
         }
 
         public String getDhcpAddress()
@@ -216,6 +228,15 @@ public class VirtualMachineDefinition
         public boolean isRdPasswordSet()
         {
             return rdPassword != null && !rdPassword.isEmpty();
+        }
+
+        /**
+         * Null or empty keymap
+         */
+        @JsonIgnore
+        public boolean isKeyMapSet()
+        {
+            return keyMap != null && !keyMap.isEmpty();
         }
 
         public List<VirtualNIC> getVirtualNICList()
@@ -282,7 +303,6 @@ public class VirtualMachineDefinition
         {
             this.diskStateful = value;
         }
-
 
         @JsonIgnore
         public boolean isStateful()
@@ -367,7 +387,7 @@ public class VirtualMachineDefinition
         return isHA;
     }
 
-    public void setHA(boolean isHA)
+    public void setHA(final boolean isHA)
     {
         this.isHA = isHA;
     }
