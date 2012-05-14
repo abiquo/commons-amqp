@@ -1,100 +1,56 @@
 <?xml version="1.0"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-
-    <!-- Maven coordinates -->
+    <parent>
+        <groupId>com.abiquo</groupId>
+        <artifactId>platform</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.abiquo</groupId>
     <artifactId>commons-amqp</artifactId>
-    <packaging>jar</packaging>
     <version>1.2-SNAPSHOT</version>
 
-    <!-- Properties -->
-    <properties>
-        <jdk.version>1.6</jdk.version>
-    </properties>
-
-    <!-- Set dependencies -->
     <dependencies>
         <dependency>
             <groupId>com.rabbitmq</groupId>
             <artifactId>amqp-client</artifactId>
-            <version>2.5.0</version>
         </dependency>
         <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
-            <version>2.6</version>
         </dependency>
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-jaxrs</artifactId>
-            <version>1.6.1</version>
         </dependency>
-
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-core</artifactId>
-            <version>1.0.1</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.0.1</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.6.4</version>
         </dependency>
 
         <!-- Test dependencies -->
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
-            <version>5.12.1</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.abiquo</groupId>
+            <artifactId>api-model</artifactId>
+            <classifier>tests</classifier>
         </dependency>
     </dependencies>
 
-    <!-- Project properties -->
-    <name>Abiquo Commons AMQP</name>
-    <url>http://www.abiquo.com</url>
-    <inceptionYear>2010</inceptionYear>
-    <licenses>
-        <license>
-            <name>LGPL</name>
-            <url>http://www.gnu.org/licenses/lgpl.html</url>
-        </license>
-    </licenses>
-
-    <distributionManagement>
-        <repository>
-            <id>abiquo-repo</id>
-            <url>http://repo.community.abiquo.com/libs-releases-local</url>
-        </repository>
-        <snapshotRepository>
-            <id>abiquo-repo</id>
-            <url>http://repo.community.abiquo.com/libs-snapshots-local</url>
-        </snapshotRepository>
-    </distributionManagement>
-
     <build>
-        <finalName>commons-amqp</finalName>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
-                <configuration>
-                    <source>${jdk.version}</source>
-                    <target>${jdk.version}</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.10</version>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -109,17 +65,6 @@
                     </execution>
                 </executions>
             </plugin>
-
         </plugins>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-            </resource>
-        </resources>
-        <testResources>
-            <testResource>
-                <directory>src/test/resources</directory>
-            </testResource>
-        </testResources>
     </build>
 </project>
