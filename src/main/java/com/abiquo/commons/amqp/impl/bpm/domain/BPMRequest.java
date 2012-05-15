@@ -22,12 +22,12 @@ package com.abiquo.commons.amqp.impl.bpm.domain;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import org.codehaus.jackson.annotate.JsonTypeInfo;
 import org.codehaus.jackson.annotate.JsonTypeInfo.As;
 import org.codehaus.jackson.annotate.JsonTypeInfo.Id;
 
+import com.abiquo.commons.amqp.impl.bpm.domain.job.AbstractBPMJob;
 import com.abiquo.commons.amqp.impl.datacenter.domain.DatacenterRequest;
 import com.abiquo.commons.amqp.util.JSONUtils;
 
@@ -36,27 +36,28 @@ public class BPMRequest extends DatacenterRequest
 {
     public enum BPMRequestType
     {
-        PERSISTENT, CONVERSION;
+        /** Disk conversion task */
+        CONVERT_DISK,
+
+        /** Persistent disk creation task */
+        MAKE_PERSISTENT,
+
+        /** Instance of a persistent disk task */
+        INSTANCE_PERSISTENT;
     }
 
     private String taskId;
 
     private BPMRequestType type;
 
-    private List<BPMJob> jobs;
+    private List<AbstractBPMJob> jobs;
 
     public BPMRequest()
     {
+        this.jobs = new ArrayList<AbstractBPMJob>();
     }
 
-    public BPMRequest(final BPMRequestType type)
-    {
-        this.setTaskId(UUID.randomUUID().toString());
-        this.jobs = new ArrayList<BPMJob>();
-        this.type = type;
-    }
-
-    public void addJob(final BPMJob job)
+    public void addJob(final AbstractBPMJob job)
     {
         this.jobs.add(job);
     }
@@ -67,7 +68,7 @@ public class BPMRequest extends DatacenterRequest
     }
 
     // needed for serialization
-    private void setTaskId(final String taskId)
+    public void setTaskId(final String taskId)
     {
         this.taskId = taskId;
     }
@@ -82,12 +83,12 @@ public class BPMRequest extends DatacenterRequest
         this.type = type;
     }
 
-    public List<BPMJob> getJobs()
+    public List<AbstractBPMJob> getJobs()
     {
         return jobs;
     }
 
-    public void setJobs(final List<BPMJob> jobs)
+    public void setJobs(final List<AbstractBPMJob> jobs)
     {
         this.jobs = jobs;
     }

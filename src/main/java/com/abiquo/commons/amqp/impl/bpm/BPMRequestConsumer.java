@@ -20,19 +20,17 @@
  */
 package com.abiquo.commons.amqp.impl.bpm;
 
-import java.util.Set;
+import static com.abiquo.commons.amqp.util.ConsumerUtils.ackMessage;
+import static com.abiquo.commons.amqp.util.ConsumerUtils.rejectMessage;
 
-import com.abiquo.commons.amqp.consumer.RequestBasedCallback;
-import com.abiquo.commons.amqp.impl.bpm.domain.BPMJob;
+import java.io.IOException;
+
 import com.abiquo.commons.amqp.impl.bpm.domain.BPMRequest;
-import com.abiquo.commons.amqp.impl.bpm.domain.ImageConverterRequest;
-import com.abiquo.commons.amqp.impl.bpm.domain.StatefulDiskRequest;
 import com.abiquo.commons.amqp.impl.datacenter.DatacenterRequestConfiguration.RequestType;
 import com.abiquo.commons.amqp.impl.datacenter.DatacenterRequestConsumer;
-import com.abiquo.commons.amqp.impl.datacenter.domain.DatacenterRequest;
 import com.rabbitmq.client.Envelope;
 
-public class BPMRequestConsumer extends DatacenterRequestConsumer
+public class BPMRequestConsumer extends DatacenterRequestConsumer<BPMRequestCallback>
 {
     public BPMRequestConsumer(final String datacenterId)
     {
@@ -40,66 +38,22 @@ public class BPMRequestConsumer extends DatacenterRequestConsumer
     }
 
     @Override
-    protected DatacenterRequest deserializeRequest(final Envelope envelope, final byte[] body)
+    public void consume(Envelope envelope, byte[] body) throws IOException
     {
-        return BPMRequest.fromByteArray(body);
-    }
+        BPMRequest request = BPMRequest.fromByteArray(body);
 
-    @Override
-    protected void consume(final DatacenterRequest request,
-        final Set<RequestBasedCallback> callbacks)
-    {
-        if (request instanceof BPMRequest)
+        if (request != null)
         {
-            for (BPMJob job : ((BPMRequest) request).getJobs())
+            for (BPMRequestCallback callback : callbacks)
             {
-                if (job instanceof ImageConverterRequest)
-                {
-                    Set<RequestBasedCallback> jobCallbacks =
-                        callbacksMap.get(ImageConverterRequest.class);
-                    consume((ImageConverterRequest) job, jobCallbacks);
-                    // TODO ACK JOB
-                }
-                else if (job instanceof StatefulDiskRequest)
-                {
-                    Set<RequestBasedCallback> jobCallbacks =
-                        callbacksMap.get(StatefulDiskRequest.class);
-                    consume((StatefulDiskRequest) job, jobCallbacks);
-                    // TODO ACK JOB
-                }
+                callback.process(request);
             }
-            // TODO ACK TASK
-        }
-    }
 
-    protected void consume(final ImageConverterRequest request,
-        final Set<RequestBasedCallback> callbacks)
-    {
-        for (RequestBasedCallback callback : callbacks)
+            ackMessage(getChannel(), envelope.getDeliveryTag());
+        }
+        else
         {
-            ImageConverterRequestCallback realCallback = (ImageConverterRequestCallback) callback;
-            realCallback.convertDisk(request);
+            rejectMessage(getChannel(), envelope.getDeliveryTag());
         }
     }
-
-    protected void consume(final StatefulDiskRequest request,
-        final Set<RequestBasedCallback> callbacks)
-    {
-        for (RequestBasedCallback callback : callbacks)
-        {
-            StatefulDiskRequestCallback realCallback = (StatefulDiskRequestCallback) callback;
-
-            switch (request.getType())
-            {
-                case DUMP_DISK_TO_VOLUME:
-                    realCallback.dumpDiskToVolume(request);
-                    break;
-
-                case DUMP_VOLUME_TO_DISK:
-                    realCallback.dumpVolumeToDisk(request);
-                    break;
-            }
-        }
-    }
-
 }

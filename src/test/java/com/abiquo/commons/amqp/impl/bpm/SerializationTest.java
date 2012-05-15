@@ -23,12 +23,11 @@ package com.abiquo.commons.amqp.impl.bpm;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import com.abiquo.commons.amqp.impl.bpm.domain.BPMJob;
-import com.abiquo.commons.amqp.impl.bpm.domain.BPMJob.BPMJobType;
 import com.abiquo.commons.amqp.impl.bpm.domain.BPMRequest;
 import com.abiquo.commons.amqp.impl.bpm.domain.BPMResponse;
-import com.abiquo.commons.amqp.impl.bpm.domain.ImageConverterRequest;
-import com.abiquo.commons.amqp.impl.bpm.domain.StatefulDiskRequest;
+import com.abiquo.commons.amqp.impl.bpm.domain.job.AbstractBPMJob;
+import com.abiquo.commons.amqp.impl.bpm.domain.job.DiskConversionJob;
+import com.abiquo.commons.amqp.impl.bpm.domain.job.DiskToVolumeJob;
 import com.abiquo.commons.amqp.impl.datacenter.domain.DatacenterNotification;
 
 public class SerializationTest
@@ -36,11 +35,11 @@ public class SerializationTest
     @Test
     public void test_BPMRequestInheritance()
     {
-        ImageConverterRequest imageRequest = new ImageConverterRequest();
-        StatefulDiskRequest statefulRequest =
-            new StatefulDiskRequest(1, "", "", 1, 22L, 22, BPMJobType.DUMP_VOLUME_TO_DISK);
-        BPMRequest req = new BPMRequest(BPMRequest.BPMRequestType.PERSISTENT);
-        req.addJob(imageRequest);
+        DiskToVolumeJob statefulRequest = new DiskToVolumeJob("", "", 22L);
+        DiskConversionJob conversion = new DiskConversionJob("", "", "", "");
+
+        BPMRequest req = new BPMRequest();
+        req.addJob(conversion);
         req.addJob(statefulRequest);
         String serialization = new String(req.toByteArray());
 
@@ -48,13 +47,13 @@ public class SerializationTest
         Assert.assertNotNull(deserialization);
         Assert.assertTrue(deserialization instanceof BPMRequest);
 
-        BPMJob job1 = req.getJobs().get(0);
-        Assert.assertTrue(job1 instanceof ImageConverterRequest);
-        Assert.assertFalse(job1 instanceof StatefulDiskRequest);
+        AbstractBPMJob job1 = req.getJobs().get(0);
+        Assert.assertTrue(job1 instanceof DiskConversionJob);
+        Assert.assertFalse(job1 instanceof DiskToVolumeJob);
 
-        BPMJob job2 = req.getJobs().get(1);
-        Assert.assertTrue(job2 instanceof StatefulDiskRequest);
-        Assert.assertFalse(job2 instanceof ImageConverterRequest);
+        AbstractBPMJob job2 = req.getJobs().get(1);
+        Assert.assertTrue(job2 instanceof DiskToVolumeJob);
+        Assert.assertFalse(job2 instanceof DiskConversionJob);
     }
 
     @Test
