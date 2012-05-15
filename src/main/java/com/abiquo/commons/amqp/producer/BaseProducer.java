@@ -28,11 +28,18 @@ import com.abiquo.commons.amqp.config.DefaultConfiguration;
 import com.abiquo.commons.amqp.domain.Queuable;
 import com.rabbitmq.client.ShutdownSignalException;
 
-public abstract class BasicProducer<T extends Queuable> extends ChannelHandler
+/**
+ * The base producer, it handles the creation and configuration of AMQP entities and the connection
+ * and disconnection to RabbitMQ.
+ * 
+ * @param <T> the type of the objects to publish
+ * @author Enric Ruiz
+ */
+public abstract class BaseProducer<T extends Queuable> extends ChannelHandler
 {
     protected DefaultConfiguration configuration;
 
-    public BasicProducer(DefaultConfiguration configuration)
+    public BaseProducer(DefaultConfiguration configuration)
     {
         this.configuration = configuration;
     }

@@ -28,9 +28,9 @@ import static com.abiquo.commons.amqp.util.ProducerUtils.publishPersistentText;
 import java.io.IOException;
 
 import com.abiquo.commons.amqp.impl.tracer.domain.Trace;
-import com.abiquo.commons.amqp.producer.BasicProducer;
+import com.abiquo.commons.amqp.producer.BaseProducer;
 
-public class TracerProducer extends BasicProducer<Trace>
+public class TracerProducer extends BaseProducer<Trace>
 {
     public TracerProducer()
     {

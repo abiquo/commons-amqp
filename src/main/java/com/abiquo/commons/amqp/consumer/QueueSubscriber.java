@@ -32,7 +32,7 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
 
-public class QueueSubscriber<T extends BasicConsumer< ? >> extends DefaultConsumer
+public class QueueSubscriber<T extends BaseConsumer< ? >> extends DefaultConsumer
 {
     private final static Logger LOGGER = LoggerFactory.getLogger(QueueSubscriber.class);
 

@@ -29,9 +29,9 @@ import java.io.IOException;
 
 import com.abiquo.commons.amqp.impl.datacenter.DatacenterRequestConfiguration.RequestType;
 import com.abiquo.commons.amqp.impl.datacenter.domain.DatacenterRequest;
-import com.abiquo.commons.amqp.producer.BasicProducer;
+import com.abiquo.commons.amqp.producer.BaseProducer;
 
-public abstract class DatacenterRequestProducer extends BasicProducer<DatacenterRequest>
+public abstract class DatacenterRequestProducer extends BaseProducer<DatacenterRequest>
 {
     private String datacenterId;
 
