@@ -29,7 +29,6 @@ import com.abiquo.commons.amqp.impl.tarantino.domain.dto.DatacenterTasks;
 
 public class DatacenterTasksTest
 {
-
     @Test
     public void getJob_test()
     {
