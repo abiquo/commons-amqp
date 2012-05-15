@@ -1,13 +1,11 @@
-package com.abiquo.commons.amqp.impl.bpm.domain;
-
-import java.util.UUID;
+package com.abiquo.commons.amqp.impl.bpm.domain.job;
 
 import org.codehaus.jackson.annotate.JsonTypeInfo;
 import org.codehaus.jackson.annotate.JsonTypeInfo.As;
 import org.codehaus.jackson.annotate.JsonTypeInfo.Id;
 
 @JsonTypeInfo(use = Id.CLASS, include = As.PROPERTY, property = "@class")
-public class BPMJob
+public abstract class AbstractBPMJob
 {
     public enum BPMJobType
     {
@@ -25,9 +23,9 @@ public class BPMJob
 
     private BPMJobType type;
 
-    public BPMJob()
+    public AbstractBPMJob(BPMJobType type)
     {
-        this.setJobId(UUID.randomUUID().toString());
+        this.type = type;
     }
 
     public String getJobId()
@@ -35,8 +33,7 @@ public class BPMJob
         return jobId;
     }
 
-    // needed for serialization
-    private void setJobId(final String jobId)
+    public void setJobId(final String jobId)
     {
         this.jobId = jobId;
     }

@@ -1,0 +1,87 @@
+/**
+ * Abiquo community edition
+ * cloud management application for hybrid clouds
+ * Copyright (C) 2008-2010 - Abiquo Holdings S.L.
+ * 
+ * This application is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU LESSER GENERAL PUBLIC
+ * LICENSE as published by the Free Software Foundation under
+ * version 3 of the License
+ * 
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * LESSER GENERAL PUBLIC LICENSE v.3 for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
+ */
+package com.abiquo.commons.amqp.impl.bpm.domain.job;
+
+public class DiskConversionJob extends AbstractBPMJob
+{
+    private String diskPathSource;
+
+    private String diskPathDestination;
+
+    private String sourceFormat;
+
+    private String destinationFormat;
+
+    public DiskConversionJob()
+    {
+        super(BPMJobType.DISK_CONVERSION);
+    }
+
+    public DiskConversionJob(final String sourcePath, final String destPath, final String source,
+        final String dest)
+    {
+        this();
+        this.diskPathSource = sourcePath;
+        this.diskPathDestination = destPath;
+        this.sourceFormat = source;
+        this.destinationFormat = dest;
+    }
+
+    public String getDiskPathSource()
+    {
+        return diskPathSource;
+    }
+
+    public void setDiskPathSource(String diskPathSource)
+    {
+        this.diskPathSource = diskPathSource;
+    }
+
+    public String getDiskPathDestination()
+    {
+        return diskPathDestination;
+    }
+
+    public void setDiskPathDestination(String diskPathDestination)
+    {
+        this.diskPathDestination = diskPathDestination;
+    }
+
+    public String getSourceFormat()
+    {
+        return sourceFormat;
+    }
+
+    public void setSourceFormat(String sourceFormat)
+    {
+        this.sourceFormat = sourceFormat;
+    }
+
+    public String getDestinationFormat()
+    {
+        return destinationFormat;
+    }
+
+    public void setDestinationFormat(String destinationFormat)
+    {
+        this.destinationFormat = destinationFormat;
+    }
+}
