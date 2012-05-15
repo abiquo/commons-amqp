@@ -21,11 +21,6 @@
             <version>2.5.0</version>
         </dependency>
         <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>2.0</version>
-        </dependency>
-        <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
             <version>2.6</version>
@@ -35,7 +30,6 @@
             <artifactId>jackson-jaxrs</artifactId>
             <version>1.6.1</version>
         </dependency>
-
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-core</artifactId>
@@ -51,7 +45,6 @@
             <artifactId>slf4j-api</artifactId>
             <version>1.6.4</version>
         </dependency>
-
         <!-- Test dependencies -->
         <dependency>
             <groupId>org.testng</groupId>
