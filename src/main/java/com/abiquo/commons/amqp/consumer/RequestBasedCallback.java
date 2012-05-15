@@ -20,7 +20,9 @@
  */
 package com.abiquo.commons.amqp.consumer;
 
-public interface RequestBasedCallback
+public interface RequestBasedCallback<T>
 {
-    public Class< ? > getRequestClass();
+    public Class<T> getRequestClass();
+
+    public void processResponse(T response);
 }
