@@ -27,7 +27,6 @@ import java.util.Set;
 
 import com.abiquo.commons.amqp.consumer.RequestBasedCallback;
 import com.abiquo.commons.amqp.consumer.RequestBasedConsumer;
-import com.abiquo.commons.amqp.consumer.ResponseProcessor;
 import com.abiquo.commons.amqp.impl.bpm.domain.BPMResponse;
 import com.abiquo.commons.amqp.impl.datacenter.domain.DatacenterNotification;
 import com.abiquo.commons.amqp.impl.tarantino.domain.TarantinoResponse;
@@ -65,8 +64,7 @@ public class DatacenterNotificationConsumer extends RequestBasedConsumer<Datacen
     {
         for (RequestBasedCallback callback : callbacks)
         {
-            ResponseProcessor<BPMResponse> realCallback = (ResponseProcessor<BPMResponse>) callback;
-            realCallback.processResponse(request);
+            callback.processResponse(request);
         }
     }
 
@@ -76,9 +74,7 @@ public class DatacenterNotificationConsumer extends RequestBasedConsumer<Datacen
     {
         for (RequestBasedCallback callback : callbacks)
         {
-            ResponseProcessor<TarantinoResponse> realCallback =
-                (ResponseProcessor<TarantinoResponse>) callback;
-            realCallback.processResponse(request);
+            callback.processResponse(request);
         }
     }
 }

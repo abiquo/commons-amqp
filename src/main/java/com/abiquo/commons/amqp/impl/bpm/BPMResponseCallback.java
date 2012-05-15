@@ -21,15 +21,12 @@
 package com.abiquo.commons.amqp.impl.bpm;
 
 import com.abiquo.commons.amqp.consumer.RequestBasedCallback;
-import com.abiquo.commons.amqp.consumer.ResponseProcessor;
 import com.abiquo.commons.amqp.impl.bpm.domain.BPMResponse;
 
-public abstract class BPMResponseCallback implements RequestBasedCallback,
-    ResponseProcessor<BPMResponse>
+public abstract class BPMResponseCallback implements RequestBasedCallback<BPMResponse>
 {
-
     @Override
-    public Class< ? > getRequestClass()
+    public Class<BPMResponse> getRequestClass()
     {
         return BPMResponse.class;
     }

@@ -22,11 +22,10 @@ package com.abiquo.commons.amqp.impl.datacenter;
 
 import static com.abiquo.commons.amqp.impl.datacenter.DatacenterRequestConfiguration.buildJobsQueue;
 
-import com.abiquo.commons.amqp.consumer.RequestBasedConsumer;
+import com.abiquo.commons.amqp.consumer.BasicConsumer;
 import com.abiquo.commons.amqp.impl.datacenter.DatacenterRequestConfiguration.RequestType;
-import com.abiquo.commons.amqp.impl.datacenter.domain.DatacenterRequest;
 
-public abstract class DatacenterRequestConsumer extends RequestBasedConsumer<DatacenterRequest>
+public abstract class DatacenterRequestConsumer<C> extends BasicConsumer<C>
 {
     public DatacenterRequestConsumer(String datacenterId, RequestType type)
     {
