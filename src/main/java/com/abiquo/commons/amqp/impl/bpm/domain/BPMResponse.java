@@ -25,31 +25,48 @@ import com.abiquo.commons.amqp.util.JSONUtils;
 
 public class BPMResponse extends DatacenterNotification
 {
-    public enum BPMJobStateType
+    public enum BPMResponseType
+    {
+        TASK, JOB
+    };
+
+    public enum BPMResponseStateType
     {
         START, DONE, FAILED
     };
 
-    protected String jobId;
+    protected String id;
 
-    protected BPMJobStateType state;
+    protected BPMResponseType type;
 
-    public String getJobId()
+    protected BPMResponseStateType state;
+
+    public String getId()
     {
-        return jobId;
+        return id;
     }
 
-    public void setJobId(final String jobId)
+    public void setId(String id)
     {
-        this.jobId = jobId;
+        this.id = id;
     }
 
-    public BPMJobStateType getState()
+    public BPMResponseType getType()
+    {
+        return type;
+    }
+
+    public void setType(BPMResponseType type)
+    {
+        this.type = type;
+    }
+
+    public BPMResponseStateType getState()
     {
         return state;
     }
 
-    public void setState(final BPMJobStateType state)
+    public void setState(BPMResponseStateType state)
     {
         this.state = state;
     }
