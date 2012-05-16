@@ -30,6 +30,8 @@ public class DiskConversionJob extends AbstractBPMJob
 
     private String destinationFormat;
 
+    private boolean destroyOriginDisk;
+
     public DiskConversionJob()
     {
         super(BPMJobType.DISK_CONVERSION);
@@ -50,7 +52,7 @@ public class DiskConversionJob extends AbstractBPMJob
         return diskPathSource;
     }
 
-    public void setDiskPathSource(String diskPathSource)
+    public void setDiskPathSource(final String diskPathSource)
     {
         this.diskPathSource = diskPathSource;
     }
@@ -60,7 +62,7 @@ public class DiskConversionJob extends AbstractBPMJob
         return diskPathDestination;
     }
 
-    public void setDiskPathDestination(String diskPathDestination)
+    public void setDiskPathDestination(final String diskPathDestination)
     {
         this.diskPathDestination = diskPathDestination;
     }
@@ -70,7 +72,7 @@ public class DiskConversionJob extends AbstractBPMJob
         return sourceFormat;
     }
 
-    public void setSourceFormat(String sourceFormat)
+    public void setSourceFormat(final String sourceFormat)
     {
         this.sourceFormat = sourceFormat;
     }
@@ -80,8 +82,19 @@ public class DiskConversionJob extends AbstractBPMJob
         return destinationFormat;
     }
 
-    public void setDestinationFormat(String destinationFormat)
+    public void setDestinationFormat(final String destinationFormat)
     {
         this.destinationFormat = destinationFormat;
     }
+
+    public boolean mustDestroyOriginDisk()
+    {
+        return destroyOriginDisk;
+    }
+
+    public void setDestroyOriginDisk(final boolean destroyOriginDisk)
+    {
+        this.destroyOriginDisk = destroyOriginDisk;
+    }
+
 }

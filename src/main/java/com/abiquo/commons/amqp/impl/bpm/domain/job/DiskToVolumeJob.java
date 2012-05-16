@@ -40,7 +40,6 @@ public class DiskToVolumeJob extends AbstractBPMJob
         this.storagePoolTarget = storagePoolTarget;
         this.diskPath = diskPath;
         this.volumeSize = volumeSize;
-
     }
 
     public String getStoragePoolTarget()
@@ -48,7 +47,7 @@ public class DiskToVolumeJob extends AbstractBPMJob
         return storagePoolTarget;
     }
 
-    public void setStoragePoolTarget(String storagePoolTarget)
+    public void setStoragePoolTarget(final String storagePoolTarget)
     {
         this.storagePoolTarget = storagePoolTarget;
     }
@@ -58,7 +57,7 @@ public class DiskToVolumeJob extends AbstractBPMJob
         return diskPath;
     }
 
-    public void setDiskPath(String diskPath)
+    public void setDiskPath(final String diskPath)
     {
         this.diskPath = diskPath;
     }
@@ -68,7 +67,7 @@ public class DiskToVolumeJob extends AbstractBPMJob
         return volumeSize;
     }
 
-    public void setVolumeSize(Long volumeSize)
+    public void setVolumeSize(final Long volumeSize)
     {
         this.volumeSize = volumeSize;
     }

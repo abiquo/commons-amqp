@@ -27,7 +27,7 @@ public class BPMResponse extends DatacenterNotification
 {
     public enum BPMJobStateType
     {
-        START, DONE, ERROR, ABORTED
+        START, DONE, FAILED
     };
 
     protected String jobId;
@@ -39,7 +39,7 @@ public class BPMResponse extends DatacenterNotification
         return jobId;
     }
 
-    public void setJobId(String jobId)
+    public void setJobId(final String jobId)
     {
         this.jobId = jobId;
     }
@@ -49,7 +49,7 @@ public class BPMResponse extends DatacenterNotification
         return state;
     }
 
-    public void setState(BPMJobStateType state)
+    public void setState(final BPMJobStateType state)
     {
         this.state = state;
     }
