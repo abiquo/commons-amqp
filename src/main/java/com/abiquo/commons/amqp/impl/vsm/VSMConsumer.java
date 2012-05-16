@@ -26,11 +26,11 @@ import static com.abiquo.commons.amqp.util.ConsumerUtils.rejectMessage;
 
 import java.io.IOException;
 
-import com.abiquo.commons.amqp.consumer.BasicConsumer;
+import com.abiquo.commons.amqp.consumer.BaseConsumer;
 import com.abiquo.commons.amqp.impl.vsm.domain.VirtualSystemEvent;
 import com.rabbitmq.client.Envelope;
 
-public class VSMConsumer extends BasicConsumer<VSMCallback>
+public class VSMConsumer extends BaseConsumer<VSMCallback>
 {
     public VSMConsumer(String queue)
     {

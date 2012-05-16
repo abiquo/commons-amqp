@@ -27,11 +27,11 @@ import static com.abiquo.commons.amqp.util.ConsumerUtils.rejectMessage;
 
 import java.io.IOException;
 
-import com.abiquo.commons.amqp.consumer.BasicConsumer;
+import com.abiquo.commons.amqp.consumer.BaseConsumer;
 import com.abiquo.commons.amqp.impl.tracer.domain.Trace;
 import com.rabbitmq.client.Envelope;
 
-public class TracerConsumer extends BasicConsumer<TracerCallback>
+public class TracerConsumer extends BaseConsumer<TracerCallback>
 {
     public TracerConsumer()
     {

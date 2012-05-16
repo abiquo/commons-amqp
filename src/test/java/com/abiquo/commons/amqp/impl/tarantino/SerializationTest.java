@@ -37,7 +37,6 @@ import com.abiquo.commons.amqp.impl.tarantino.domain.operations.SnapshotVirtualM
 
 public class SerializationTest
 {
-
     @Test
     public void test_ApplyVirtualMachineStateOpSerialization()
     {

@@ -32,7 +32,6 @@ import org.testng.annotations.Test;
 
 public class BaseJobTest
 {
-
     @Test
     public void isRoot_test()
     {

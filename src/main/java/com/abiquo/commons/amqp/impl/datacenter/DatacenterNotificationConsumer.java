@@ -22,17 +22,16 @@
 package com.abiquo.commons.amqp.impl.datacenter;
 
 import static com.abiquo.commons.amqp.impl.datacenter.DatacenterNotificationConfiguration.NOTIFICATIONS_QUEUE;
+import static com.abiquo.commons.amqp.util.ConsumerUtils.ackMessage;
+import static com.abiquo.commons.amqp.util.ConsumerUtils.rejectMessage;
 
-import java.util.Set;
+import java.io.IOException;
 
-import com.abiquo.commons.amqp.consumer.RequestBasedCallback;
-import com.abiquo.commons.amqp.consumer.RequestBasedConsumer;
-import com.abiquo.commons.amqp.impl.bpm.domain.BPMResponse;
+import com.abiquo.commons.amqp.consumer.BaseConsumer;
 import com.abiquo.commons.amqp.impl.datacenter.domain.DatacenterNotification;
-import com.abiquo.commons.amqp.impl.tarantino.domain.TarantinoResponse;
 import com.rabbitmq.client.Envelope;
 
-public class DatacenterNotificationConsumer extends RequestBasedConsumer<DatacenterNotification>
+public class DatacenterNotificationConsumer extends BaseConsumer<DatacenterNotificationCallback>
 {
     public DatacenterNotificationConsumer()
     {
@@ -40,41 +39,22 @@ public class DatacenterNotificationConsumer extends RequestBasedConsumer<Datacen
     }
 
     @Override
-    protected DatacenterNotification deserializeRequest(final Envelope envelope, final byte[] body)
+    public void consume(Envelope envelope, byte[] body) throws IOException
     {
-        return DatacenterNotification.fromByteArray(body);
-    }
+        DatacenterNotification notification = DatacenterNotification.fromByteArray(body);
 
-    @Override
-    protected void consume(final DatacenterNotification request,
-        final Set<RequestBasedCallback> callbacks)
-    {
-        if (request instanceof BPMResponse)
+        if (notification != null)
         {
-            consume((BPMResponse) request, callbacks);
-        }
-        else if (request instanceof TarantinoResponse)
-        {
-            consume((TarantinoResponse) request, callbacks);
-        }
-    }
+            for (DatacenterNotificationCallback callback : callbacks)
+            {
+                callback.onNotification(notification);
+            }
 
-    @SuppressWarnings("unchecked")
-    protected void consume(final BPMResponse request, final Set<RequestBasedCallback> callbacks)
-    {
-        for (RequestBasedCallback callback : callbacks)
-        {
-            callback.processResponse(request);
+            ackMessage(getChannel(), envelope.getDeliveryTag());
         }
-    }
-
-    @SuppressWarnings("unchecked")
-    protected void consume(final TarantinoResponse request,
-        final Set<RequestBasedCallback> callbacks)
-    {
-        for (RequestBasedCallback callback : callbacks)
+        else
         {
-            callback.processResponse(request);
+            rejectMessage(getChannel(), envelope.getDeliveryTag());
         }
     }
 }

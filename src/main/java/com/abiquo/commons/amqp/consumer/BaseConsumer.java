@@ -34,13 +34,20 @@ import com.abiquo.commons.amqp.consumer.retry.DelayedRetryStrategy;
 import com.rabbitmq.client.Envelope;
 import com.rabbitmq.client.ShutdownSignalException;
 
-public abstract class BasicConsumer<T> extends ChannelHandler
+/**
+ * The base consumer, it handles the creation and configuration of AMQP entities, the callback
+ * collection by consumer and the retry strategy when RabbitMQ goes down.
+ * 
+ * @param <C> the type of the objects used as callback
+ * @author Enric Ruiz
+ */
+public abstract class BaseConsumer<C> extends ChannelHandler
 {
-    private final static Logger LOGGER = LoggerFactory.getLogger(BasicConsumer.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(BaseConsumer.class);
 
-    protected QueueSubscriber<BasicConsumer<T>> consumer;
+    protected QueueSubscriber<BaseConsumer<C>> consumer;
 
-    protected Set<T> callbacks;
+    protected Set<C> callbacks;
 
     protected DefaultConfiguration configuration;
 
@@ -48,18 +55,18 @@ public abstract class BasicConsumer<T> extends ChannelHandler
 
     protected Class< ? extends RetryStrategy> strategyClass;
 
-    public BasicConsumer(DefaultConfiguration configuration, String queue)
+    public BaseConsumer(DefaultConfiguration configuration, String queue)
     {
-        this.callbacks = new HashSet<T>();
+        this.callbacks = new HashSet<C>();
         this.configuration = configuration;
         this.queueName = queue;
         this.strategyClass = DelayedRetryStrategy.class;
     }
 
-    public BasicConsumer(DefaultConfiguration configuration, String queue,
+    public BaseConsumer(DefaultConfiguration configuration, String queue,
         Class< ? extends RetryStrategy> retryStrategy)
     {
-        this.callbacks = new HashSet<T>();
+        this.callbacks = new HashSet<C>();
         this.configuration = configuration;
         this.queueName = queue;
         this.strategyClass = retryStrategy;
@@ -73,7 +80,7 @@ public abstract class BasicConsumer<T> extends ChannelHandler
         configuration.declareExchanges(getChannel());
         configuration.declareQueues(getChannel());
 
-        consumer = new QueueSubscriber<BasicConsumer<T>>(getChannel(), this);
+        consumer = new QueueSubscriber<BaseConsumer<C>>(getChannel(), this);
         getChannel().basicConsume(queueName, false, consumer);
     }
 
@@ -83,7 +90,7 @@ public abstract class BasicConsumer<T> extends ChannelHandler
         closeChannelAndConnection();
     }
 
-    public void addCallback(T callback)
+    public void addCallback(C callback)
     {
         callbacks.add(callback);
     }

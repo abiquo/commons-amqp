@@ -28,9 +28,9 @@ import static com.abiquo.commons.amqp.util.ProducerUtils.publishPersistentText;
 import java.io.IOException;
 
 import com.abiquo.commons.amqp.impl.am.domain.TemplateStatusEvent;
-import com.abiquo.commons.amqp.producer.BasicProducer;
+import com.abiquo.commons.amqp.producer.BaseProducer;
 
-public class AMProducer extends BasicProducer<TemplateStatusEvent>
+public class AMProducer extends BaseProducer<TemplateStatusEvent>
 {
     public AMProducer()
     {

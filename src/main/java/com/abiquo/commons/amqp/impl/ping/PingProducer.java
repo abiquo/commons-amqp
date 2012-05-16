@@ -24,9 +24,9 @@ package com.abiquo.commons.amqp.impl.ping;
 import java.io.IOException;
 
 import com.abiquo.commons.amqp.domain.QueuableString;
-import com.abiquo.commons.amqp.producer.BasicProducer;
+import com.abiquo.commons.amqp.producer.BaseProducer;
 
-public class PingProducer extends BasicProducer<QueuableString>
+public class PingProducer extends BaseProducer<QueuableString>
 {
     public PingProducer()
     {

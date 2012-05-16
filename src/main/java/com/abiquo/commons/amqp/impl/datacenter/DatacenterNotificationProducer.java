@@ -28,9 +28,9 @@ import static com.abiquo.commons.amqp.util.ProducerUtils.publishPersistentText;
 import java.io.IOException;
 
 import com.abiquo.commons.amqp.impl.datacenter.domain.DatacenterNotification;
-import com.abiquo.commons.amqp.producer.BasicProducer;
+import com.abiquo.commons.amqp.producer.BaseProducer;
 
-public class DatacenterNotificationProducer extends BasicProducer<DatacenterNotification>
+public class DatacenterNotificationProducer extends BaseProducer<DatacenterNotification>
 {
     public DatacenterNotificationProducer()
     {

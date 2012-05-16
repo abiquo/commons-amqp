@@ -22,10 +22,17 @@ package com.abiquo.commons.amqp.impl.datacenter;
 
 import static com.abiquo.commons.amqp.impl.datacenter.DatacenterRequestConfiguration.buildJobsQueue;
 
-import com.abiquo.commons.amqp.consumer.BasicConsumer;
+import com.abiquo.commons.amqp.consumer.BaseConsumer;
 import com.abiquo.commons.amqp.impl.datacenter.DatacenterRequestConfiguration.RequestType;
 
-public abstract class DatacenterRequestConsumer<C> extends BasicConsumer<C>
+/**
+ * An abstract {@link BaseConsumer} for manage all incoming request in a datacenter. See
+ * {@link DatacenterRequestConfiguration} for configuration details.
+ * 
+ * @param <C> The callback type to be invoked
+ * @author Enric Ruiz
+ */
+public abstract class DatacenterRequestConsumer<C> extends BaseConsumer<C>
 {
     public DatacenterRequestConsumer(String datacenterId, RequestType type)
     {

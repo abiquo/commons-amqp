@@ -27,11 +27,11 @@ import static com.abiquo.commons.amqp.util.ConsumerUtils.rejectMessage;
 
 import java.io.IOException;
 
-import com.abiquo.commons.amqp.consumer.BasicConsumer;
+import com.abiquo.commons.amqp.consumer.BaseConsumer;
 import com.abiquo.commons.amqp.impl.am.domain.TemplateStatusEvent;
 import com.rabbitmq.client.Envelope;
 
-public class AMConsumer extends BasicConsumer<AMCallback>
+public class AMConsumer extends BaseConsumer<AMCallback>
 {
     public AMConsumer()
     {
