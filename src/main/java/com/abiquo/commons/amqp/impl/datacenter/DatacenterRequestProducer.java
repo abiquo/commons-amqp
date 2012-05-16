@@ -31,7 +31,7 @@ import com.abiquo.commons.amqp.impl.datacenter.DatacenterRequestConfiguration.Re
 import com.abiquo.commons.amqp.impl.datacenter.domain.DatacenterRequest;
 import com.abiquo.commons.amqp.producer.BaseProducer;
 
-public abstract class DatacenterRequestProducer extends BaseProducer<DatacenterRequest>
+public class DatacenterRequestProducer extends BaseProducer<DatacenterRequest>
 {
     private String datacenterId;
 
