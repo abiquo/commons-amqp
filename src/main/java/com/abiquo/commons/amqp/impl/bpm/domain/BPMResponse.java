@@ -20,6 +20,8 @@
  */
 package com.abiquo.commons.amqp.impl.bpm.domain;
 
+import java.util.Map;
+
 import com.abiquo.commons.amqp.impl.datacenter.domain.DatacenterNotification;
 import com.abiquo.commons.amqp.util.JSONUtils;
 
@@ -32,7 +34,12 @@ public class BPMResponse extends DatacenterNotification
 
     public enum BPMResponseStateType
     {
-        START, DONE, FAILED
+        STARTED, DONE, FAILED
+    };
+
+    public enum BPMExtraDataKeys
+    {
+        DISK_SIZE_BYTES
     };
 
     protected String id;
@@ -41,12 +48,14 @@ public class BPMResponse extends DatacenterNotification
 
     protected BPMResponseStateType state;
 
+    protected Map<BPMExtraDataKeys, Object> extraData;
+
     public String getId()
     {
         return id;
     }
 
-    public void setId(String id)
+    public void setId(final String id)
     {
         this.id = id;
     }
@@ -56,7 +65,7 @@ public class BPMResponse extends DatacenterNotification
         return type;
     }
 
-    public void setType(BPMResponseType type)
+    public void setType(final BPMResponseType type)
     {
         this.type = type;
     }
@@ -66,9 +75,19 @@ public class BPMResponse extends DatacenterNotification
         return state;
     }
 
-    public void setState(BPMResponseStateType state)
+    public void setState(final BPMResponseStateType state)
     {
         this.state = state;
+    }
+
+    public Map<BPMExtraDataKeys, Object> getExtraData()
+    {
+        return extraData;
+    }
+
+    public void setExtraData(final Map<BPMExtraDataKeys, Object> extraData)
+    {
+        this.extraData = extraData;
     }
 
     public static BPMResponse fromByteArray(final byte[] bytes)
