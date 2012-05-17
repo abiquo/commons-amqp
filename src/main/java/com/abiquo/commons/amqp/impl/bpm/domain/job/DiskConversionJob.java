@@ -37,14 +37,14 @@ public class DiskConversionJob extends AbstractBPMJob
         super(BPMJobType.DISK_CONVERSION);
     }
 
-    public DiskConversionJob(final String sourcePath, final String destPath, final String source,
-        final String dest)
+    public DiskConversionJob(final String sourcePath, final String destinationPath, final String sourceFormat,
+        final String destinationFormat)
     {
         this();
         this.diskPathSource = sourcePath;
-        this.diskPathDestination = destPath;
-        this.sourceFormat = source;
-        this.destinationFormat = dest;
+        this.diskPathDestination = destinationPath;
+        this.sourceFormat = sourceFormat;
+        this.destinationFormat = destinationFormat;
     }
 
     public String getDiskPathSource()
