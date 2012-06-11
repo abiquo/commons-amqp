@@ -171,6 +171,17 @@ public class VirtualMachineDescriptionBuilder
         return this;
     }
 
+    public VirtualMachineDescriptionBuilder setKeyMap(final String keymap)
+    {
+        if (keymap == null)
+        {
+            netConf = new NetworkConfiguration();
+        }
+        netConf.setKeyMap(keymap);
+
+        return this;
+    }
+
     public VirtualMachineDescriptionBuilder bootstrap(final String uri, final String auth)
     {
         bootstrapConf = new BootstrapConfiguration();
