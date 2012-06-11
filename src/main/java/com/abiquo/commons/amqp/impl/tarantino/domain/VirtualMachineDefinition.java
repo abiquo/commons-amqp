@@ -47,6 +47,8 @@ public class VirtualMachineDefinition
 
     protected boolean isHA;
 
+    protected Cdrom cdrom;
+
     public String getMachineUUID()
     {
         return machineUUID;
@@ -120,6 +122,27 @@ public class VirtualMachineDefinition
     public void setBootstrap(final BootstrapConfiguration bootstrap)
     {
         this.bootstrap = bootstrap;
+    }
+
+    public void setCdrom(final Cdrom cdrom)
+    {
+        this.cdrom = cdrom;
+    }
+
+    public Cdrom getCdrom()
+    {
+        return cdrom;
+    }
+
+    @JsonIgnore
+    public boolean isCdromSet()
+    {
+        return cdrom != null;
+    }
+
+    public static class Cdrom
+    {
+
     }
 
     public static class HardwareConfiguration
