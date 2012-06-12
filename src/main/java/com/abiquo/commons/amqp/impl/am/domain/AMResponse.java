@@ -21,23 +21,32 @@
 
 package com.abiquo.commons.amqp.impl.am.domain;
 
-import com.abiquo.commons.amqp.domain.Queuable;
+import com.abiquo.commons.amqp.impl.datacenter.domain.DatacenterNotification;
 import com.abiquo.commons.amqp.util.JSONUtils;
 
-public class TemplateStatusEvent implements Queuable
+public class AMResponse extends DatacenterNotification
 {
-    protected String ovfId;
+    /** identify the event **/
 
-    protected String status;
+    private String taskId;
+    
 
-    protected Double progress;
+    protected String datacenterUuid;
 
     protected String enterpriseId;
 
-    protected String repositoryLocation;
+    protected String ovfId;
 
-    /** only for ERROR events */
+    /** kind of event **/
+    // TODO use TemplateStatusEnumType
+    protected String status;
+
+    /** Additional data based of kind of event **/
+    /** only during ERROR */
     protected String errorCause;
+
+    /** only during DOWNLOADING */
+    protected Double progress;
 
     public String getOvfId()
     {
@@ -89,24 +98,29 @@ public class TemplateStatusEvent implements Queuable
         this.enterpriseId = enterpriseId;
     }
 
-    public String getRepositoryLocation()
+    public String getDatacenterUuid()
     {
-        return repositoryLocation;
+        return datacenterUuid;
     }
 
-    public void setRepositoryLocation(final String repositoryLocation)
+    public void setDatacenterUuid(final String datacenterUuid)
     {
-        this.repositoryLocation = repositoryLocation;
+        this.datacenterUuid = datacenterUuid;
+    }
+    
+    public String getTaskId()
+    {
+        return taskId;
     }
 
-    @Override
-    public byte[] toByteArray()
+    public void setTaskId(final String taskId)
     {
-        return JSONUtils.serialize(this);
+        this.taskId = taskId;
     }
 
-    public static TemplateStatusEvent fromByteArray(final byte[] bytes)
+
+    public static AMResponse fromByteArray(final byte[] bytes)
     {
-        return JSONUtils.deserialize(bytes, TemplateStatusEvent.class);
+        return JSONUtils.deserialize(bytes, AMResponse.class);
     }
 }

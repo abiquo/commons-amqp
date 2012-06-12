@@ -36,6 +36,17 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
         </dependency>
+        <!-- 
+        <dependency>
+            <groupId>com.abiquo</groupId>
+            <artifactId>am-model</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.abiquo</groupId>
+                    <artifactId>api-model</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency> -->
         <!-- Test dependencies -->
         <dependency>
             <groupId>org.testng</groupId>
