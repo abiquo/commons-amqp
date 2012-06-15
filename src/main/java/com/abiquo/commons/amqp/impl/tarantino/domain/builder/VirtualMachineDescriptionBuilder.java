@@ -32,6 +32,7 @@ import com.abiquo.commons.amqp.impl.tarantino.domain.SecondaryDiskStandard;
 import com.abiquo.commons.amqp.impl.tarantino.domain.SecondaryDiskStateful;
 import com.abiquo.commons.amqp.impl.tarantino.domain.VirtualMachineDefinition;
 import com.abiquo.commons.amqp.impl.tarantino.domain.VirtualMachineDefinition.BootstrapConfiguration;
+import com.abiquo.commons.amqp.impl.tarantino.domain.VirtualMachineDefinition.Cdrom;
 import com.abiquo.commons.amqp.impl.tarantino.domain.VirtualMachineDefinition.EthernetDriver;
 import com.abiquo.commons.amqp.impl.tarantino.domain.VirtualMachineDefinition.HardwareConfiguration;
 import com.abiquo.commons.amqp.impl.tarantino.domain.VirtualMachineDefinition.NetworkConfiguration;
@@ -56,6 +57,8 @@ public class VirtualMachineDescriptionBuilder
     private BootstrapConfiguration bootstrapConf;
 
     private boolean isHA;
+
+    private boolean hasDvd = false;
 
     public VirtualMachineDescriptionBuilder hardware(final int virtualCpu, final int ramInMb)
     {
@@ -276,6 +279,13 @@ public class VirtualMachineDescriptionBuilder
         return this;
     }
 
+    public VirtualMachineDescriptionBuilder setHasDvd()
+    {
+        this.hasDvd = true;
+
+        return this;
+    }
+
     public VirtualMachineDefinition build()
     {
         final VirtualMachineDefinition virtualMachine = new VirtualMachineDefinition();
@@ -289,6 +299,11 @@ public class VirtualMachineDescriptionBuilder
         virtualMachine.setPrimaryDisk(primaryDisk);
         virtualMachine.setSecondaryDisks(secondaryDisks);
         virtualMachine.setHA(isHA);
+
+        if (hasDvd)
+        {
+            virtualMachine.setCdrom(new Cdrom());
+        }
 
         return virtualMachine;
     }
