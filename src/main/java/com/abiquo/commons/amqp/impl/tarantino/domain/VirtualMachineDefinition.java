@@ -142,7 +142,17 @@ public class VirtualMachineDefinition
 
     public static class Cdrom
     {
+        protected String image;
 
+        public String getImage()
+        {
+            return image;
+        }
+
+        public void setImage(final String image)
+        {
+            this.image = image;
+        }
     }
 
     public static class HardwareConfiguration

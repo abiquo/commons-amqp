@@ -30,6 +30,7 @@ import static org.testng.Assert.assertNotNull;
 import org.testng.annotations.Test;
 
 import com.abiquo.commons.amqp.impl.datacenter.domain.DatacenterRequest;
+import com.abiquo.commons.amqp.impl.tarantino.domain.VirtualMachineDefinition.Cdrom;
 import com.abiquo.commons.amqp.impl.tarantino.domain.dto.DatacenterTasks;
 import com.abiquo.commons.amqp.impl.tarantino.domain.operations.ApplyVirtualMachineStateOp;
 import com.abiquo.commons.amqp.impl.tarantino.domain.operations.ReconfigureVirtualMachineOp;
@@ -41,6 +42,22 @@ public class SerializationTest
     public void test_ApplyVirtualMachineStateOpSerialization()
     {
         ApplyVirtualMachineStateOp operation = buildApplyVirtualMachineStateOp();
+        operation.setId("some tasks.job");
+        DatacenterTasks tlist = new DatacenterTasks();
+        tlist.getJobs().add(operation);
+        tlist.setDependent(false);
+        tlist.setId("some tasks");
+
+        String serialization = new String(tlist.toByteArray());
+        DatacenterRequest deserialization = DatacenterTasks.fromByteArray(serialization.getBytes());
+        assertNotNull(deserialization);
+    }
+
+    @Test
+    public void test_ApplyVirtualMachineStateOpSerializationWithDvd()
+    {
+        ApplyVirtualMachineStateOp operation = buildApplyVirtualMachineStateOp();
+        operation.getVirtualMachine().setCdrom(new Cdrom());
         operation.setId("some tasks.job");
         DatacenterTasks tlist = new DatacenterTasks();
         tlist.getJobs().add(operation);
