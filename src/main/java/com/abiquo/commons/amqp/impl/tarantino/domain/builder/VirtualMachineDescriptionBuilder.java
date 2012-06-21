@@ -23,6 +23,8 @@ package com.abiquo.commons.amqp.impl.tarantino.domain.builder;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.abiquo.commons.amqp.impl.tarantino.domain.DhcpOptionCom;
 import com.abiquo.commons.amqp.impl.tarantino.domain.DiskDescription.DiskControllerType;
 import com.abiquo.commons.amqp.impl.tarantino.domain.DiskDescription.DiskFormatType;
@@ -59,6 +61,8 @@ public class VirtualMachineDescriptionBuilder
     private boolean isHA;
 
     private boolean hasDvd = false;
+
+    private boolean isImported;
 
     public VirtualMachineDescriptionBuilder hardware(final int virtualCpu, final int ramInMb)
     {
@@ -212,6 +216,9 @@ public class VirtualMachineDescriptionBuilder
         primaryDisk = new PrimaryDisk();
         primaryDisk.setDiskStandard(disk);
 
+        // If repository is not present; it is an imported one
+        isImported = StringUtils.isBlank(disk.getRepository());
+
         return this;
     }
 
@@ -229,6 +236,10 @@ public class VirtualMachineDescriptionBuilder
 
         primaryDisk = new PrimaryDisk();
         primaryDisk.setDiskStateful(disk);
+
+        // Never will be imported, because it is stateful
+        isImported = false;
+
         return this;
     }
 
@@ -299,6 +310,7 @@ public class VirtualMachineDescriptionBuilder
         virtualMachine.setPrimaryDisk(primaryDisk);
         virtualMachine.setSecondaryDisks(secondaryDisks);
         virtualMachine.setHA(isHA);
+        virtualMachine.setImported(isImported);
 
         if (hasDvd)
         {

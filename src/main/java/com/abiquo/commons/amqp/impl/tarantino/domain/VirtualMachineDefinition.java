@@ -49,6 +49,8 @@ public class VirtualMachineDefinition
 
     protected Cdrom cdrom;
 
+    protected boolean isImported;
+
     public String getMachineUUID()
     {
         return machineUUID;
@@ -138,6 +140,26 @@ public class VirtualMachineDefinition
     public boolean isCdromSet()
     {
         return cdrom != null;
+    }
+
+    public boolean isHA()
+    {
+        return isHA;
+    }
+
+    public void setHA(final boolean isHA)
+    {
+        this.isHA = isHA;
+    }
+
+    public boolean isImported()
+    {
+        return isImported;
+    }
+
+    public void setImported(final boolean isImported)
+    {
+        this.isImported = isImported;
     }
 
     public static class Cdrom
@@ -415,13 +437,4 @@ public class VirtualMachineDefinition
 
     }
 
-    public boolean isHA()
-    {
-        return isHA;
-    }
-
-    public void setHA(final boolean isHA)
-    {
-        this.isHA = isHA;
-    }
 }
