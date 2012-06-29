@@ -168,11 +168,6 @@ public enum TarantinoError
 
     VCENTER_UNREGISTER_VM("VCENTER-2", "Could not unregiter the virtual machine from vCenter"),
 
-    // DISK CONTROLLERS
-    ESXI_INCOMPATIBLE_DISK_CONTROLER(
-        "CNTRL-0",
-        "ESXi hosts cannot deploy a VMDK sparse using a SCSI disk controller (see ''abiquo.diskController.primary'' property)"),
-
     ESXI_RDM_DATASTORE_NOT_CONFIGURED("DRM-0", "Can't use the datastore for volume RDM, "
         + "and ''abiquo.esxi.datastoreRdm'' it is not configured."),
 
