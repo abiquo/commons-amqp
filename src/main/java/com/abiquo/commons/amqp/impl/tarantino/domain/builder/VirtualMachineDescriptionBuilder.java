@@ -180,7 +180,7 @@ public class VirtualMachineDescriptionBuilder
 
     public VirtualMachineDescriptionBuilder setKeyMap(final String keymap)
     {
-        if (keymap == null)
+        if (netConf == null)
         {
             netConf = new NetworkConfiguration();
         }
