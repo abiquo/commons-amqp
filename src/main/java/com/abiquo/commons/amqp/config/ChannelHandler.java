@@ -29,7 +29,7 @@ import com.rabbitmq.client.ShutdownListener;
 
 public abstract class ChannelHandler implements ShutdownListener
 {
-    private ConnectionFactory connectionFactory;
+    private final ConnectionFactory connectionFactory;
 
     private Connection connection;
 
@@ -44,6 +44,8 @@ public abstract class ChannelHandler implements ShutdownListener
         connectionFactory.setUsername(DefaultConfiguration.getUserName());
         connectionFactory.setPassword(DefaultConfiguration.getPassword());
         connectionFactory.setVirtualHost(DefaultConfiguration.getVirtualHost());
+        connectionFactory.setConnectionTimeout(DefaultConfiguration.getConnectionTimeout());
+        connectionFactory.setRequestedHeartbeat(DefaultConfiguration.getRequestedHeartbeat());
 
         connection = null;
         channel = null;

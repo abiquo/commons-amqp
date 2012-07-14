@@ -37,6 +37,8 @@ Configuration properties
 * **abiquo.rabbitmq.username** the username to use, by default *guest*
 * **abiquo.rabbitmq.password** the password to use, by default *guest*
 * **abiquo.rabbitmq.virtualHost** virtual host to use, by default */*
+* **abiquo.rabbitmq.connectionTimeout** connection establishment timeout in milliseconds, by default 0 (wait indefinitely until connection established or error occurs) */*
+* **abiquo.rabbitmq.requestedHeartbeat** the initially requested heartbeat interval, in seconds, by default 0 (none) */*
 
 The following properties are used when the connection with RabbitMQ has been lost
 

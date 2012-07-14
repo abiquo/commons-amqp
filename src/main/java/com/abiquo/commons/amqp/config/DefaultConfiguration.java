@@ -87,6 +87,16 @@ public abstract class DefaultConfiguration
         return System.getProperty("abiquo.rabbitmq.virtualHost", "/");
     }
 
+    public static Integer getConnectionTimeout()
+    {
+        return Integer.parseInt(System.getProperty("abiquo.rabbitmq.connectionTimeout", "0"));
+    }
+
+    public static Integer getRequestedHeartbeat()
+    {
+        return Integer.parseInt(System.getProperty("abiquo.rabbitmq.requestedHeartbeat", "0"));
+    }
+
     protected DefaultConfiguration()
     {
         LOGGER.debug(String.format("RabbitMQ configuration. Host: %s, port: %d, username: %s",
