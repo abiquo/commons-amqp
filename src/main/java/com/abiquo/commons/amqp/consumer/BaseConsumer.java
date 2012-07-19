@@ -21,6 +21,9 @@
 
 package com.abiquo.commons.amqp.consumer;
 
+import static com.abiquo.commons.amqp.config.DefaultConfiguration.getHost;
+import static java.lang.String.format;
+
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
@@ -55,16 +58,10 @@ public abstract class BaseConsumer<C> extends ChannelHandler
 
     protected Class< ? extends RetryStrategy> strategyClass;
 
-    public BaseConsumer(DefaultConfiguration configuration, String queue)
-    {
-        this.callbacks = new HashSet<C>();
-        this.configuration = configuration;
-        this.queueName = queue;
-        this.strategyClass = DelayedRetryStrategy.class;
-    }
+    public abstract void consume(Envelope envelope, byte[] body) throws IOException;
 
-    public BaseConsumer(DefaultConfiguration configuration, String queue,
-        Class< ? extends RetryStrategy> retryStrategy)
+    public BaseConsumer(final DefaultConfiguration configuration, final String queue,
+        final Class< ? extends RetryStrategy> retryStrategy)
     {
         this.callbacks = new HashSet<C>();
         this.configuration = configuration;
@@ -72,7 +69,30 @@ public abstract class BaseConsumer<C> extends ChannelHandler
         this.strategyClass = retryStrategy;
     }
 
-    public void start() throws IOException
+    public BaseConsumer(final DefaultConfiguration configuration, final String queue)
+    {
+        this(configuration, queue, DelayedRetryStrategy.class);
+    }
+
+    public void start()
+    {
+        try
+        {
+            startConsumer();
+        }
+        catch (Exception e)
+        {
+            LOGGER.error(format("Unable to connect to %s", getHost()));
+            reconnect();
+        }
+    }
+
+    public void stop() throws IOException
+    {
+        stopConsumer();
+    }
+
+    private void startConsumer() throws IOException
     {
         openChannelAndConnection();
         getChannel().basicQos(getPrefetchCount());
@@ -84,42 +104,42 @@ public abstract class BaseConsumer<C> extends ChannelHandler
         getChannel().basicConsume(queueName, false, consumer);
     }
 
-    public void stop() throws IOException
+    private void stopConsumer() throws IOException
     {
         getChannel().basicCancel(consumer.getConsumerTag());
         closeChannelAndConnection();
     }
 
-    public void addCallback(C callback)
+    public void addCallback(final C callback)
     {
         callbacks.add(callback);
     }
 
-    protected int getPrefetchCount()
+    public int getPrefetchCount()
     {
         return 1;
     }
 
     @Override
-    public void shutdownCompleted(ShutdownSignalException cause)
+    public void shutdownCompleted(final ShutdownSignalException cause)
     {
-        String rabbitmqHost = DefaultConfiguration.getHost();
+        LOGGER.error(format("Connection lost to %s", getHost()));
+        reconnect();
+    }
 
-        LOGGER.debug(String.format("Connection lost to %s", rabbitmqHost));
-
+    private void reconnect()
+    {
         try
         {
             RetryStrategy strategy = strategyClass.newInstance();
 
             while (strategy.shouldRetry())
             {
-                LOGGER.debug(String.format("Try to reconnect to %s", rabbitmqHost));
+                LOGGER.debug(format("Try to reconnect to %s", getHost()));
 
                 try
                 {
-                    openChannelAndConnection();
-                    start();
-
+                    startConsumer();
                     LOGGER.debug("And we are back!");
                     return;
                 }
@@ -134,8 +154,6 @@ public abstract class BaseConsumer<C> extends ChannelHandler
             LOGGER.debug("Unable to instance new retry strategy");
         }
 
-        LOGGER.debug(String.format("Unable to reconnect to %s", rabbitmqHost));
+        LOGGER.debug(format("Unable to reconnect to %s", getHost()));
     }
-
-    public abstract void consume(Envelope envelope, byte[] body) throws IOException;
 }
