@@ -21,10 +21,11 @@
 
 package com.abiquo.commons.amqp.util;
 
-import static java.util.concurrent.Executors.newCachedThreadPool;
+import static java.util.concurrent.Executors.newSingleThreadExecutor;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Consumer;
@@ -36,7 +37,13 @@ import com.rabbitmq.client.Consumer;
  */
 public class ConsumerUtils
 {
-    public final static ExecutorService reconnectionExecutor = newCachedThreadPool();
+    /**
+     * {@link ExecutorService} used to start the reconnect logic asynchronously. We use the
+     * {@link Executors#newSingleThreadExecutor()} implementation due the connection to rabbitmq has
+     * failed in all the consumers, then we can wait for one consumer reconnection success and start
+     * the remaining reconnection jobs.
+     */
+    public final static ExecutorService reconnectionExecutor = newSingleThreadExecutor();
 
     public static void startConsumerRequiredAck(final Channel channel, final Consumer consumer,
         final String queue) throws IOException
