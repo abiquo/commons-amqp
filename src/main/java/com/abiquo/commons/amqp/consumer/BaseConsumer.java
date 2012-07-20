@@ -22,7 +22,7 @@
 package com.abiquo.commons.amqp.consumer;
 
 import static com.abiquo.commons.amqp.config.DefaultConfiguration.getHost;
-import static java.lang.String.format;
+import static com.abiquo.commons.amqp.util.ConsumerUtils.reconnectionExecutor;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -82,14 +82,31 @@ public abstract class BaseConsumer<C> extends ChannelHandler
         }
         catch (Exception e)
         {
-            LOGGER.error(format("Unable to connect to %s", getHost()));
-            reconnect();
+            LOGGER.error("Unable to connect to {}", getHost());
+            reconnectAsync();
         }
     }
 
     public void stop() throws IOException
     {
         stopConsumer();
+    }
+
+    @Override
+    public void shutdownCompleted(final ShutdownSignalException cause)
+    {
+        LOGGER.error("Connection lost to {}", getHost());
+        reconnect();
+    }
+
+    public void addCallback(final C callback)
+    {
+        callbacks.add(callback);
+    }
+
+    public int getPrefetchCount()
+    {
+        return 1;
     }
 
     private void startConsumer() throws IOException
@@ -110,21 +127,16 @@ public abstract class BaseConsumer<C> extends ChannelHandler
         closeChannelAndConnection();
     }
 
-    public void addCallback(final C callback)
+    private void reconnectAsync()
     {
-        callbacks.add(callback);
-    }
-
-    public int getPrefetchCount()
-    {
-        return 1;
-    }
-
-    @Override
-    public void shutdownCompleted(final ShutdownSignalException cause)
-    {
-        LOGGER.error(format("Connection lost to %s", getHost()));
-        reconnect();
+        reconnectionExecutor.submit(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                reconnect();
+            }
+        });
     }
 
     private void reconnect()
@@ -135,7 +147,7 @@ public abstract class BaseConsumer<C> extends ChannelHandler
 
             while (strategy.shouldRetry())
             {
-                LOGGER.debug(format("Try to reconnect to %s", getHost()));
+                LOGGER.debug("Try to reconnect to {}", getHost());
 
                 try
                 {
@@ -154,6 +166,6 @@ public abstract class BaseConsumer<C> extends ChannelHandler
             LOGGER.debug("Unable to instance new retry strategy");
         }
 
-        LOGGER.debug(format("Unable to reconnect to %s", getHost()));
+        LOGGER.debug("Unable to reconnect to {}", getHost());
     }
 }

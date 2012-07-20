@@ -21,7 +21,10 @@
 
 package com.abiquo.commons.amqp.util;
 
+import static java.util.concurrent.Executors.newCachedThreadPool;
+
 import java.io.IOException;
+import java.util.concurrent.ExecutorService;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Consumer;
@@ -33,23 +36,26 @@ import com.rabbitmq.client.Consumer;
  */
 public class ConsumerUtils
 {
-    public static void startConsumerRequiredAck(Channel channel, Consumer consumer, String queue)
-        throws IOException
+    public final static ExecutorService reconnectionExecutor = newCachedThreadPool();
+
+    public static void startConsumerRequiredAck(final Channel channel, final Consumer consumer,
+        final String queue) throws IOException
     {
         channel.basicConsume(queue, false, consumer);
     }
 
-    public static void ackMessage(Channel channel, long tag) throws IOException
+    public static void ackMessage(final Channel channel, final long tag) throws IOException
     {
         channel.basicAck(tag, false);
     }
 
-    public static void rejectMessage(Channel channel, long tag) throws IOException
+    public static void rejectMessage(final Channel channel, final long tag) throws IOException
     {
         channel.basicReject(tag, false);
     }
 
-    public static void rejectMessageAndRequeue(Channel channel, long tag) throws IOException
+    public static void rejectMessageAndRequeue(final Channel channel, final long tag)
+        throws IOException
     {
         channel.basicReject(tag, true);
     }
