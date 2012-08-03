@@ -41,6 +41,8 @@ import com.abiquo.commons.amqp.impl.tarantino.domain.VirtualMachineDefinition.Ne
 import com.abiquo.commons.amqp.impl.tarantino.domain.VirtualMachineDefinition.PrimaryDisk;
 import com.abiquo.commons.amqp.impl.tarantino.domain.VirtualMachineDefinition.SecondaryDisks;
 import com.abiquo.commons.amqp.impl.tarantino.domain.VirtualNIC;
+import com.abiquo.commons.amqp.impl.tarantino.domain.exception.BuilderException;
+import com.abiquo.commons.amqp.impl.tarantino.domain.exception.BuilderException.VirtualMachineDescriptionBuilderError;
 
 public class VirtualMachineDescriptionBuilder
 {
@@ -267,7 +269,8 @@ public class VirtualMachineDescriptionBuilder
     }
 
     public VirtualMachineDescriptionBuilder addSecondaryHardDisk(final long diskFileSizeInBytes,
-        final int sequence, final String datastorePath, final DiskControllerType controllerType)
+        final int sequence, final String datastorePath, final DiskControllerType controllerType,
+        final Integer diskManagementId)
     {
         if (secondaryDisks == null)
         {
@@ -275,6 +278,7 @@ public class VirtualMachineDescriptionBuilder
         }
 
         final SecondaryDiskStandard hdDisk = new SecondaryDiskStandard();
+        hdDisk.setDiskManagementId(diskManagementId);
         hdDisk.setCapacityInBytes(0l);
         hdDisk.setDestinationDatastore(datastorePath);
         hdDisk.setDiskFileSizeInBytes(diskFileSizeInBytes);
@@ -317,7 +321,20 @@ public class VirtualMachineDescriptionBuilder
             virtualMachine.setCdrom(new Cdrom());
         }
 
-        return virtualMachine;
+        if (primaryDisk == null)
+        {
+            throw new BuilderException(VirtualMachineDescriptionBuilderError.NO_PRIMARY_DISK);
+        }
+        if (uuid == null || name == null)
+        {
+            throw new BuilderException(VirtualMachineDescriptionBuilderError.NO_IDENTIFIED);
+        }
+        if (hardConf == null)
+        {
+            throw new BuilderException(VirtualMachineDescriptionBuilderError.NO_HARDWARE);
+        }
+
+        return DiskSequenceToBusAndUnitNumber.numerateBusAndUnitBasedOnSequences(virtualMachine);
     }
 
 }// create builder
