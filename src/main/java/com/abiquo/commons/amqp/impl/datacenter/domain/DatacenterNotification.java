@@ -31,6 +31,14 @@ import com.abiquo.commons.amqp.util.JSONUtils;
 @JsonTypeInfo(use = Id.CLASS, include = As.PROPERTY, property = "@class")
 public abstract class DatacenterNotification implements Queuable
 {
+    protected NotificationState state;
+
+    public abstract boolean isTaskNotification();
+
+    public abstract boolean isJobNotification();
+
+    public abstract String getNotificationIdentifier();
+
     @Override
     public byte[] toByteArray()
     {
@@ -40,5 +48,15 @@ public abstract class DatacenterNotification implements Queuable
     public static DatacenterNotification fromByteArray(final byte[] bytes)
     {
         return JSONUtils.deserialize(bytes, DatacenterNotification.class);
+    }
+
+    public NotificationState getState()
+    {
+        return state;
+    }
+
+    public void setState(final NotificationState state)
+    {
+        this.state = state;
     }
 }

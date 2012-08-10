@@ -28,14 +28,7 @@ import com.abiquo.commons.amqp.util.JSONUtils;
 
 public class TarantinoResponse extends DatacenterNotification
 {
-    public enum JobStateType
-    {
-        START, DONE, ERROR, ABORTED, ROLLBACK_START, ROLLBACK_DONE, ROLLBACK_ERROR, ROLLBACK_ABORTED
-    };
-
     protected String jobId;
-
-    protected JobStateType state;
 
     /** for ERROR and ROLLBACK_ERROR adds the cause. TODO use VirtualFactoryException. */
     protected String error;
@@ -62,16 +55,6 @@ public class TarantinoResponse extends DatacenterNotification
         this.jobId = jobId;
     }
 
-    public JobStateType getState()
-    {
-        return state;
-    }
-
-    public void setState(final JobStateType state)
-    {
-        this.state = state;
-    }
-
     public String getError()
     {
         return error;
@@ -82,14 +65,29 @@ public class TarantinoResponse extends DatacenterNotification
         this.error = error;
     }
 
+    public static TarantinoResponse fromByteArray(final byte[] bytes)
+    {
+        return JSONUtils.deserialize(bytes, TarantinoResponse.class);
+    }
+
+    @Override
     @JsonIgnore
-    public boolean isTask()
+    public boolean isTaskNotification()
     {
         return BaseJob.isRoot(this.jobId);
     }
 
-    public static TarantinoResponse fromByteArray(final byte[] bytes)
+    @Override
+    @JsonIgnore
+    public boolean isJobNotification()
     {
-        return JSONUtils.deserialize(bytes, TarantinoResponse.class);
+        return !isTaskNotification();
+    }
+
+    @Override
+    @JsonIgnore
+    public String getNotificationIdentifier()
+    {
+        return getJobId();
     }
 }

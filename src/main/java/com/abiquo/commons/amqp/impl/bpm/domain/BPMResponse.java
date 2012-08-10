@@ -22,6 +22,8 @@ package com.abiquo.commons.amqp.impl.bpm.domain;
 
 import java.util.Map;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import com.abiquo.commons.amqp.impl.datacenter.domain.DatacenterNotification;
 import com.abiquo.commons.amqp.util.JSONUtils;
 
@@ -32,11 +34,6 @@ public class BPMResponse extends DatacenterNotification
         TASK, JOB
     };
 
-    public enum BPMResponseStateType
-    {
-        STARTED, DONE, FAILED
-    };
-
     public enum BPMExtraDataKeys
     {
         DISK_SIZE_BYTES
@@ -45,8 +42,6 @@ public class BPMResponse extends DatacenterNotification
     protected String id;
 
     protected BPMResponseType type;
-
-    protected BPMResponseStateType state;
 
     protected Map<BPMExtraDataKeys, Object> extraData;
 
@@ -70,16 +65,6 @@ public class BPMResponse extends DatacenterNotification
         this.type = type;
     }
 
-    public BPMResponseStateType getState()
-    {
-        return state;
-    }
-
-    public void setState(final BPMResponseStateType state)
-    {
-        this.state = state;
-    }
-
     public Map<BPMExtraDataKeys, Object> getExtraData()
     {
         return extraData;
@@ -93,5 +78,26 @@ public class BPMResponse extends DatacenterNotification
     public static BPMResponse fromByteArray(final byte[] bytes)
     {
         return JSONUtils.deserialize(bytes, BPMResponse.class);
+    }
+
+    @Override
+    @JsonIgnore
+    public boolean isTaskNotification()
+    {
+        return getType().equals(BPMResponseType.TASK);
+    }
+
+    @Override
+    @JsonIgnore
+    public boolean isJobNotification()
+    {
+        return getType().equals(BPMResponseType.JOB);
+    }
+
+    @Override
+    @JsonIgnore
+    public String getNotificationIdentifier()
+    {
+        return getId();
     }
 }
