@@ -136,10 +136,11 @@ public class DiskSequenceToBusAndUnitNumber
         Integer regularSequence = primaryIde ? 1 : 0;
         for (SequenceAndController seq : sortedIdes)
         {
-            if (regularSequence > 3)
-            {
-                throw new BuilderException(VirtualMachineDescriptionBuilderError.IDE_FULL);
-            }
+            // FIXME now is controlled in tarantino in order to avoid a transaction mess in TarantinoService
+            // if (regularSequence > 3)
+            // {
+            //     throw new BuilderException(VirtualMachineDescriptionBuilderError.IDE_FULL);
+            // }
 
             addresses.add(new DiskAddress(seq.sequence, //
                 (int) (regularSequence / 2), regularSequence % 2));
