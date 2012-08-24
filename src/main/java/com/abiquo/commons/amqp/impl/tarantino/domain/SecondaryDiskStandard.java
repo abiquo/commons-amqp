@@ -24,8 +24,6 @@
  */
 package com.abiquo.commons.amqp.impl.tarantino.domain;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
 
 /**
  * @author jdevesa
@@ -33,6 +31,11 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 public class SecondaryDiskStandard extends DiskStandard
 {
     protected int sequence;
+
+    /**
+     * Identifier of the DiskManagement association (doesn't change)
+     * */
+    protected int diskManagementId;
 
     public int getSequence()
     {
@@ -44,15 +47,14 @@ public class SecondaryDiskStandard extends DiskStandard
         this.sequence = value;
     }
 
-    @Override
-    public int hashCode()
+    public int getDiskManagementId()
     {
-        return HashCodeBuilder.reflectionHashCode(this);
+        return diskManagementId;
     }
 
-    @Override
-    public boolean equals(final Object obj)
+    public void setDiskManagementId(int diskManagementId)
     {
-        return EqualsBuilder.reflectionEquals(this, obj);
+        this.diskManagementId = diskManagementId;
     }
+    
 }

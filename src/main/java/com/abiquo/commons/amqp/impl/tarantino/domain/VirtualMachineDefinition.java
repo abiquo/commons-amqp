@@ -111,6 +111,32 @@ public class VirtualMachineDefinition
         return secondaryDisks;
     }
 
+    /**
+     * Find in HardDisks and Volumes
+     * 
+     * @return null if sequence not present
+     */
+    @JsonIgnore
+    public DiskDescription getSecondaryDiskBySequence(final Integer sequence)
+    {
+        SecondaryDisks secondaries = getSecondaryDisks();
+        for (SecondaryDiskStandard standard : secondaries.getStandardDisks())
+        {
+            if (sequence == standard.getSequence())
+            {
+                return standard;
+            }
+        }
+        for (SecondaryDiskStateful stateful : secondaries.getStatefulDisks())
+        {
+            if (sequence == stateful.getSequence())
+            {
+                return stateful;
+            }
+        }
+        return null;
+    }
+
     public void setSecondaryDisks(final SecondaryDisks secondaryDisks)
     {
         this.secondaryDisks = secondaryDisks;
@@ -165,6 +191,18 @@ public class VirtualMachineDefinition
     public static class Cdrom
     {
         protected String image;
+        
+        /**
+         * Identify the controller (X:_)
+         */
+        protected Integer busNumber;
+
+        /**
+         * Identify the disk inside the controller (_:X)
+         */
+        protected Integer unitNumber;
+        
+        // fixed DiskControllerType = IDE
 
         public String getImage()
         {
@@ -174,6 +212,26 @@ public class VirtualMachineDefinition
         public void setImage(final String image)
         {
             this.image = image;
+        }
+
+        public Integer getBusNumber()
+        {
+            return busNumber;
+        }
+
+        public void setBusNumber(Integer busNumber)
+        {
+            this.busNumber = busNumber;
+        }
+
+        public Integer getUnitNumber()
+        {
+            return unitNumber;
+        }
+
+        public void setUnitNumber(Integer unitNumber)
+        {
+            this.unitNumber = unitNumber;
         }
     }
 

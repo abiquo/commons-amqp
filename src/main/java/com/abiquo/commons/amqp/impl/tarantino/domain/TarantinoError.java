@@ -101,6 +101,8 @@ public enum TarantinoError
     REFRESH_VIRTUAL_MACHINE_RESOURCES("VM-21",
         "Could not refresh the resources of the virtual machine"),
 
+    SECONDARY_DISK_NOT_FOUND("VM-22", "Auxiliary disk not found"),
+
     // NETWORK
     NETWORK_DECONFIGURE("NET-0",
         "Could not deconfigure the network resources of the virtual machine"),
@@ -158,6 +160,7 @@ public enum TarantinoError
     // External Disks
     ED_CAN_NOT_FIND_IDE_CONTROLLER("ED-0", "Can not find IDE controller in Virtual Machine"),
 
+    @Deprecated // controled in API
     IDE_CONTROLLER_FULL("ED-1", "Can not attach more than 4 disks to IDE controller"),
 
     // vCENTER

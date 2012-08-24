@@ -28,6 +28,19 @@ import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 @JsonSerialize(include = Inclusion.NON_NULL)
 public class DiskDescription
 {
+
+    // TODO sequence and remove SecondaryDisk{Standard/Stateful} classes
+
+    /**
+     * Identify the controller (X:_)
+     */
+    protected Integer busNumber;
+
+    /**
+     * Identify the disk inside the controller (_:X)
+     */
+    protected Integer unitNumber;
+
     public enum DiskControllerType
     {
         SCSI, IDE
@@ -91,6 +104,33 @@ public class DiskDescription
     public boolean isDiskControllerTypeSet()
     {
         return this.diskControllerType != null;
+    }
+
+    public Integer getBusNumber()
+    {
+        return busNumber;
+    }
+
+    public void setBusNumber(Integer busNumber)
+    {
+        this.busNumber = busNumber;
+    }
+
+    public Integer getUnitNumber()
+    {
+        return unitNumber;
+    }
+
+    public void setUnitNumber(Integer unitNumber)
+    {
+        this.unitNumber = unitNumber;
+    }
+
+    @JsonIgnore
+    public void setBusAndUnitNumber(Integer busNumber, Integer unitNumber)
+    {
+        setBusNumber(busNumber);
+        setUnitNumber(unitNumber);
     }
 
     /** ######## DiskFomratType already in the *model* project TODO duplicated ######## **/
