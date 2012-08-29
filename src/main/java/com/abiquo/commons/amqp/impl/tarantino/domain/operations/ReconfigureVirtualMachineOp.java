@@ -21,7 +21,7 @@
 
 package com.abiquo.commons.amqp.impl.tarantino.domain.operations;
 
-import com.abiquo.commons.amqp.impl.tarantino.domain.VirtualMachineDefinition;
+import com.abiquo.hypervisor.model.VirtualMachineDefinition;
 
 /**
  * Updates a {@link VirtualMachineDefinition}

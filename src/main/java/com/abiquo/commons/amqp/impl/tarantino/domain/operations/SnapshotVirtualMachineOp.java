@@ -21,9 +21,9 @@
 
 package com.abiquo.commons.amqp.impl.tarantino.domain.operations;
 
-import com.abiquo.commons.amqp.impl.tarantino.domain.DiskSnapshot;
-import com.abiquo.commons.amqp.impl.tarantino.domain.VirtualMachineDefinition;
-import com.abiquo.commons.amqp.impl.tarantino.domain.VirtualMachineDefinition.PrimaryDisk;
+import com.abiquo.hypervisor.model.DiskSnapshot;
+import com.abiquo.hypervisor.model.VirtualMachineDefinition;
+import com.abiquo.hypervisor.model.VirtualMachineDefinition.PrimaryDisk;
 
 /**
  * Moves the {@link VirtualMachineDefinition} {@link PrimaryDisk} to the datacenter repository.

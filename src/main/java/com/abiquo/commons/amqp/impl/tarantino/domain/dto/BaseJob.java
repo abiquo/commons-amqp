@@ -20,11 +20,10 @@
  */
 package com.abiquo.commons.amqp.impl.tarantino.domain.dto;
 
-import org.codehaus.jackson.annotate.JsonTypeInfo;
-import org.codehaus.jackson.annotate.JsonTypeInfo.As;
-import org.codehaus.jackson.annotate.JsonTypeInfo.Id;
-
 import com.abiquo.commons.amqp.impl.datacenter.domain.DatacenterRequest;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
 @JsonTypeInfo(use = Id.CLASS, include = As.PROPERTY, property = "@class")
 public class BaseJob extends DatacenterRequest
@@ -41,7 +40,7 @@ public class BaseJob extends DatacenterRequest
         return isRollback;
     }
 
-    public void setIsRollback(Boolean isRollback)
+    public void setIsRollback(final Boolean isRollback)
     {
         this.isRollback = isRollback;
     }
@@ -51,12 +50,12 @@ public class BaseJob extends DatacenterRequest
         return id;
     }
 
-    public void setId(String id)
+    public void setId(final String id)
     {
         this.id = id;
     }
 
-    public static String getParent(String id)
+    public static String getParent(final String id)
     {
         if (isRoot(id))
         {
@@ -69,7 +68,7 @@ public class BaseJob extends DatacenterRequest
         }
     }
 
-    public static boolean isRoot(String id)
+    public static boolean isRoot(final String id)
     {
         return !id.contains(".");
     }

@@ -24,12 +24,6 @@ package com.abiquo.commons.amqp.impl.tarantino;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.abiquo.commons.amqp.impl.tarantino.domain.DhcpOptionCom;
-import com.abiquo.commons.amqp.impl.tarantino.domain.DiskDescription.DiskFormatType;
-import com.abiquo.commons.amqp.impl.tarantino.domain.HypervisorConnection.HypervisorType;
-import com.abiquo.commons.amqp.impl.tarantino.domain.StateTransition;
-import com.abiquo.commons.amqp.impl.tarantino.domain.VirtualMachineDefinition;
-import com.abiquo.commons.amqp.impl.tarantino.domain.VirtualMachineDefinition.HardwareConfiguration;
 import com.abiquo.commons.amqp.impl.tarantino.domain.builder.ApplyVirtualMachineStateJobBuilder;
 import com.abiquo.commons.amqp.impl.tarantino.domain.builder.ReconfigureVirtualMachineJobBuilder;
 import com.abiquo.commons.amqp.impl.tarantino.domain.builder.RefreshVirtualMachineResourcesJobBuilder;
@@ -39,6 +33,12 @@ import com.abiquo.commons.amqp.impl.tarantino.domain.operations.ApplyVirtualMach
 import com.abiquo.commons.amqp.impl.tarantino.domain.operations.ReconfigureVirtualMachineOp;
 import com.abiquo.commons.amqp.impl.tarantino.domain.operations.RefreshVirtualMachineResourcesOp;
 import com.abiquo.commons.amqp.impl.tarantino.domain.operations.SnapshotVirtualMachineOp;
+import com.abiquo.hypervisor.model.DhcpOptionCom;
+import com.abiquo.hypervisor.model.DiskDescription.DiskFormatType;
+import com.abiquo.hypervisor.model.HypervisorConnection.HypervisorType;
+import com.abiquo.hypervisor.model.StateTransition;
+import com.abiquo.hypervisor.model.VirtualMachineDefinition;
+import com.abiquo.hypervisor.model.VirtualMachineDefinition.HardwareConfiguration;
 
 public class TestJobs
 {
@@ -47,7 +47,7 @@ public class TestJobs
         return new VirtualMachineDescriptionBuilder()
             //
             .setBasics("virtualMachineID", "ABQ_virtualMachineID").setHA(false)
-            .hardware(1, 256)
+            .hardware(1, 256l)
             //
             .addNetwork("mac:mac:mac", "127.0.0.1", "vSwitchName", "networkName", 1, "leaseName",
                 "forwardMode", "netAddress", "gateway", "mask", "primaryDNS", "secondaryDNS",
@@ -120,7 +120,7 @@ public class TestJobs
     {
         HardwareConfiguration hwConf = new HardwareConfiguration();
         hwConf.setNumVirtualCpus(4);
-        hwConf.setRamInMb(1000);
+        hwConf.setRamInMb(1000l);
 
         VirtualMachineDefinition newVmDef = vmbuilder.build();
         newVmDef.setHardwareConfiguration(hwConf);
@@ -138,7 +138,7 @@ public class TestJobs
     {
         HardwareConfiguration hwConf = new HardwareConfiguration();
         hwConf.setNumVirtualCpus(0);
-        hwConf.setRamInMb(0);
+        hwConf.setRamInMb(0l);
 
         VirtualMachineDefinition newVmDef = vmbuilder.build();
         newVmDef.setHardwareConfiguration(hwConf);

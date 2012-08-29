@@ -21,8 +21,8 @@
 
 package com.abiquo.commons.amqp.impl.tarantino.domain.builder;
 
-import com.abiquo.commons.amqp.impl.tarantino.domain.HypervisorConnection.HypervisorType;
 import com.abiquo.commons.amqp.impl.tarantino.domain.operations.RefreshVirtualMachineResourcesOp;
+import com.abiquo.hypervisor.model.HypervisorConnection.HypervisorType;
 
 public class RefreshVirtualMachineResourcesJobBuilder extends VirtualFactoryJobBuilder
 {

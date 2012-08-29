@@ -21,11 +21,11 @@
 
 package com.abiquo.commons.amqp.impl.tarantino.domain.builder;
 
-import com.abiquo.commons.amqp.impl.tarantino.domain.DiskSnapshot;
-import com.abiquo.commons.amqp.impl.tarantino.domain.DiskStandard;
-import com.abiquo.commons.amqp.impl.tarantino.domain.DiskDescription.DiskFormatType;
-import com.abiquo.commons.amqp.impl.tarantino.domain.HypervisorConnection.HypervisorType;
 import com.abiquo.commons.amqp.impl.tarantino.domain.operations.SnapshotVirtualMachineOp;
+import com.abiquo.hypervisor.model.DiskSnapshot;
+import com.abiquo.hypervisor.model.DiskStandard;
+import com.abiquo.hypervisor.model.DiskDescription.DiskFormatType;
+import com.abiquo.hypervisor.model.HypervisorConnection.HypervisorType;
 
 public class SnapshotVirtualMachineJobBuilder extends VirtualFactoryJobBuilder
 {

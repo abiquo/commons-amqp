@@ -21,9 +21,9 @@
 
 package com.abiquo.commons.amqp.impl.tarantino.domain.builder;
 
-import com.abiquo.commons.amqp.impl.tarantino.domain.HypervisorConnection.HypervisorType;
-import com.abiquo.commons.amqp.impl.tarantino.domain.StateTransition;
 import com.abiquo.commons.amqp.impl.tarantino.domain.operations.ApplyVirtualMachineStateOp;
+import com.abiquo.hypervisor.model.StateTransition;
+import com.abiquo.hypervisor.model.HypervisorConnection.HypervisorType;
 
 public class ApplyVirtualMachineStateJobBuilder extends VirtualFactoryJobBuilder
 {

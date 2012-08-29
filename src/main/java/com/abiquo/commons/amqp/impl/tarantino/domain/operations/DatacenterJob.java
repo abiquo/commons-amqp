@@ -21,13 +21,12 @@
 
 package com.abiquo.commons.amqp.impl.tarantino.domain.operations;
 
-import org.codehaus.jackson.annotate.JsonTypeInfo;
-import org.codehaus.jackson.annotate.JsonTypeInfo.As;
-import org.codehaus.jackson.annotate.JsonTypeInfo.Id;
-
-import com.abiquo.commons.amqp.impl.tarantino.domain.HypervisorConnection;
-import com.abiquo.commons.amqp.impl.tarantino.domain.VirtualMachineDefinition;
 import com.abiquo.commons.amqp.impl.tarantino.domain.dto.BaseJob;
+import com.abiquo.hypervisor.model.HypervisorConnection;
+import com.abiquo.hypervisor.model.VirtualMachineDefinition;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
 /**
  * Carry common attributes to all the virtual machine operations.
@@ -49,7 +48,7 @@ public abstract class DatacenterJob extends BaseJob
         return virtualMachine;
     }
 
-    public void setVirtualMachine(VirtualMachineDefinition virtualMachine)
+    public void setVirtualMachine(final VirtualMachineDefinition virtualMachine)
     {
         this.virtualMachine = virtualMachine;
     }
@@ -59,7 +58,7 @@ public abstract class DatacenterJob extends BaseJob
         return hypervisorConnection;
     }
 
-    public void setHypervisorConnection(HypervisorConnection hypervisorConnection)
+    public void setHypervisorConnection(final HypervisorConnection hypervisorConnection)
     {
         this.hypervisorConnection = hypervisorConnection;
     }
@@ -74,7 +73,7 @@ public abstract class DatacenterJob extends BaseJob
         return retry;
     }
 
-    public void setRetry(Integer retry)
+    public void setRetry(final Integer retry)
     {
         this.retry = retry;
     }

@@ -24,12 +24,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
-import org.codehaus.jackson.annotate.JsonTypeInfo;
-import org.codehaus.jackson.annotate.JsonTypeInfo.As;
-import org.codehaus.jackson.annotate.JsonTypeInfo.Id;
-
 import com.abiquo.commons.amqp.impl.tarantino.domain.operations.DatacenterJob;
 import com.abiquo.commons.amqp.util.JSONUtils;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
 /**
  * Dependent or independent BaseJob collection
@@ -52,7 +51,7 @@ public class DatacenterTasks extends BaseJob
         return dependent;
     }
 
-    public void setDependent(boolean dependent)
+    public void setDependent(final boolean dependent)
     {
         this.dependent = dependent;
     }
@@ -127,7 +126,7 @@ public class DatacenterTasks extends BaseJob
      * 
      * @param job
      */
-    public void addDatacenterJob(DatacenterJob job)
+    public void addDatacenterJob(final DatacenterJob job)
     {
         job.setId(getId().concat(".").concat(UUID.randomUUID().toString()));
         getJobs().add(job);

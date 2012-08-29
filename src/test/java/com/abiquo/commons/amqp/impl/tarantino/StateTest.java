@@ -29,8 +29,8 @@ import java.util.Set;
 
 import org.testng.annotations.Test;
 
-import com.abiquo.commons.amqp.impl.tarantino.domain.State;
-import com.abiquo.commons.amqp.impl.tarantino.domain.StateTransition;
+import com.abiquo.hypervisor.model.State;
+import com.abiquo.hypervisor.model.StateTransition;
 
 public class StateTest
 {

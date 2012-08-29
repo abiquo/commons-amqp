@@ -23,26 +23,21 @@ package com.abiquo.commons.amqp.impl.tarantino.domain.builder;
 
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
-
-import com.abiquo.commons.amqp.impl.tarantino.domain.DhcpOptionCom;
-import com.abiquo.commons.amqp.impl.tarantino.domain.DiskDescription.DiskControllerType;
-import com.abiquo.commons.amqp.impl.tarantino.domain.DiskDescription.DiskFormatType;
-import com.abiquo.commons.amqp.impl.tarantino.domain.DiskStandard;
-import com.abiquo.commons.amqp.impl.tarantino.domain.DiskStateful;
-import com.abiquo.commons.amqp.impl.tarantino.domain.SecondaryDiskStandard;
-import com.abiquo.commons.amqp.impl.tarantino.domain.SecondaryDiskStateful;
-import com.abiquo.commons.amqp.impl.tarantino.domain.VirtualMachineDefinition;
-import com.abiquo.commons.amqp.impl.tarantino.domain.VirtualMachineDefinition.BootstrapConfiguration;
-import com.abiquo.commons.amqp.impl.tarantino.domain.VirtualMachineDefinition.Cdrom;
-import com.abiquo.commons.amqp.impl.tarantino.domain.VirtualMachineDefinition.EthernetDriver;
-import com.abiquo.commons.amqp.impl.tarantino.domain.VirtualMachineDefinition.HardwareConfiguration;
-import com.abiquo.commons.amqp.impl.tarantino.domain.VirtualMachineDefinition.NetworkConfiguration;
-import com.abiquo.commons.amqp.impl.tarantino.domain.VirtualMachineDefinition.PrimaryDisk;
-import com.abiquo.commons.amqp.impl.tarantino.domain.VirtualMachineDefinition.SecondaryDisks;
-import com.abiquo.commons.amqp.impl.tarantino.domain.VirtualNIC;
-import com.abiquo.commons.amqp.impl.tarantino.domain.exception.BuilderException;
-import com.abiquo.commons.amqp.impl.tarantino.domain.exception.BuilderException.VirtualMachineDescriptionBuilderError;
+import com.abiquo.hypervisor.model.DhcpOptionCom;
+import com.abiquo.hypervisor.model.DiskDescription.DiskControllerType;
+import com.abiquo.hypervisor.model.DiskDescription.DiskFormatType;
+import com.abiquo.hypervisor.model.DiskStandard;
+import com.abiquo.hypervisor.model.DiskStateful;
+import com.abiquo.hypervisor.model.SecondaryDiskStandard;
+import com.abiquo.hypervisor.model.SecondaryDiskStateful;
+import com.abiquo.hypervisor.model.VirtualMachineDefinition;
+import com.abiquo.hypervisor.model.VirtualMachineDefinition.BootstrapConfiguration;
+import com.abiquo.hypervisor.model.VirtualMachineDefinition.EthernetDriver;
+import com.abiquo.hypervisor.model.VirtualMachineDefinition.HardwareConfiguration;
+import com.abiquo.hypervisor.model.VirtualMachineDefinition.NetworkConfiguration;
+import com.abiquo.hypervisor.model.VirtualMachineDefinition.PrimaryDisk;
+import com.abiquo.hypervisor.model.VirtualMachineDefinition.SecondaryDisks;
+import com.abiquo.hypervisor.model.VirtualNIC;
 
 public class VirtualMachineDescriptionBuilder
 {

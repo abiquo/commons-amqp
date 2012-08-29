@@ -21,9 +21,12 @@
 
 package com.abiquo.commons.amqp.util;
 
-import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
 
 /**
  * A collection of helper methods to wrap the use of Jackson.
@@ -41,9 +44,12 @@ public class JSONUtils
      * @return A "" array representing the JSON serialization of the object. A null value if the
      *         serialization fails.
      */
-    public static byte[] serialize(Object value)
+    public static byte[] serialize(final Object value)
     {
-        ObjectMapper mapper = new ObjectMapper();
+        // ObjectMapper mapper = new ObjectMapper();
+        ObjectMapper mapper = new XmlMapper();
+        JaxbAnnotationModule jaxbModule = new JaxbAnnotationModule();
+        mapper.registerModule(jaxbModule);
 
         try
         {
@@ -64,14 +70,18 @@ public class JSONUtils
      * @param type The Class of the object to deserialize
      * @return The deserialized object or null if the process fails.
      */
-    public static <T> T deserialize(byte[] bytes, Class<T> type)
+    public static <T> T deserialize(final byte[] bytes, final Class<T> type)
     {
-        ObjectMapper mapper = new ObjectMapper();
+        // ObjectMapper mapper = new ObjectMapper();
+        ObjectMapper mapper = new XmlMapper();
+        JaxbAnnotationModule jaxbModule = new JaxbAnnotationModule();
+        mapper.registerModule(jaxbModule);
+
         String content = new String(bytes);
 
         try
         {
-            return (T) mapper.readValue(content, type);
+            return mapper.readValue(content, type);
         }
         catch (Exception e)
         {

@@ -12,6 +12,11 @@
     <name>Commons AMQP</name>
 
     <dependencies>
+	    <!-- Abiquo dependencies -->
+    	<dependency>
+    	    <groupId>com.abiquo</groupId>
+            <artifactId>discovery-manager-model</artifactId>
+       	</dependency>
         <dependency>
             <groupId>com.rabbitmq</groupId>
             <artifactId>amqp-client</artifactId>
@@ -25,8 +30,12 @@
             <artifactId>commons-lang</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-jaxrs</artifactId>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-jaxb-annotations</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-xml</artifactId>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
@@ -40,18 +49,6 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
         </dependency>
-        <!-- 
-        <dependency>
-            <groupId>com.abiquo</groupId>
-            <artifactId>am-model</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.abiquo</groupId>
-                    <artifactId>api-model</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency> -->
-        <!-- Test dependencies -->
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>

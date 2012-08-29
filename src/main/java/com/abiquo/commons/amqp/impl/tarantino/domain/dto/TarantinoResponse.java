@@ -18,13 +18,11 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
-package com.abiquo.commons.amqp.impl.tarantino.domain;
-
-import org.codehaus.jackson.annotate.JsonIgnore;
+package com.abiquo.commons.amqp.impl.tarantino.domain.dto;
 
 import com.abiquo.commons.amqp.impl.datacenter.domain.DatacenterNotification;
-import com.abiquo.commons.amqp.impl.tarantino.domain.dto.BaseJob;
 import com.abiquo.commons.amqp.util.JSONUtils;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class TarantinoResponse extends DatacenterNotification
 {

@@ -21,9 +21,9 @@
 
 package com.abiquo.commons.amqp.impl.tarantino.domain.builder;
 
-import com.abiquo.commons.amqp.impl.tarantino.domain.HypervisorConnection.HypervisorType;
-import com.abiquo.commons.amqp.impl.tarantino.domain.VirtualMachineDefinition;
 import com.abiquo.commons.amqp.impl.tarantino.domain.operations.ReconfigureVirtualMachineOp;
+import com.abiquo.hypervisor.model.VirtualMachineDefinition;
+import com.abiquo.hypervisor.model.HypervisorConnection.HypervisorType;
 
 public class ReconfigureVirtualMachineJobBuilder extends VirtualFactoryJobBuilder
 {

@@ -40,7 +40,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
-package com.abiquo.commons.amqp.impl.tarantino.domain;
+package com.abiquo.commons.amqp.impl.tarantino.domain.dto;
 
 import java.util.Arrays;
 import java.util.Comparator;

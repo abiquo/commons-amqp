@@ -21,7 +21,7 @@
 
 package com.abiquo.commons.amqp.impl.tarantino.domain.operations;
 
-import com.abiquo.commons.amqp.impl.tarantino.domain.StateTransition;
+import com.abiquo.hypervisor.model.StateTransition;
 
 /**
  * Change the virtual machine state. @see {@link StateTransition}

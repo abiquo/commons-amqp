@@ -21,6 +21,9 @@
 package com.abiquo.commons.amqp.impl.tarantino;
 
 import com.abiquo.commons.amqp.impl.tarantino.domain.TarantinoResponse;
+import com.abiquo.commons.amqp.consumer.RequestBasedCallback;
+import com.abiquo.commons.amqp.consumer.ResponseProcessor;
+import com.abiquo.commons.amqp.impl.tarantino.domain.dto.TarantinoResponse;
 
 public interface TarantinoResponseCallback
 {
