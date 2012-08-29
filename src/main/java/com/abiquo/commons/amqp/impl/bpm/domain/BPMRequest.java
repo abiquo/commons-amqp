@@ -23,10 +23,6 @@ package com.abiquo.commons.amqp.impl.bpm.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.codehaus.jackson.annotate.JsonTypeInfo;
-import org.codehaus.jackson.annotate.JsonTypeInfo.As;
-import org.codehaus.jackson.annotate.JsonTypeInfo.Id;
-
 import com.abiquo.commons.amqp.impl.bpm.domain.job.AbstractBPMJob;
 import com.abiquo.commons.amqp.impl.datacenter.domain.DatacenterRequest;
 import com.abiquo.commons.amqp.util.JSONUtils;

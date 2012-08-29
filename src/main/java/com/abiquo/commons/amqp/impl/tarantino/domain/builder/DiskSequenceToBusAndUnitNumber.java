@@ -7,13 +7,13 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.abiquo.commons.amqp.impl.tarantino.domain.DiskDescription.DiskControllerType;
-import com.abiquo.commons.amqp.impl.tarantino.domain.SecondaryDiskStandard;
-import com.abiquo.commons.amqp.impl.tarantino.domain.SecondaryDiskStateful;
-import com.abiquo.commons.amqp.impl.tarantino.domain.VirtualMachineDefinition;
-import com.abiquo.commons.amqp.impl.tarantino.domain.VirtualMachineDefinition.SecondaryDisks;
 import com.abiquo.commons.amqp.impl.tarantino.domain.exception.BuilderException;
 import com.abiquo.commons.amqp.impl.tarantino.domain.exception.BuilderException.VirtualMachineDescriptionBuilderError;
+import com.abiquo.hypervisor.model.DiskDescription.DiskControllerType;
+import com.abiquo.hypervisor.model.SecondaryDiskStandard;
+import com.abiquo.hypervisor.model.SecondaryDiskStateful;
+import com.abiquo.hypervisor.model.VirtualMachineDefinition;
+import com.abiquo.hypervisor.model.VirtualMachineDefinition.SecondaryDisks;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
@@ -23,7 +23,7 @@ import com.google.common.collect.Ordering;
 public class DiskSequenceToBusAndUnitNumber
 {
     private final static Logger LOG = LoggerFactory.getLogger(DiskSequenceToBusAndUnitNumber.class);
-    
+
     /**
      * Set the bus and unit number for all the Disks in the virtual machine definition. Including
      * PrimaryDisk, SecondaryStandardDisk, SecondaryStatefulDisk and CDRom.
@@ -38,27 +38,27 @@ public class DiskSequenceToBusAndUnitNumber
      * </ul>
      */
     public static VirtualMachineDefinition numerateBusAndUnitBasedOnSequences(
-        VirtualMachineDefinition vmdef)
+        final VirtualMachineDefinition vmdef)
     {
 
         final List<SequenceAndController> sequences = getSequencesWithControllerType(vmdef);
 
         for (DiskAddress address : numerateBusAndUnitBasedOnSequence(sequences,
-            DiskControllerType.IDE == vmdef.getPrimaryDisk().getDiskControllerType(), vmdef
-                .isCdromSet()))
+            DiskControllerType.IDE == vmdef.getPrimaryDisk().getDiskControllerType(),
+            vmdef.isCdromSet()))
         {
             if (-1 == address.sequence) // has cdrom set
             {
-                LOG.debug("CD-ROM will use {}:{}",address.busNumber, address.unitNumber);
-                
+                LOG.debug("CD-ROM will use {}:{}", address.busNumber, address.unitNumber);
+
                 vmdef.getCdrom().setBusNumber(address.busNumber);
                 vmdef.getCdrom().setUnitNumber(address.unitNumber);
             }
             else
             {
-                LOG.debug("Secondary Disk with sequence {} will use {} ", address.sequence, String
-                    .format("%d:%d", address.busNumber, address.unitNumber));
-                
+                LOG.debug("Secondary Disk with sequence {} will use {} ", address.sequence,
+                    String.format("%d:%d", address.busNumber, address.unitNumber));
+
                 vmdef.getSecondaryDiskBySequence(address.sequence).//
                     setBusAndUnitNumber(address.busNumber, address.unitNumber);
             }
@@ -77,7 +77,7 @@ public class DiskSequenceToBusAndUnitNumber
     }
 
     private static List<SequenceAndController> getSequencesWithControllerType(
-        VirtualMachineDefinition vmdef)
+        final VirtualMachineDefinition vmdef)
     {
         final List<SequenceAndController> sequences = new LinkedList<SequenceAndController>();
 
@@ -100,7 +100,7 @@ public class DiskSequenceToBusAndUnitNumber
     }
 
     private static List<DiskAddress> numerateBusAndUnitBasedOnSequence(
-        List<SequenceAndController> sequences, boolean primaryIde, boolean isCdrom)
+        final List<SequenceAndController> sequences, final boolean primaryIde, final boolean isCdrom)
     {
         if (isCdrom)
         {
@@ -110,22 +110,22 @@ public class DiskSequenceToBusAndUnitNumber
         }
 
         ImmutableList<SequenceAndController> sortedIdes =
-            ImmutableList.copyOf(Ordering.natural().onResultOf(sequenceOrdering).sortedCopy(
-                Iterables.filter(sequences, new Predicate<SequenceAndController>()
+            ImmutableList.copyOf(Ordering.natural().onResultOf(sequenceOrdering)
+                .sortedCopy(Iterables.filter(sequences, new Predicate<SequenceAndController>()
                 {
                     @Override
-                    public boolean apply(SequenceAndController input)
+                    public boolean apply(final SequenceAndController input)
                     {
                         return DiskControllerType.IDE == input.controller;
                     }
                 })));
 
         ImmutableList<SequenceAndController> sortedScsi =
-            ImmutableList.copyOf(Ordering.natural().onResultOf(sequenceOrdering).sortedCopy(
-                Iterables.filter(sequences, new Predicate<SequenceAndController>()
+            ImmutableList.copyOf(Ordering.natural().onResultOf(sequenceOrdering)
+                .sortedCopy(Iterables.filter(sequences, new Predicate<SequenceAndController>()
                 {
                     @Override
-                    public boolean apply(SequenceAndController input)
+                    public boolean apply(final SequenceAndController input)
                     {
                         return DiskControllerType.SCSI == input.controller;
                     }
@@ -136,14 +136,16 @@ public class DiskSequenceToBusAndUnitNumber
         Integer regularSequence = primaryIde ? 1 : 0;
         for (SequenceAndController seq : sortedIdes)
         {
-            // FIXME now is controlled in tarantino in order to avoid a transaction mess in TarantinoService
+            // FIXME now is controlled in tarantino in order to avoid a transaction mess in
+            // TarantinoService
             // if (regularSequence > 3)
             // {
-            //     throw new BuilderException(VirtualMachineDescriptionBuilderError.IDE_FULL);
+            // throw new BuilderException(VirtualMachineDescriptionBuilderError.IDE_FULL);
             // }
 
             addresses.add(new DiskAddress(seq.sequence, //
-                (int) (regularSequence / 2), regularSequence % 2));
+                regularSequence / 2,
+                regularSequence % 2));
             regularSequence++;
         }
 
@@ -163,21 +165,20 @@ public class DiskSequenceToBusAndUnitNumber
         new Function<SequenceAndController, Integer>()
         {
             @Override
-            public Integer apply(SequenceAndController from)
+            public Integer apply(final SequenceAndController from)
             {
                 return from.sequence;
             }
         };
 
-    private static void checkNoSequenceRepetition(List<SequenceAndController> sequences)
+    private static void checkNoSequenceRepetition(final List<SequenceAndController> sequences)
     {
         HashSet<Integer> setseq = new HashSet<Integer>();
         for (SequenceAndController s : sequences)
         {
             if (!setseq.add(s.sequence))
             {
-                throw new BuilderException(
-                    VirtualMachineDescriptionBuilderError.SEQUENCE_REPETITION);
+                throw new BuilderException(VirtualMachineDescriptionBuilderError.SEQUENCE_REPETITION);
             }
         }
     }
@@ -192,7 +193,7 @@ public class DiskSequenceToBusAndUnitNumber
 
         public final DiskControllerType controller;
 
-        public SequenceAndController(Integer sequence, DiskControllerType controller)
+        public SequenceAndController(final Integer sequence, final DiskControllerType controller)
         {
             super();
             this.sequence = sequence;
@@ -207,8 +208,8 @@ public class DiskSequenceToBusAndUnitNumber
         public final Integer busNumber;
 
         public final Integer unitNumber;
-        
-        public DiskAddress(Integer sequence, Integer busNumber, Integer unitNumber)
+
+        public DiskAddress(final Integer sequence, final Integer busNumber, final Integer unitNumber)
         {
             super();
             this.sequence = sequence;

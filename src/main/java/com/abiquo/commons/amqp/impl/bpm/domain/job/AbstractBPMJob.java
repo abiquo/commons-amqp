@@ -1,8 +1,8 @@
 package com.abiquo.commons.amqp.impl.bpm.domain.job;
 
-import org.codehaus.jackson.annotate.JsonTypeInfo;
-import org.codehaus.jackson.annotate.JsonTypeInfo.As;
-import org.codehaus.jackson.annotate.JsonTypeInfo.Id;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
 @JsonTypeInfo(use = Id.CLASS, include = As.PROPERTY, property = "@class")
 public abstract class AbstractBPMJob
@@ -23,7 +23,7 @@ public abstract class AbstractBPMJob
 
     private BPMJobType type;
 
-    public AbstractBPMJob(BPMJobType type)
+    public AbstractBPMJob(final BPMJobType type)
     {
         this.type = type;
     }

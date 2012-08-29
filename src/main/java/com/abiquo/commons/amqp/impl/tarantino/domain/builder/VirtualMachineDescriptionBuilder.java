@@ -23,6 +23,10 @@ package com.abiquo.commons.amqp.impl.tarantino.domain.builder;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
+import com.abiquo.commons.amqp.impl.tarantino.domain.exception.BuilderException;
+import com.abiquo.commons.amqp.impl.tarantino.domain.exception.BuilderException.VirtualMachineDescriptionBuilderError;
 import com.abiquo.hypervisor.model.DhcpOptionCom;
 import com.abiquo.hypervisor.model.DiskDescription.DiskControllerType;
 import com.abiquo.hypervisor.model.DiskDescription.DiskFormatType;
@@ -32,6 +36,7 @@ import com.abiquo.hypervisor.model.SecondaryDiskStandard;
 import com.abiquo.hypervisor.model.SecondaryDiskStateful;
 import com.abiquo.hypervisor.model.VirtualMachineDefinition;
 import com.abiquo.hypervisor.model.VirtualMachineDefinition.BootstrapConfiguration;
+import com.abiquo.hypervisor.model.VirtualMachineDefinition.Cdrom;
 import com.abiquo.hypervisor.model.VirtualMachineDefinition.EthernetDriver;
 import com.abiquo.hypervisor.model.VirtualMachineDefinition.HardwareConfiguration;
 import com.abiquo.hypervisor.model.VirtualMachineDefinition.NetworkConfiguration;
@@ -65,7 +70,7 @@ public class VirtualMachineDescriptionBuilder
     {
         hardConf = new HardwareConfiguration();
         hardConf.setNumVirtualCpus(virtualCpu);
-        hardConf.setRamInMb(ramInMb);
+        hardConf.setRamInMb((long) ramInMb);
 
         return this;
     }

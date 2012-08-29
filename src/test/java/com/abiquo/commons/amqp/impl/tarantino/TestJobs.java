@@ -47,7 +47,7 @@ public class TestJobs
         return new VirtualMachineDescriptionBuilder()
             //
             .setBasics("virtualMachineID", "ABQ_virtualMachineID").setHA(false)
-            .hardware(1, 256l)
+            .hardware(1, 256)
             //
             .addNetwork("mac:mac:mac", "127.0.0.1", "vSwitchName", "networkName", 1, "leaseName",
                 "forwardMode", "netAddress", "gateway", "mask", "primaryDNS", "secondaryDNS",

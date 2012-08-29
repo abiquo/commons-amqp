@@ -21,9 +21,9 @@
 
 package com.abiquo.commons.amqp.impl.tarantino.domain.builder;
 
-import static com.abiquo.commons.amqp.impl.tarantino.domain.DiskDescription.DiskControllerType.IDE;
-import static com.abiquo.commons.amqp.impl.tarantino.domain.DiskDescription.DiskControllerType.SCSI;
 import static com.abiquo.commons.amqp.impl.tarantino.domain.builder.DiskSequenceToBusAndUnitNumber.numerateBusAndUnitBasedOnSequences;
+import static com.abiquo.hypervisor.model.DiskDescription.DiskControllerType.IDE;
+import static com.abiquo.hypervisor.model.DiskDescription.DiskControllerType.SCSI;
 import static com.abiquo.testng.TestConfig.BASIC_UNIT_TESTS;
 
 import java.util.Random;
@@ -31,13 +31,13 @@ import java.util.Random;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import com.abiquo.commons.amqp.impl.tarantino.domain.DiskDescription;
-import com.abiquo.commons.amqp.impl.tarantino.domain.DiskDescription.DiskControllerType;
-import com.abiquo.commons.amqp.impl.tarantino.domain.DiskDescription.DiskFormatType;
-import com.abiquo.commons.amqp.impl.tarantino.domain.VirtualMachineDefinition;
 import com.abiquo.commons.amqp.impl.tarantino.domain.builder.DiskSequenceToBusAndUnitNumber.DiskAddress;
 import com.abiquo.commons.amqp.impl.tarantino.domain.builder.DiskSequenceToBusAndUnitNumber.SequenceAndController;
 import com.abiquo.commons.amqp.impl.tarantino.domain.exception.BuilderException;
+import com.abiquo.hypervisor.model.DiskDescription;
+import com.abiquo.hypervisor.model.DiskDescription.DiskControllerType;
+import com.abiquo.hypervisor.model.DiskDescription.DiskFormatType;
+import com.abiquo.hypervisor.model.VirtualMachineDefinition;
 
 /**
  * Checks had disk and volumes sequence to unitNumber function
@@ -100,7 +100,8 @@ public class DiskSequenceToBusAndUnitNumberTest
         checkvmdefinition(def, address(seq, "0:1"));
     }
 
-    @Test(expectedExceptions = {BuilderException.class}, enabled = false) // FIXME
+    @Test(expectedExceptions = {BuilderException.class}, enabled = false)
+    // FIXME
     public void test_primaryIDE_toomany_IDE()
     {
         def = vmdefinition(IDE, //
@@ -110,7 +111,8 @@ public class DiskSequenceToBusAndUnitNumberTest
         Assert.assertFalse(true, "too many ides");
     }
 
-    @Test(expectedExceptions = {BuilderException.class}, enabled = false) // FIXME
+    @Test(expectedExceptions = {BuilderException.class}, enabled = false)
+    // FIXME
     public void test_primarySCSI_toomany_IDE()
     {
         def = vmdefinition(SCSI, //
@@ -168,16 +170,16 @@ public class DiskSequenceToBusAndUnitNumberTest
 
         def = numerateBusAndUnitBasedOnSequences(def);
 
-        checkvmdefinition(def, address(1, "0:0"), address(2, "0:1"), address(3, "1:0"), address(4,
-            "1:1"));
+        checkvmdefinition(def, address(1, "0:0"), address(2, "0:1"), address(3, "1:0"),
+            address(4, "1:1"));
 
         def = vmdefinition(SCSI, //
             disk(5, IDE), disk(7, IDE), disk(11, IDE), disk(13, IDE));
 
         def = numerateBusAndUnitBasedOnSequences(def);
 
-        checkvmdefinition(def, address(5, "0:0"), address(7, "0:1"), address(11, "1:0"), address(
-            13, "1:1"));
+        checkvmdefinition(def, address(5, "0:0"), address(7, "0:1"), address(11, "1:0"),
+            address(13, "1:1"));
     }
 
     @Test
@@ -268,7 +270,8 @@ public class DiskSequenceToBusAndUnitNumberTest
         checkvmdefinition(def, "0:0", address(seq, "0:1"));
     }
 
-    @Test(enabled = false) // FIXME
+    @Test(enabled = false)
+    // FIXME
     public void test_primaryIDE_toomany_IDE_andCdrom()
     {
         def = vmdefinition(IDE, true,//
@@ -284,7 +287,8 @@ public class DiskSequenceToBusAndUnitNumberTest
         }
     }
 
-    @Test(enabled = false) // FIXME
+    @Test(enabled = false)
+    // FIXME
     public void test_primarySCSI_toomany_IDE_andCdrom()
     {
         def = vmdefinition(SCSI, true,//
@@ -404,7 +408,8 @@ public class DiskSequenceToBusAndUnitNumberTest
      * AUX METHODS
      */
 
-    public static void checkvmdefinition(VirtualMachineDefinition vmdefinition, DiskAddress... addresses)
+    public static void checkvmdefinition(final VirtualMachineDefinition vmdefinition,
+        final DiskAddress... addresses)
     {
         for (DiskAddress address : addresses)
         {
@@ -417,33 +422,38 @@ public class DiskSequenceToBusAndUnitNumberTest
         }
     }
 
-    public static void checkvmdefinition(VirtualMachineDefinition vmdefinition, final String cdromAddress,
-        DiskAddress... addresses)
+    public static void checkvmdefinition(final VirtualMachineDefinition vmdefinition,
+        final String cdromAddress, final DiskAddress... addresses)
     {
         checkvmdefinition(vmdefinition, addresses);
         Assert.assertEquals(String.format("%d:%d", vmdefinition.getCdrom().getBusNumber(),
             vmdefinition.getCdrom().getUnitNumber()), cdromAddress);
     }
 
-    public static VirtualMachineDefinition vmdefinition(DiskControllerType primaryDiskController,
-        SequenceAndControllerAndManId... disks)
+    public static VirtualMachineDefinition vmdefinition(
+        final DiskControllerType primaryDiskController,
+        final SequenceAndControllerAndManId... disks)
     {
         VirtualMachineDescriptionBuilder builder =
-            new VirtualMachineDescriptionBuilder().hardware(2, 2048).setBasics("uuid", "name").//
+            new VirtualMachineDescriptionBuilder().hardware(2, 2048)
+                .setBasics("uuid", "name")
+                .//
                 primaryDisk(DiskFormatType.RAW, 2024, "repository", "sourcePath",
                     "destinationDatastore", "repositoryManagerAddress", primaryDiskController);
 
         for (SequenceAndControllerAndManId disk : disks)
         {
-            builder.addSecondaryHardDisk(2048, disk.sequence, String.format("disk %d %s",
-                disk.sequence, disk.controller), disk.controller, disk.manId);
+            builder.addSecondaryHardDisk(2048, disk.sequence,
+                String.format("disk %d %s", disk.sequence, disk.controller), disk.controller,
+                disk.manId);
         }
 
         return builder.build();
     }
 
-    public static VirtualMachineDefinition vmdefinition(DiskControllerType primaryDiskController, boolean cdrom,
-        SequenceAndControllerAndManId... disks)
+    public static VirtualMachineDefinition vmdefinition(
+        final DiskControllerType primaryDiskController, final boolean cdrom,
+        final SequenceAndControllerAndManId... disks)
     {
         VirtualMachineDefinition def = vmdefinition(primaryDiskController, disks);
         if (cdrom)
@@ -453,37 +463,42 @@ public class DiskSequenceToBusAndUnitNumberTest
 
         return def;
     }
-    
-    
+
     static public class SequenceAndControllerAndManId extends SequenceAndController
     {
         public Integer manId;
-        public SequenceAndControllerAndManId(Integer sequence, DiskControllerType controller, Integer manId)
+
+        public SequenceAndControllerAndManId(final Integer sequence,
+            final DiskControllerType controller, final Integer manId)
         {
             super(sequence, controller);
             this.manId = manId;
         }
     }
 
-    public static SequenceAndControllerAndManId disk(Integer manId, Integer sequence, DiskControllerType controller)
+    public static SequenceAndControllerAndManId disk(final Integer manId, final Integer sequence,
+        final DiskControllerType controller)
     {
         return new SequenceAndControllerAndManId(sequence, controller, manId);
     }
-    
-    public static SequenceAndControllerAndManId disk(Integer sequence, DiskControllerType controller)
+
+    public static SequenceAndControllerAndManId disk(final Integer sequence,
+        final DiskControllerType controller)
     {
         return new SequenceAndControllerAndManId(sequence, controller, sequence);
     }
 
-    public static DiskAddress address(Integer sequence, Integer busNumber, Integer unitNumber)
+    public static DiskAddress address(final Integer sequence, final Integer busNumber,
+        final Integer unitNumber)
     {
         return new DiskAddress(sequence, busNumber, unitNumber);
     }
 
-    public static DiskAddress address(Integer sequence, String address)
+    public static DiskAddress address(final Integer sequence, final String address)
     {
-        return new DiskAddress(sequence, Integer.valueOf(address.split(":")[0]), Integer
-            .valueOf(address.split(":")[1]));
+        return new DiskAddress(sequence,
+            Integer.valueOf(address.split(":")[0]),
+            Integer.valueOf(address.split(":")[1]));
     }
 
 }

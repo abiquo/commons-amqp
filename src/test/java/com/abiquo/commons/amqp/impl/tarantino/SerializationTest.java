@@ -30,11 +30,11 @@ import static org.testng.Assert.assertNotNull;
 import org.testng.annotations.Test;
 
 import com.abiquo.commons.amqp.impl.datacenter.domain.DatacenterRequest;
-import com.abiquo.commons.amqp.impl.tarantino.domain.VirtualMachineDefinition.Cdrom;
 import com.abiquo.commons.amqp.impl.tarantino.domain.dto.DatacenterTasks;
 import com.abiquo.commons.amqp.impl.tarantino.domain.operations.ApplyVirtualMachineStateOp;
 import com.abiquo.commons.amqp.impl.tarantino.domain.operations.ReconfigureVirtualMachineOp;
 import com.abiquo.commons.amqp.impl.tarantino.domain.operations.SnapshotVirtualMachineOp;
+import com.abiquo.hypervisor.model.VirtualMachineDefinition.Cdrom;
 
 public class SerializationTest
 {
