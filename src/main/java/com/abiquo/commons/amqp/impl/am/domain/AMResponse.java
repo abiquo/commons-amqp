@@ -21,15 +21,14 @@
 
 package com.abiquo.commons.amqp.impl.am.domain;
 
-import com.abiquo.commons.amqp.impl.datacenter.domain.DatacenterNotification;
+import com.abiquo.commons.amqp.domain.Queuable;
 import com.abiquo.commons.amqp.util.JSONUtils;
 
-public class AMResponse extends DatacenterNotification
+public class AMResponse implements Queuable
 {
     /** identify the event **/
 
     private String taskId;
-    
 
     protected String datacenterUuid;
 
@@ -107,7 +106,7 @@ public class AMResponse extends DatacenterNotification
     {
         this.datacenterUuid = datacenterUuid;
     }
-    
+
     public String getTaskId()
     {
         return taskId;
@@ -118,9 +117,14 @@ public class AMResponse extends DatacenterNotification
         this.taskId = taskId;
     }
 
-
     public static AMResponse fromByteArray(final byte[] bytes)
     {
         return JSONUtils.deserialize(bytes, AMResponse.class);
+    }
+
+    @Override
+    public byte[] toByteArray()
+    {
+        return JSONUtils.serialize(this);
     }
 }
