@@ -15,7 +15,7 @@
 	    <!-- Abiquo dependencies -->
     	<dependency>
     	    <groupId>com.abiquo</groupId>
-            <artifactId>discovery-manager-model</artifactId>
+            <artifactId>remote-services-model</artifactId>
        	</dependency>
         <dependency>
             <groupId>com.rabbitmq</groupId>
