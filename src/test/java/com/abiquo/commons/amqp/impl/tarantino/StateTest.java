@@ -29,8 +29,8 @@ import java.util.Set;
 
 import org.testng.annotations.Test;
 
-import com.abiquo.hypervisor.model.State;
-import com.abiquo.hypervisor.model.StateTransition;
+import com.abiquo.rsmodel.domain.common.virtualmachine.State;
+import com.abiquo.rsmodel.domain.common.virtualmachine.StateTransition;
 
 public class StateTest
 {

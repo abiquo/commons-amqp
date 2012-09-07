@@ -25,7 +25,7 @@ import static org.testng.Assert.assertNull;
 
 import org.testng.annotations.Test;
 
-import com.abiquo.commons.amqp.impl.tarantino.domain.dto.DatacenterTasks;
+import com.abiquo.rsmodel.amqp.tarantino.dto.DatacenterTasks;
 
 public class DatacenterTasksTest
 {

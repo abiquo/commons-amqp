@@ -28,8 +28,8 @@ import static com.abiquo.commons.amqp.util.ConsumerUtils.rejectMessage;
 import java.io.IOException;
 
 import com.abiquo.commons.amqp.consumer.BaseConsumer;
-import com.abiquo.commons.amqp.impl.datacenter.domain.DatacenterNotification;
-import com.abiquo.commons.amqp.impl.tarantino.domain.dto.TarantinoResponse;
+import com.abiquo.rsmodel.amqp.datacenter.DatacenterNotification;
+import com.abiquo.rsmodel.amqp.tarantino.dto.TarantinoResponse;
 import com.rabbitmq.client.Envelope;
 
 public class DatacenterNotificationConsumer extends BaseConsumer<DatacenterNotificationCallback>

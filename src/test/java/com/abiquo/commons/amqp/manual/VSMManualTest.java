@@ -29,7 +29,7 @@ import com.abiquo.commons.amqp.impl.vsm.VSMCallback;
 import com.abiquo.commons.amqp.impl.vsm.VSMConfiguration;
 import com.abiquo.commons.amqp.impl.vsm.VSMConsumer;
 import com.abiquo.commons.amqp.impl.vsm.VSMProducer;
-import com.abiquo.commons.amqp.impl.vsm.domain.VirtualSystemEvent;
+import com.abiquo.rsmodel.amqp.vsm.VirtualSystemEvent;
 
 public class VSMManualTest
 {

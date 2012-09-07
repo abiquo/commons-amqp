@@ -27,8 +27,8 @@ import static com.abiquo.commons.amqp.util.ProducerUtils.publishPersistentText;
 
 import java.io.IOException;
 
-import com.abiquo.commons.amqp.impl.vsm.domain.VirtualSystemEvent;
 import com.abiquo.commons.amqp.producer.BaseProducer;
+import com.abiquo.rsmodel.amqp.vsm.VirtualSystemEvent;
 
 public class VSMProducer extends BaseProducer<VirtualSystemEvent>
 {

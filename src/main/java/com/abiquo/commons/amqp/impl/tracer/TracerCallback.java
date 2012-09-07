@@ -21,7 +21,7 @@
 
 package com.abiquo.commons.amqp.impl.tracer;
 
-import com.abiquo.commons.amqp.impl.tracer.domain.Trace;
+import com.abiquo.rsmodel.amqp.tracer.Trace;
 
 public interface TracerCallback
 {

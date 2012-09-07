@@ -23,12 +23,12 @@ package com.abiquo.commons.amqp.impl.bpm;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import com.abiquo.commons.amqp.impl.bpm.domain.BPMRequest;
-import com.abiquo.commons.amqp.impl.bpm.domain.BPMResponse;
-import com.abiquo.commons.amqp.impl.bpm.domain.job.AbstractBPMJob;
-import com.abiquo.commons.amqp.impl.bpm.domain.job.DiskConversionJob;
-import com.abiquo.commons.amqp.impl.bpm.domain.job.DiskToVolumeJob;
-import com.abiquo.commons.amqp.impl.datacenter.domain.DatacenterNotification;
+import com.abiquo.rsmodel.amqp.bpm.AbstractBPMJob;
+import com.abiquo.rsmodel.amqp.bpm.BPMRequest;
+import com.abiquo.rsmodel.amqp.bpm.BPMResponse;
+import com.abiquo.rsmodel.amqp.bpm.DiskConversionJob;
+import com.abiquo.rsmodel.amqp.bpm.DiskToVolumeJob;
+import com.abiquo.rsmodel.amqp.datacenter.DatacenterNotification;
 
 public class SerializationTest
 {

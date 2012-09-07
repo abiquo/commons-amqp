@@ -21,8 +21,8 @@
 
 package com.abiquo.commons.amqp.impl.am.domain;
 
-import com.abiquo.commons.amqp.impl.datacenter.domain.DatacenterNotification;
-import com.abiquo.commons.amqp.util.JSONUtils;
+import com.abiquo.rsmodel.amqp.datacenter.DatacenterNotification;
+import com.abiquo.rsmodel.amqp.util.JSONUtils;
 
 public class AMResponse extends DatacenterNotification
 {

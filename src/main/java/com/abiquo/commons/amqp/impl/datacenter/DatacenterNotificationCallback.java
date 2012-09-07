@@ -21,7 +21,7 @@
 
 package com.abiquo.commons.amqp.impl.datacenter;
 
-import com.abiquo.commons.amqp.impl.datacenter.domain.DatacenterNotification;
+import com.abiquo.rsmodel.amqp.datacenter.DatacenterNotification;
 
 public interface DatacenterNotificationCallback
 {

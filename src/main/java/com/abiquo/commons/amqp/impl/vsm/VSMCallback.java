@@ -21,7 +21,7 @@
 
 package com.abiquo.commons.amqp.impl.vsm;
 
-import com.abiquo.commons.amqp.impl.vsm.domain.VirtualSystemEvent;
+import com.abiquo.rsmodel.amqp.vsm.VirtualSystemEvent;
 
 public interface VSMCallback
 {

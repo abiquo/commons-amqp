@@ -21,9 +21,9 @@
 
 package com.abiquo.commons.amqp.impl.tarantino.domain.builder;
 
-import static com.abiquo.commons.amqp.impl.tarantino.domain.builder.DiskSequenceToBusAndUnitNumber.numerateBusAndUnitBasedOnSequences;
-import static com.abiquo.hypervisor.model.DiskDescription.DiskControllerType.IDE;
-import static com.abiquo.hypervisor.model.DiskDescription.DiskControllerType.SCSI;
+import static com.abiquo.rsmodel.amqp.tarantino.builder.DiskSequenceToBusAndUnitNumber.numerateBusAndUnitBasedOnSequences;
+import static com.abiquo.rsmodel.domain.common.hypervisor.DiskDescription.DiskControllerType.IDE;
+import static com.abiquo.rsmodel.domain.common.hypervisor.DiskDescription.DiskControllerType.SCSI;
 import static com.abiquo.testng.TestConfig.BASIC_UNIT_TESTS;
 
 import java.util.Random;
@@ -31,13 +31,14 @@ import java.util.Random;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import com.abiquo.commons.amqp.impl.tarantino.domain.builder.DiskSequenceToBusAndUnitNumber.DiskAddress;
-import com.abiquo.commons.amqp.impl.tarantino.domain.builder.DiskSequenceToBusAndUnitNumber.SequenceAndController;
-import com.abiquo.commons.amqp.impl.tarantino.domain.exception.BuilderException;
-import com.abiquo.hypervisor.model.DiskDescription;
-import com.abiquo.hypervisor.model.DiskDescription.DiskControllerType;
-import com.abiquo.hypervisor.model.DiskDescription.DiskFormatType;
-import com.abiquo.hypervisor.model.VirtualMachineDefinition;
+import com.abiquo.rsmodel.amqp.tarantino.builder.DiskSequenceToBusAndUnitNumber.DiskAddress;
+import com.abiquo.rsmodel.amqp.tarantino.builder.DiskSequenceToBusAndUnitNumber.SequenceAndController;
+import com.abiquo.rsmodel.amqp.tarantino.builder.VirtualMachineDescriptionBuilder;
+import com.abiquo.rsmodel.amqp.tarantino.exception.BuilderException;
+import com.abiquo.rsmodel.domain.common.hypervisor.DiskDescription;
+import com.abiquo.rsmodel.domain.common.hypervisor.DiskDescription.DiskControllerType;
+import com.abiquo.rsmodel.domain.common.hypervisor.DiskDescription.DiskFormatType;
+import com.abiquo.rsmodel.domain.common.virtualmachine.VirtualMachineDefinition;
 
 /**
  * Checks had disk and volumes sequence to unitNumber function

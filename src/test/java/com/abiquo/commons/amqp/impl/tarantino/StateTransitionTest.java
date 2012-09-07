@@ -21,15 +21,15 @@
 
 package com.abiquo.commons.amqp.impl.tarantino;
 
-import static com.abiquo.hypervisor.model.StateTransition.CONFIGURE;
-import static com.abiquo.hypervisor.model.StateTransition.DECONFIGURE;
-import static com.abiquo.hypervisor.model.StateTransition.PAUSE;
-import static com.abiquo.hypervisor.model.StateTransition.POWEROFF;
-import static com.abiquo.hypervisor.model.StateTransition.POWERON;
-import static com.abiquo.hypervisor.model.StateTransition.RECONFIGURE;
-import static com.abiquo.hypervisor.model.StateTransition.RESET;
-import static com.abiquo.hypervisor.model.StateTransition.RESUME;
-import static com.abiquo.hypervisor.model.StateTransition.SNAPSHOT;
+import static com.abiquo.rsmodel.domain.common.virtualmachine.StateTransition.CONFIGURE;
+import static com.abiquo.rsmodel.domain.common.virtualmachine.StateTransition.DECONFIGURE;
+import static com.abiquo.rsmodel.domain.common.virtualmachine.StateTransition.PAUSE;
+import static com.abiquo.rsmodel.domain.common.virtualmachine.StateTransition.POWEROFF;
+import static com.abiquo.rsmodel.domain.common.virtualmachine.StateTransition.POWERON;
+import static com.abiquo.rsmodel.domain.common.virtualmachine.StateTransition.RECONFIGURE;
+import static com.abiquo.rsmodel.domain.common.virtualmachine.StateTransition.RESET;
+import static com.abiquo.rsmodel.domain.common.virtualmachine.StateTransition.RESUME;
+import static com.abiquo.rsmodel.domain.common.virtualmachine.StateTransition.SNAPSHOT;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
@@ -39,8 +39,8 @@ import java.util.Set;
 
 import org.testng.annotations.Test;
 
-import com.abiquo.hypervisor.model.State;
-import com.abiquo.hypervisor.model.StateTransition;
+import com.abiquo.rsmodel.domain.common.virtualmachine.State;
+import com.abiquo.rsmodel.domain.common.virtualmachine.StateTransition;
 
 public class StateTransitionTest
 {

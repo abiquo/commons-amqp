@@ -24,21 +24,21 @@ package com.abiquo.commons.amqp.impl.tarantino;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.abiquo.commons.amqp.impl.tarantino.domain.builder.ApplyVirtualMachineStateJobBuilder;
-import com.abiquo.commons.amqp.impl.tarantino.domain.builder.ReconfigureVirtualMachineJobBuilder;
-import com.abiquo.commons.amqp.impl.tarantino.domain.builder.RefreshVirtualMachineResourcesJobBuilder;
-import com.abiquo.commons.amqp.impl.tarantino.domain.builder.SnapshotVirtualMachineJobBuilder;
-import com.abiquo.commons.amqp.impl.tarantino.domain.builder.VirtualMachineDescriptionBuilder;
-import com.abiquo.commons.amqp.impl.tarantino.domain.operations.ApplyVirtualMachineStateOp;
-import com.abiquo.commons.amqp.impl.tarantino.domain.operations.ReconfigureVirtualMachineOp;
-import com.abiquo.commons.amqp.impl.tarantino.domain.operations.RefreshVirtualMachineResourcesOp;
-import com.abiquo.commons.amqp.impl.tarantino.domain.operations.SnapshotVirtualMachineOp;
-import com.abiquo.hypervisor.model.DhcpOptionCom;
-import com.abiquo.hypervisor.model.DiskDescription.DiskFormatType;
-import com.abiquo.hypervisor.model.HypervisorConnection.HypervisorType;
-import com.abiquo.hypervisor.model.StateTransition;
-import com.abiquo.hypervisor.model.VirtualMachineDefinition;
-import com.abiquo.hypervisor.model.VirtualMachineDefinition.HardwareConfiguration;
+import com.abiquo.rsmodel.amqp.tarantino.builder.ApplyVirtualMachineStateJobBuilder;
+import com.abiquo.rsmodel.amqp.tarantino.builder.ReconfigureVirtualMachineJobBuilder;
+import com.abiquo.rsmodel.amqp.tarantino.builder.RefreshVirtualMachineResourcesJobBuilder;
+import com.abiquo.rsmodel.amqp.tarantino.builder.SnapshotVirtualMachineJobBuilder;
+import com.abiquo.rsmodel.amqp.tarantino.builder.VirtualMachineDescriptionBuilder;
+import com.abiquo.rsmodel.amqp.tarantino.operations.ApplyVirtualMachineStateOp;
+import com.abiquo.rsmodel.amqp.tarantino.operations.ReconfigureVirtualMachineOp;
+import com.abiquo.rsmodel.amqp.tarantino.operations.RefreshVirtualMachineResourcesOp;
+import com.abiquo.rsmodel.amqp.tarantino.operations.SnapshotVirtualMachineOp;
+import com.abiquo.rsmodel.domain.common.hypervisor.DiskDescription.DiskFormatType;
+import com.abiquo.rsmodel.domain.common.hypervisor.HypervisorConnection.HypervisorType;
+import com.abiquo.rsmodel.domain.common.virtualmachine.StateTransition;
+import com.abiquo.rsmodel.domain.common.virtualmachine.VirtualMachineDefinition;
+import com.abiquo.rsmodel.domain.common.virtualmachine.VirtualMachineDefinition.HardwareConfiguration;
+import com.abiquo.rsmodel.domain.tarantino.dhcp.DhcpOptionCom;
 
 public class TestJobs
 {
