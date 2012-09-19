@@ -29,7 +29,6 @@ public class AMResponse extends DatacenterNotification
     /** identify the event **/
 
     private String taskId;
-    
 
     protected String datacenterUuid;
 
@@ -107,7 +106,7 @@ public class AMResponse extends DatacenterNotification
     {
         this.datacenterUuid = datacenterUuid;
     }
-    
+
     public String getTaskId()
     {
         return taskId;
@@ -117,7 +116,6 @@ public class AMResponse extends DatacenterNotification
     {
         this.taskId = taskId;
     }
-
 
     public static AMResponse fromByteArray(final byte[] bytes)
     {
