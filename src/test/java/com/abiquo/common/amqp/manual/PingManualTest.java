@@ -19,7 +19,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
-package com.abiquo.commons.amqp.manual;
+package com.abiquo.common.amqp.manual;
 
 import org.testng.AssertJUnit;
 import org.testng.annotations.Test;
