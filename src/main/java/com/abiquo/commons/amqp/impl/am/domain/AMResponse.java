@@ -6,7 +6,7 @@
  */
 package com.abiquo.commons.amqp.impl.am.domain;
 
-import com.abiquo.rsmodel.amqp.datacenter.DatacenterNotification;
+import com.abiquo.rsmodel.amqp.Queuable;
 import com.abiquo.rsmodel.amqp.util.JSONUtils;
 
 public class AMResponse implements Queuable
