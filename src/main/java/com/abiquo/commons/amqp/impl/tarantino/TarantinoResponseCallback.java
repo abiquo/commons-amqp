@@ -6,7 +6,7 @@
  */
 package com.abiquo.commons.amqp.impl.tarantino;
 
-import com.abiquo.commons.amqp.impl.tarantino.domain.TarantinoResponse;
+import com.abiquo.rsmodel.amqp.tarantino.dto.TarantinoResponse;
 
 public interface TarantinoResponseCallback
 {

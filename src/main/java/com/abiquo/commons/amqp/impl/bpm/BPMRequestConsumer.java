@@ -11,9 +11,9 @@ import static com.abiquo.commons.amqp.util.ConsumerUtils.rejectMessage;
 
 import java.io.IOException;
 
-import com.abiquo.commons.amqp.impl.bpm.domain.BPMRequest;
 import com.abiquo.commons.amqp.impl.datacenter.DatacenterRequestConfiguration.RequestType;
 import com.abiquo.commons.amqp.impl.datacenter.DatacenterRequestConsumer;
+import com.abiquo.rsmodel.amqp.bpm.BPMRequest;
 import com.rabbitmq.client.Envelope;
 
 public class BPMRequestConsumer extends DatacenterRequestConsumer<BPMRequestCallback>

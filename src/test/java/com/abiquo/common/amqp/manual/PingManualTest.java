@@ -4,7 +4,7 @@
  * Please see /opt/abiquo/tomcat/webapps/legal/ on Abiquo server
  * or contact contact@abiquo.com for licensing information.
  */
-package com.abiquo.commons.amqp.manual;
+package com.abiquo.common.amqp.manual;
 
 import org.testng.AssertJUnit;
 import org.testng.annotations.Test;

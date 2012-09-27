@@ -6,11 +6,13 @@
  */
 package com.abiquo.commons.amqp.domain;
 
+import com.abiquo.rsmodel.amqp.Queuable;
+
 public class QueuableString implements Queuable
 {
     protected String message;
 
-    public QueuableString(String value)
+    public QueuableString(final String value)
     {
         this.message = value;
     }
@@ -26,7 +28,7 @@ public class QueuableString implements Queuable
         return message;
     }
 
-    public void setMessage(String message)
+    public void setMessage(final String message)
     {
         this.message = message;
     }

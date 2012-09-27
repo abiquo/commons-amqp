@@ -13,7 +13,7 @@ import static com.abiquo.commons.amqp.util.ConsumerUtils.rejectMessage;
 import java.io.IOException;
 
 import com.abiquo.commons.amqp.consumer.BaseConsumer;
-import com.abiquo.commons.amqp.impl.ha.domain.HATask;
+import com.abiquo.rsmodel.amqp.ha.HATask;
 import com.rabbitmq.client.Envelope;
 
 public class HAConsumer extends BaseConsumer<HACallback>

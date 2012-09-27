@@ -4,7 +4,7 @@
  * Please see /opt/abiquo/tomcat/webapps/legal/ on Abiquo server
  * or contact contact@abiquo.com for licensing information.
  */
-package com.abiquo.commons.amqp.manual;
+package com.abiquo.common.amqp.manual;
 
 import java.io.IOException;
 
@@ -14,7 +14,7 @@ import com.abiquo.commons.amqp.impl.vsm.VSMCallback;
 import com.abiquo.commons.amqp.impl.vsm.VSMConfiguration;
 import com.abiquo.commons.amqp.impl.vsm.VSMConsumer;
 import com.abiquo.commons.amqp.impl.vsm.VSMProducer;
-import com.abiquo.commons.amqp.impl.vsm.domain.VirtualSystemEvent;
+import com.abiquo.rsmodel.amqp.vsm.VirtualSystemEvent;
 
 public class VSMManualTest
 {

@@ -6,7 +6,7 @@
  */
 package com.abiquo.commons.amqp.impl.ha;
 
-import com.abiquo.commons.amqp.impl.ha.domain.HATask;
+import com.abiquo.rsmodel.amqp.ha.HATask;
 
 public interface HACallback
 {

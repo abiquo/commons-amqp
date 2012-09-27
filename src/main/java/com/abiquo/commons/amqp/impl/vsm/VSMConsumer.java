@@ -12,7 +12,7 @@ import static com.abiquo.commons.amqp.util.ConsumerUtils.rejectMessage;
 import java.io.IOException;
 
 import com.abiquo.commons.amqp.consumer.BaseConsumer;
-import com.abiquo.commons.amqp.impl.vsm.domain.VirtualSystemEvent;
+import com.abiquo.rsmodel.amqp.vsm.VirtualSystemEvent;
 import com.rabbitmq.client.Envelope;
 
 public class VSMConsumer extends BaseConsumer<VSMCallback>

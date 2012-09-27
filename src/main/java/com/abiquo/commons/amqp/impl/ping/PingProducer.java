@@ -19,7 +19,7 @@ public class PingProducer extends BaseProducer<QueuableString>
     }
 
     @Override
-    public void publish(QueuableString message) throws IOException
+    public void publish(final QueuableString message) throws IOException
     {
         // Intentionally empty
     }
