@@ -6,7 +6,7 @@
  */
 package com.abiquo.commons.amqp.impl.nodecollector;
 
-import com.abiquo.rsmodel.ampq.nodecollector.NodeCollectorNotification;
+import com.abiquo.rsmodel.amqp.nodecollector.NodeCollectorNotification;
 
 public interface NodeCollectorNotificationCallback
 {

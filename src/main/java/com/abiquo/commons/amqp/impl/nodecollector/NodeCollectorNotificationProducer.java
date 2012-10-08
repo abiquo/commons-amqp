@@ -13,7 +13,7 @@ import static com.abiquo.commons.amqp.util.ProducerUtils.publishPersistentText;
 import java.io.IOException;
 
 import com.abiquo.commons.amqp.producer.BaseProducer;
-import com.abiquo.rsmodel.ampq.nodecollector.NodeCollectorNotification;
+import com.abiquo.rsmodel.amqp.nodecollector.NodeCollectorNotification;
 
 public class NodeCollectorNotificationProducer extends BaseProducer<NodeCollectorNotification>
 {
@@ -23,7 +23,7 @@ public class NodeCollectorNotificationProducer extends BaseProducer<NodeCollecto
     }
 
     @Override
-    public void publish(NodeCollectorNotification notification) throws IOException
+    public void publish(final NodeCollectorNotification notification) throws IOException
     {
         publishPersistentText(getChannel(), NODE_COLLECTOR_EXCHANGE, NODE_COLLECTOR_ROUTING_KEY,
             notification.toByteArray());

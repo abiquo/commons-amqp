@@ -13,10 +13,11 @@ import static com.abiquo.commons.amqp.util.ConsumerUtils.rejectMessage;
 import java.io.IOException;
 
 import com.abiquo.commons.amqp.consumer.BaseConsumer;
-import com.abiquo.rsmodel.ampq.nodecollector.NodeCollectorNotification;
+import com.abiquo.rsmodel.amqp.nodecollector.NodeCollectorNotification;
 import com.rabbitmq.client.Envelope;
 
-public class NodeCollectorNotificationConsumer extends BaseConsumer<NodeCollectorNotificationCallback>
+public class NodeCollectorNotificationConsumer extends
+    BaseConsumer<NodeCollectorNotificationCallback>
 {
     public NodeCollectorNotificationConsumer()
     {
@@ -24,7 +25,7 @@ public class NodeCollectorNotificationConsumer extends BaseConsumer<NodeCollecto
     }
 
     @Override
-    public void consume(Envelope envelope, byte[] body) throws IOException
+    public void consume(final Envelope envelope, final byte[] body) throws IOException
     {
         NodeCollectorNotification notification = NodeCollectorNotification.fromByteArray(body);
 
