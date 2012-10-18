@@ -84,7 +84,7 @@ public abstract class DefaultConfiguration
 
     protected DefaultConfiguration()
     {
-        LOGGER.debug(String.format("RabbitMQ configuration. Host: %s, port: %d, username: %s",
+        LOGGER.trace(String.format("RabbitMQ configuration. Host: %s, port: %d, username: %s",
             getHost(), getPort(), getUserName()));
     }
 }
