@@ -8,9 +8,6 @@ package com.abiquo.commons.amqp.config;
 
 import java.io.IOException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.rabbitmq.client.Channel;
 
 /**
@@ -21,9 +18,6 @@ import com.rabbitmq.client.Channel;
  */
 public abstract class DefaultConfiguration
 {
-    /** Logger **/
-    private final static Logger LOGGER = LoggerFactory.getLogger(DefaultConfiguration.class);
-
     /** Constants **/
     protected final String FanoutExchange = "fanout";
 
@@ -84,7 +78,5 @@ public abstract class DefaultConfiguration
 
     protected DefaultConfiguration()
     {
-        LOGGER.trace(String.format("RabbitMQ configuration. Host: %s, port: %d, username: %s",
-            getHost(), getPort(), getUserName()));
     }
 }
