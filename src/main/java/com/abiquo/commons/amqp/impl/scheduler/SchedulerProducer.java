@@ -7,7 +7,8 @@
 package com.abiquo.commons.amqp.impl.scheduler;
 
 import static com.abiquo.commons.amqp.impl.scheduler.SchedulerConfiguration.SCHEDULER_EXCHANGE;
-import static com.abiquo.commons.amqp.impl.scheduler.SchedulerConfiguration.SCHEDULER_ROUTING_KEY;
+import static com.abiquo.commons.amqp.impl.scheduler.SchedulerConfiguration.SCHEDULER_FAST_QUEUE;
+import static com.abiquo.commons.amqp.impl.scheduler.SchedulerConfiguration.SCHEDULER_SLOW_QUEUE;
 import static com.abiquo.commons.amqp.util.ProducerUtils.publishPersistentText;
 
 import java.io.IOException;
@@ -25,7 +26,18 @@ public class SchedulerProducer extends BaseProducer<SchedulerRequest>
     @Override
     public void publish(final SchedulerRequest request) throws IOException
     {
-        publishPersistentText(getChannel(), SCHEDULER_EXCHANGE, SCHEDULER_ROUTING_KEY,
-            request.toByteArray());
+        switch (request.getOperation())
+        {
+            case SCHEDULE:
+                publishPersistentText(getChannel(), SCHEDULER_EXCHANGE, SCHEDULER_SLOW_QUEUE,
+                    request.toByteArray());
+                break;
+
+            case FREE:
+            case UPDATE:
+                publishPersistentText(getChannel(), SCHEDULER_EXCHANGE, SCHEDULER_FAST_QUEUE,
+                    request.toByteArray());
+                break;
+        }
     }
 }
