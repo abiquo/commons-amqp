@@ -4,7 +4,7 @@
  * Please see /opt/abiquo/tomcat/webapps/legal/ on Abiquo server
  * or contact contact@abiquo.com for licensing information.
  */
-package com.abiquo.commons.amqp.impl.scheduler;
+package com.abiquo.commons.amqp.scheduler;
 
 import com.abiquo.rsmodel.amqp.scheduler.SchedulerRequest;
 

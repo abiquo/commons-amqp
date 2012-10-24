@@ -13,6 +13,7 @@ import static com.abiquo.commons.amqp.util.ConsumerUtils.rejectMessage;
 import java.io.IOException;
 
 import com.abiquo.commons.amqp.consumer.BaseConsumer;
+import com.abiquo.commons.amqp.scheduler.SchedulerCallback;
 import com.abiquo.rsmodel.amqp.scheduler.SchedulerRequest;
 import com.rabbitmq.client.Envelope;
 
