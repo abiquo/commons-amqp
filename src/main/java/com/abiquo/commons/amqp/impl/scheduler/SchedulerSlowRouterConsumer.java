@@ -15,6 +15,9 @@ import static com.abiquo.commons.amqp.util.ProducerUtils.publishPersistentText;
 
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.abiquo.commons.amqp.consumer.BaseConsumer;
 import com.abiquo.commons.amqp.scheduler.SchedulerCallback;
 import com.abiquo.rsmodel.amqp.scheduler.SchedulerRequest;
@@ -22,6 +25,8 @@ import com.rabbitmq.client.Envelope;
 
 public class SchedulerSlowRouterConsumer extends BaseConsumer<SchedulerCallback>
 {
+    private final static Logger LOGGER = LoggerFactory.getLogger(SchedulerSlowRouterConsumer.class);
+
     public SchedulerSlowRouterConsumer()
     {
         super(new SchedulerConfiguration(), SCHEDULER_SLOW_QUEUE);
@@ -44,6 +49,9 @@ public class SchedulerSlowRouterConsumer extends BaseConsumer<SchedulerCallback>
                 request.toByteArray());
 
             ackMessage(getChannel(), envelope.getDeliveryTag());
+
+            LOGGER.debug("Forward of {} operation for virtual machine {} to scheduler", request
+                .getOperation().name(), request.getVirtualMachineId());
         }
         else
         {

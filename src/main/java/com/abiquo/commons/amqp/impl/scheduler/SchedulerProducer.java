@@ -13,11 +13,16 @@ import static com.abiquo.commons.amqp.util.ProducerUtils.publishPersistentText;
 
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.abiquo.commons.amqp.producer.BaseProducer;
 import com.abiquo.rsmodel.amqp.scheduler.SchedulerRequest;
 
 public class SchedulerProducer extends BaseProducer<SchedulerRequest>
 {
+    private final static Logger LOGGER = LoggerFactory.getLogger(SchedulerProducer.class);
+
     public SchedulerProducer()
     {
         super(new SchedulerConfiguration());
@@ -39,5 +44,8 @@ public class SchedulerProducer extends BaseProducer<SchedulerRequest>
                     request.toByteArray());
                 break;
         }
+
+        LOGGER.debug("Published {} operation for virtual machine {}",
+            request.getOperation().name(), request.getVirtualMachineId());
     }
 }
