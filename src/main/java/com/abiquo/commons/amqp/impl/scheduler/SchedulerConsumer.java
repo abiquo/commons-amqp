@@ -6,7 +6,7 @@
  */
 package com.abiquo.commons.amqp.impl.scheduler;
 
-import static com.abiquo.commons.amqp.impl.scheduler.SchedulerConfiguration.SCHEDULER_FAST_QUEUE;
+import static com.abiquo.commons.amqp.impl.scheduler.SchedulerConfiguration.SCHEDULER_REQUESTS_QUEUE;
 import static com.abiquo.commons.amqp.util.ConsumerUtils.ackMessage;
 import static com.abiquo.commons.amqp.util.ConsumerUtils.rejectMessage;
 
@@ -21,7 +21,7 @@ public class SchedulerConsumer extends BaseConsumer<SchedulerCallback>
 {
     public SchedulerConsumer()
     {
-        super(new SchedulerConfiguration(), SCHEDULER_FAST_QUEUE);
+        super(new SchedulerConfiguration(), SCHEDULER_REQUESTS_QUEUE);
     }
 
     @Override
