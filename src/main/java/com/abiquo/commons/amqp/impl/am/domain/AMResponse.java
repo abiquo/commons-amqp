@@ -6,8 +6,13 @@
  */
 package com.abiquo.commons.amqp.impl.am.domain;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import com.abiquo.rsmodel.amqp.Queuable;
 import com.abiquo.rsmodel.amqp.util.JSONUtils;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class AMResponse implements Queuable
 {
@@ -31,6 +36,7 @@ public class AMResponse implements Queuable
 
     /** only during DOWNLOADING */
     protected Double progress;
+
 
     public String getOvfId()
     {
@@ -111,5 +117,34 @@ public class AMResponse implements Queuable
     public byte[] toByteArray()
     {
         return JSONUtils.serialize(this);
+    }
+
+    /** This kind of creation haven't an associated task */
+    @JsonIgnore
+    private final static String TASK_UPLOAD = "upload";
+
+    @JsonIgnore
+    private final static String TASK_DELETE = "delete";
+
+    @JsonIgnore
+    private final static Set<String> NOT_TASK_ASSOCIATED = new HashSet<String>(Arrays
+        .asList(new String[] {TASK_UPLOAD, TASK_DELETE}));
+
+    @JsonIgnore
+    public boolean isAssociatedTask()
+    {
+        return !NOT_TASK_ASSOCIATED.contains(getTaskId());
+    }
+
+    @JsonIgnore
+    public boolean isUpload()
+    {
+        return TASK_UPLOAD.equalsIgnoreCase(getTaskId());
+    }
+
+    @JsonIgnore
+    public boolean isDelete()
+    {
+        return TASK_DELETE.equalsIgnoreCase(getTaskId());
     }
 }
