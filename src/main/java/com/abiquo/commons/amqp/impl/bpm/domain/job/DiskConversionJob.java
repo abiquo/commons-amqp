@@ -6,6 +6,7 @@
  */
 package com.abiquo.commons.amqp.impl.bpm.domain.job;
 
+
 public class DiskConversionJob extends AbstractBPMJob
 {
     private String diskPathSource;
@@ -23,8 +24,8 @@ public class DiskConversionJob extends AbstractBPMJob
         super(BPMJobType.DISK_CONVERSION);
     }
 
-    public DiskConversionJob(final String sourcePath, final String destinationPath, final String sourceFormat,
-        final String destinationFormat)
+    public DiskConversionJob(final String sourcePath, final String destinationPath,
+        final String sourceFormat, final String destinationFormat)
     {
         this();
         this.diskPathSource = sourcePath;
@@ -73,7 +74,7 @@ public class DiskConversionJob extends AbstractBPMJob
         this.destinationFormat = destinationFormat;
     }
 
-    public boolean mustDestroyOriginDisk()
+    public boolean isDestroyOriginDisk()
     {
         return destroyOriginDisk;
     }
