@@ -6,7 +6,7 @@
  */
 package com.abiquo.commons.amqp.impl.bpm;
 
-import com.abiquo.commons.amqp.impl.bpm.domain.BPMResponse;
+import com.abiquo.rsmodel.amqp.bpm.BPMResponse;
 
 public interface BPMResponseCallback
 {

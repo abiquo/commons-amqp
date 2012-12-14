@@ -4,34 +4,34 @@
  * Please see /opt/abiquo/tomcat/webapps/legal/ on Abiquo server
  * or contact contact@abiquo.com for licensing information.
  */
-package com.abiquo.commons.amqp.impl.datacenter;
+package com.abiquo.commons.amqp.impl.nodecollector;
 
-import static com.abiquo.commons.amqp.impl.datacenter.DatacenterNotificationConfiguration.NOTIFICATIONS_QUEUE;
+import static com.abiquo.commons.amqp.impl.nodecollector.NodeCollectorConfiguration.NODE_COLLECTOR_QUEUE;
 import static com.abiquo.commons.amqp.util.ConsumerUtils.ackMessage;
 import static com.abiquo.commons.amqp.util.ConsumerUtils.rejectMessage;
 
 import java.io.IOException;
 
 import com.abiquo.commons.amqp.consumer.BaseConsumer;
-import com.abiquo.rsmodel.amqp.datacenter.DatacenterNotification;
-import com.abiquo.rsmodel.amqp.tarantino.dto.TarantinoResponse;
+import com.abiquo.rsmodel.amqp.nodecollector.NodeCollectorNotification;
 import com.rabbitmq.client.Envelope;
 
-public class DatacenterNotificationConsumer extends BaseConsumer<DatacenterNotificationCallback>
+public class NodeCollectorNotificationConsumer extends
+    BaseConsumer<NodeCollectorNotificationCallback>
 {
-    public DatacenterNotificationConsumer()
+    public NodeCollectorNotificationConsumer()
     {
-        super(new DatacenterNotificationConfiguration(), NOTIFICATIONS_QUEUE);
+        super(new NodeCollectorConfiguration(), NODE_COLLECTOR_QUEUE);
     }
 
     @Override
-    public void consume(Envelope envelope, byte[] body) throws IOException
+    public void consume(final Envelope envelope, final byte[] body) throws IOException
     {
-        DatacenterNotification notification = DatacenterNotification.fromByteArray(body);
+        NodeCollectorNotification notification = NodeCollectorNotification.fromByteArray(body);
 
         if (notification != null)
         {
-            for (DatacenterNotificationCallback callback : callbacks)
+            for (NodeCollectorNotificationCallback callback : callbacks)
             {
                 callback.onNotification(notification);
             }

@@ -10,7 +10,7 @@ import java.io.IOException;
 
 import com.abiquo.commons.amqp.config.ChannelHandler;
 import com.abiquo.commons.amqp.config.DefaultConfiguration;
-import com.abiquo.commons.amqp.domain.Queuable;
+import com.abiquo.rsmodel.amqp.Queuable;
 import com.rabbitmq.client.ShutdownSignalException;
 
 /**

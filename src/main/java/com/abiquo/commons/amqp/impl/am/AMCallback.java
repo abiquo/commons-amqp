@@ -6,15 +6,9 @@
  */
 package com.abiquo.commons.amqp.impl.am;
 
-import com.abiquo.commons.amqp.impl.am.domain.TemplateStatusEvent;
+import com.abiquo.commons.amqp.impl.am.domain.AMResponse;
 
 public interface AMCallback
 {
-    public void onDownload(TemplateStatusEvent event);
-
-    public void onNotDownload(TemplateStatusEvent event);
-
-    public void onError(TemplateStatusEvent event);
-
-    public void onDownloading(TemplateStatusEvent event);
+    public void onResponse(AMResponse response);
 }

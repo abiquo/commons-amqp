@@ -4,11 +4,11 @@
  * Please see /opt/abiquo/tomcat/webapps/legal/ on Abiquo server
  * or contact contact@abiquo.com for licensing information.
  */
-package com.abiquo.commons.amqp.impl.ha;
+package com.abiquo.commons.amqp.scheduler;
 
-import com.abiquo.rsmodel.amqp.ha.HATask;
+import com.abiquo.rsmodel.amqp.scheduler.SchedulerRequest;
 
-public interface HACallback
+public interface SchedulerCallback
 {
-    public void executeHighAvailabilityTask(HATask task);
+    public void onResponse(SchedulerRequest request);
 }

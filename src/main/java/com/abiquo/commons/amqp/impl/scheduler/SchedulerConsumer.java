@@ -4,35 +4,36 @@
  * Please see /opt/abiquo/tomcat/webapps/legal/ on Abiquo server
  * or contact contact@abiquo.com for licensing information.
  */
-package com.abiquo.commons.amqp.impl.am;
+package com.abiquo.commons.amqp.impl.scheduler;
 
-import static com.abiquo.commons.amqp.impl.am.AMConfiguration.AM_NOTIFICATIONS_QUEUE;
+import static com.abiquo.commons.amqp.impl.scheduler.SchedulerConfiguration.SCHEDULER_REQUESTS_QUEUE;
 import static com.abiquo.commons.amqp.util.ConsumerUtils.ackMessage;
 import static com.abiquo.commons.amqp.util.ConsumerUtils.rejectMessage;
 
 import java.io.IOException;
 
 import com.abiquo.commons.amqp.consumer.BaseConsumer;
-import com.abiquo.commons.amqp.impl.am.domain.AMResponse;
+import com.abiquo.commons.amqp.scheduler.SchedulerCallback;
+import com.abiquo.rsmodel.amqp.scheduler.SchedulerRequest;
 import com.rabbitmq.client.Envelope;
 
-public class AMConsumer extends BaseConsumer<AMCallback>
+public class SchedulerConsumer extends BaseConsumer<SchedulerCallback>
 {
-    public AMConsumer()
+    public SchedulerConsumer()
     {
-        super(new AMConfiguration(), AM_NOTIFICATIONS_QUEUE);
+        super(new SchedulerConfiguration(), SCHEDULER_REQUESTS_QUEUE);
     }
 
     @Override
     public void consume(final Envelope envelope, final byte[] body) throws IOException
     {
-        AMResponse event = AMResponse.fromByteArray(body);
+        SchedulerRequest request = SchedulerRequest.fromByteArray(body);
 
-        if (event != null)
+        if (request != null)
         {
-            for (AMCallback callback : callbacks)
+            for (SchedulerCallback callback : callbacks)
             {
-                callback.onResponse(event);
+                callback.onResponse(request);
             }
 
             ackMessage(getChannel(), envelope.getDeliveryTag());

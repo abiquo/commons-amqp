@@ -13,8 +13,8 @@ import static com.abiquo.commons.amqp.util.ProducerUtils.publishPersistentText;
 import java.io.IOException;
 
 import com.abiquo.commons.amqp.impl.datacenter.DatacenterRequestConfiguration.RequestType;
-import com.abiquo.commons.amqp.impl.datacenter.domain.DatacenterRequest;
 import com.abiquo.commons.amqp.producer.BaseProducer;
+import com.abiquo.rsmodel.amqp.datacenter.DatacenterRequest;
 
 public class DatacenterRequestProducer extends BaseProducer<DatacenterRequest>
 {

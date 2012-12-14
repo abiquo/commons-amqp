@@ -12,10 +12,10 @@ import static com.abiquo.commons.amqp.util.ProducerUtils.publishPersistentText;
 
 import java.io.IOException;
 
-import com.abiquo.commons.amqp.impl.am.domain.TemplateStatusEvent;
+import com.abiquo.commons.amqp.impl.am.domain.AMResponse;
 import com.abiquo.commons.amqp.producer.BaseProducer;
 
-public class AMProducer extends BaseProducer<TemplateStatusEvent>
+public class AMProducer extends BaseProducer<AMResponse>
 {
     public AMProducer()
     {
@@ -23,8 +23,8 @@ public class AMProducer extends BaseProducer<TemplateStatusEvent>
     }
 
     @Override
-    public void publish(TemplateStatusEvent message) throws IOException
+    public void publish(final AMResponse response) throws IOException
     {
-        publishPersistentText(getChannel(), AM_EXCHANGE, AM_ROUTING_KEY, message.toByteArray());
+        publishPersistentText(getChannel(), AM_EXCHANGE, AM_ROUTING_KEY, response.toByteArray());
     }
 }

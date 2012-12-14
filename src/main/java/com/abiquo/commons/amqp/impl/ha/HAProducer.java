@@ -12,8 +12,8 @@ import static com.abiquo.commons.amqp.util.ProducerUtils.publishPersistentText;
 
 import java.io.IOException;
 
-import com.abiquo.commons.amqp.impl.ha.domain.HATask;
 import com.abiquo.commons.amqp.producer.BaseProducer;
+import com.abiquo.rsmodel.amqp.ha.HATask;
 
 public class HAProducer extends BaseProducer<HATask>
 {

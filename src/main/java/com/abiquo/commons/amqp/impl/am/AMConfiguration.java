@@ -11,24 +11,29 @@ import java.io.IOException;
 import com.abiquo.commons.amqp.config.DefaultConfiguration;
 import com.rabbitmq.client.Channel;
 
+/**
+ * Common RabbitMQ Broker configuration for VSM consumer and producer.
+ * 
+ * @author eruiz@abiquo.com
+ */
 public class AMConfiguration extends DefaultConfiguration
 {
     public static final String AM_EXCHANGE = "abiquo.am";
 
-    public static final String AM_ROUTING_KEY = "abiquo.am.downloads";
+    public static final String AM_NOTIFICATIONS_QUEUE = "abiquo.am.notifications";
 
-    public static final String AM_QUEUE = AM_ROUTING_KEY;
+    public static final String AM_ROUTING_KEY = "";
 
     @Override
-    public void declareExchanges(Channel channel) throws IOException
+    public void declareExchanges(final Channel channel) throws IOException
     {
         channel.exchangeDeclare(AM_EXCHANGE, DirectExchange, Durable);
     }
 
     @Override
-    public void declareQueues(Channel channel) throws IOException
+    public void declareQueues(final Channel channel) throws IOException
     {
-        channel.queueDeclare(AM_QUEUE, Durable, NonExclusive, NonAutodelete, null);
-        channel.queueBind(AM_QUEUE, AM_EXCHANGE, AM_ROUTING_KEY);
+        channel.queueDeclare(AM_NOTIFICATIONS_QUEUE, Durable, NonExclusive, NonAutodelete, null);
+        channel.queueBind(AM_NOTIFICATIONS_QUEUE, AM_EXCHANGE, AM_ROUTING_KEY);
     }
 }

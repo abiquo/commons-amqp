@@ -4,11 +4,9 @@
  * Please see /opt/abiquo/tomcat/webapps/legal/ on Abiquo server
  * or contact contact@abiquo.com for licensing information.
  */
-package com.abiquo.commons.amqp.impl.ha;
+package com.abiquo.commons.amqp.impl.datacenter.domain;
 
-import com.abiquo.rsmodel.amqp.ha.HATask;
-
-public interface HACallback
+public enum NotificationState
 {
-    public void executeHighAvailabilityTask(HATask task);
+    START, DONE, ERROR, ABORTED, ROLLBACK_START, ROLLBACK_DONE, ROLLBACK_ERROR, ROLLBACK_ABORTED
 }
