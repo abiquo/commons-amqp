@@ -45,7 +45,7 @@ public class SchedulerProducer extends BaseProducer<SchedulerRequest>
                 break;
         }
 
-        LOGGER.debug("Published {} operation for virtual machine {}",
-            request.getOperation().name(), request.getVirtualMachineId());
+        LOGGER.debug("Published {} operation with jobId {}", request.getOperation().name(), request
+            .getJobId());
     }
 }
