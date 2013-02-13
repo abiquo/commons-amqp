@@ -8,12 +8,8 @@ package com.abiquo.commons.amqp.util;
 
 import static java.util.concurrent.Executors.newSingleThreadExecutor;
 
-import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.Consumer;
 
 /**
  * A collection of helper methods to be used by the producers.
@@ -29,26 +25,4 @@ public class ConsumerUtils
      * the remaining reconnection jobs.
      */
     public final static ExecutorService reconnectionExecutor = newSingleThreadExecutor();
-
-    public static void startConsumerRequiredAck(final Channel channel, final Consumer consumer,
-        final String queue) throws IOException
-    {
-        channel.basicConsume(queue, false, consumer);
-    }
-
-    public static void ackMessage(final Channel channel, final long tag) throws IOException
-    {
-        channel.basicAck(tag, false);
-    }
-
-    public static void rejectMessage(final Channel channel, final long tag) throws IOException
-    {
-        channel.basicReject(tag, false);
-    }
-
-    public static void rejectMessageAndRequeue(final Channel channel, final long tag)
-        throws IOException
-    {
-        channel.basicReject(tag, true);
-    }
 }
