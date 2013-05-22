@@ -8,15 +8,33 @@ package com.abiquo.commons.amqp.util;
 
 import java.io.IOException;
 
-import com.abiquo.commons.amqp.impl.ping.PingProducer;
+import com.abiquo.commons.amqp.config.PingConfiguration;
+import com.abiquo.commons.amqp.producer.AMQPProducer;
 
 /**
  * A set of utility methods related to RabbitMQ server.
  * 
  * @author eruiz@abiquo.com
  */
+// TODO
 public class RabbitMQUtils
 {
+    private static final AMQPProducer<String> pinger = new AMQPProducer<String>(new PingConfiguration())
+    {
+        @Override
+        public void publish(final String message) throws IOException
+        {
+            try
+            {
+                openChannelAndConnection();
+            }
+            finally
+            {
+                closeChannelAndConnection();
+            }
+        }
+    };
+
     /**
      * Ping RabbitMQ server using the configuration in rabbitmq.properties file.
      * 
@@ -26,9 +44,7 @@ public class RabbitMQUtils
     {
         try
         {
-            PingProducer ping = new PingProducer();
-            ping.openChannel();
-            ping.closeChannel();
+            pinger.publish("");
             return true;
         }
         catch (IOException e)

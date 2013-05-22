@@ -7,7 +7,7 @@
 package com.abiquo.commons.amqp.consumer;
 
 /**
- * {@link BaseConsumer} uses this to automate the retry strategy when RabbitMQ goes down.
+ * {@link AMQPConsumer} uses this to automate the retry strategy when RabbitMQ goes down.
  * 
  * @author eruiz
  */

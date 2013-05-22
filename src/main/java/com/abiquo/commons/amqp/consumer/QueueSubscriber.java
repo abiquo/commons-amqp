@@ -11,28 +11,26 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.abiquo.commons.amqp.util.ConsumerUtils;
 import com.rabbitmq.client.AMQP.BasicProperties;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
 
-public class QueueSubscriber<T extends BaseConsumer< ? >> extends DefaultConsumer
+public class QueueSubscriber<T extends AMQPConsumer< ? >> extends DefaultConsumer
 {
-    private final static Logger LOGGER = LoggerFactory.getLogger(QueueSubscriber.class);
+    private final static Logger LOG = LoggerFactory.getLogger(QueueSubscriber.class);
 
     private T consumer;
 
-    public QueueSubscriber(Channel channel, T consumer)
+    public QueueSubscriber(final Channel channel, final T consumer)
     {
         super(channel);
-
         this.consumer = consumer;
     }
 
     @Override
-    public void handleDelivery(String consumerTag, Envelope envelope, BasicProperties properties,
-        byte[] body)
+    public void handleDelivery(final String consumerTag, final Envelope envelope,
+        final BasicProperties properties, final byte[] body)
     {
         try
         {
@@ -40,17 +38,17 @@ public class QueueSubscriber<T extends BaseConsumer< ? >> extends DefaultConsume
         }
         catch (Throwable t)
         {
-            LOGGER.error(
+            LOG.error(
                 "Unhandled exception captured, trying to reject message to prevent consumer crash",
                 t);
 
             try
             {
-                ConsumerUtils.rejectMessage(getChannel(), envelope.getDeliveryTag());
+                getChannel().basicReject(envelope.getDeliveryTag(), false);
             }
             catch (IOException io)
             {
-                LOGGER.error("Unable to reject message", io);
+                LOG.error("Unable to reject message", io);
             }
         }
     }
