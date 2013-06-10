@@ -37,7 +37,7 @@ public class AMQPConsumer<T extends Serializable> extends ChannelHandler
 
     private QueueSubscriber<AMQPConsumer<T>> subscriber;
 
-    private AMQPCallback<T> callback;
+    protected AMQPCallback<T> callback;
 
     private Class< ? extends RetryStrategy> strategyClass;
 
