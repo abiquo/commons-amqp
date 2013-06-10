@@ -9,9 +9,10 @@ package com.abiquo.commons.amqp.util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.databind.AnnotationIntrospector;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.introspect.AnnotationIntrospectorPair;
 import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationIntrospector;
 
 /**
@@ -62,18 +63,16 @@ public class JSONUtils
         }
         catch (Exception e)
         {
-            LOGGER.error(String.format("Can not deserialize %s from byte array.", type
-                .getSimpleName()), e);
+            LOGGER.error(
+                String.format("Can not deserialize %s from byte array.", type.getSimpleName()), e);
             return null;
         }
     }
 
     private static ObjectMapper createObjectMapper()
     {
-        // ObjectMapper mapper = new XmlMapper(); // XmlMapper
-        // mapper.registerModule(new JaxbAnnotationModule());
-
-        return new ObjectMapper().setAnnotationIntrospector(new AnnotationIntrospector.Pair(
-            new JacksonAnnotationIntrospector(), new JaxbAnnotationIntrospector())); // XmlJaxbAnnotationIntrospector
+        return new ObjectMapper()
+            .setAnnotationIntrospector(new AnnotationIntrospectorPair(new JacksonAnnotationIntrospector(),
+                new JaxbAnnotationIntrospector(TypeFactory.defaultInstance())));
     }
 }
