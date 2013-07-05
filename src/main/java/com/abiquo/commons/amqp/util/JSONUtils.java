@@ -23,7 +23,7 @@ import com.fasterxml.jackson.module.jaxb.JaxbAnnotationIntrospector;
  */
 public class JSONUtils
 {
-    private final static Logger LOGGER = LoggerFactory.getLogger(JSONUtils.class);
+    private final static Logger log = LoggerFactory.getLogger(JSONUtils.class);
 
     /**
      * Serializes the given Object to JSON and returns the result in array of bytes.
@@ -40,7 +40,7 @@ public class JSONUtils
         }
         catch (Exception e)
         {
-            LOGGER.error(String.format("Can not serialize %s to byte array.", value.getClass()
+            log.error(String.format("Can not serialize %s to byte array.", value.getClass()
                 .getSimpleName()), e);
             return null;
         }
@@ -63,7 +63,7 @@ public class JSONUtils
         }
         catch (Exception e)
         {
-            LOGGER.error(
+            log.error(
                 String.format("Can not deserialize %s from byte array.", type.getSimpleName()), e);
             return null;
         }

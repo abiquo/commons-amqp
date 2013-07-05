@@ -13,6 +13,7 @@ public class AMQPProperties
 {
     public static String getBrokerHost()
     {
+
         return getProperty("abiquo.rabbitmq.host", "localhost");
     }
 
@@ -44,5 +45,10 @@ public class AMQPProperties
     public static Integer getRequestedHeartbeat()
     {
         return parseInt(getProperty("abiquo.rabbitmq.requestedHeartbeat", "0"));
+    }
+
+    public static Integer getNetworkRecoveryInterval()
+    {
+        return parseInt(getProperty("abiquo.rabbitmq.networkRecoveryInterval", "5000"));
     }
 }

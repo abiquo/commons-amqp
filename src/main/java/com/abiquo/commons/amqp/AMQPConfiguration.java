@@ -8,6 +8,7 @@ package com.abiquo.commons.amqp;
 
 import java.io.IOException;
 
+import com.google.common.base.Objects;
 import com.rabbitmq.client.Channel;
 
 /**
@@ -26,15 +27,9 @@ public abstract class AMQPConfiguration
 
     protected static final boolean Durable = true;
 
-    protected static final boolean NonDurable = false;
-
     protected static final boolean Exclusive = true;
 
-    protected static final boolean NonExclusive = false;
-
     protected static final boolean Autodelete = true;
-
-    protected static final boolean NonAutodelete = false;
 
     public abstract void declareExchanges(Channel channel) throws IOException;
 
@@ -45,4 +40,19 @@ public abstract class AMQPConfiguration
     public abstract String getRoutingKey();
 
     public abstract String getQueue();
+
+    public int getPrefetchCount()
+    {
+        return 1;
+    }
+
+    @Override
+    public String toString()
+    {
+        return Objects.toStringHelper(this.getClass()).omitNullValues() //
+            .add("Exchange", getExchange()) //
+            .add("RoutingKey", getRoutingKey()) //
+            .add("Queue", getQueue()) //
+            .toString();
+    }
 }

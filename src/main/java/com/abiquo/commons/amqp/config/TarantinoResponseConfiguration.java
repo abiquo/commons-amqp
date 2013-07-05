@@ -34,7 +34,7 @@ public class TarantinoResponseConfiguration extends AMQPConfiguration
     @Override
     public void declareQueues(final Channel channel) throws IOException
     {
-        channel.queueDeclare(getQueue(), Durable, NonExclusive, NonAutodelete, null);
+        channel.queueDeclare(getQueue(), Durable, !Exclusive, !Autodelete, null);
         channel.queueBind(getQueue(), getExchange(), getRoutingKey());
     }
 

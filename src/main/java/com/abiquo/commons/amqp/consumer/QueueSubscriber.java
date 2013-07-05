@@ -18,7 +18,7 @@ import com.rabbitmq.client.Envelope;
 
 public class QueueSubscriber<T extends AMQPConsumer< ? >> extends DefaultConsumer
 {
-    private final static Logger LOG = LoggerFactory.getLogger(QueueSubscriber.class);
+    private final static Logger log = LoggerFactory.getLogger(QueueSubscriber.class);
 
     private T consumer;
 
@@ -38,17 +38,18 @@ public class QueueSubscriber<T extends AMQPConsumer< ? >> extends DefaultConsume
         }
         catch (Throwable t)
         {
-            LOG.error(
-                "Unhandled exception captured, trying to reject message to prevent consumer crash",
-                t);
+            log.error(
+                "Unhandled exception captured, trying to reject {} to prevent consumer crash",
+                envelope, t);
 
             try
             {
+                // Reject message and do not requeue
                 getChannel().basicReject(envelope.getDeliveryTag(), false);
             }
             catch (IOException io)
             {
-                LOG.error("Unable to reject message", io);
+                log.error("Unable to reject {}", envelope, io);
             }
         }
     }

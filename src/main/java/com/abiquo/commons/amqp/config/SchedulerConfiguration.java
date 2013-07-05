@@ -31,15 +31,15 @@ public class SchedulerConfiguration extends AMQPConfiguration
     public void declareQueues(final Channel channel) throws IOException
     {
         // Declare the fast router queue for FREE and UPDATE requests
-        channel.queueDeclare(SCHEDULER_FAST_QUEUE, Durable, NonExclusive, NonAutodelete, null);
+        channel.queueDeclare(SCHEDULER_FAST_QUEUE, Durable, !Exclusive, !Autodelete, null);
         channel.queueBind(SCHEDULER_FAST_QUEUE, SCHEDULER_EXCHANGE, SCHEDULER_FAST_QUEUE);
 
         // Declare the slow router queue for SCHEDULE requests
-        channel.queueDeclare(SCHEDULER_SLOW_QUEUE, Durable, NonExclusive, NonAutodelete, null);
+        channel.queueDeclare(SCHEDULER_SLOW_QUEUE, Durable, !Exclusive, !Autodelete, null);
         channel.queueBind(SCHEDULER_SLOW_QUEUE, SCHEDULER_EXCHANGE, SCHEDULER_SLOW_QUEUE);
 
         // Declare the main scheduler queue
-        channel.queueDeclare(SCHEDULER_REQUESTS_QUEUE, Durable, NonExclusive, NonAutodelete, null);
+        channel.queueDeclare(SCHEDULER_REQUESTS_QUEUE, Durable, !Exclusive, !Autodelete, null);
         channel.queueBind(SCHEDULER_REQUESTS_QUEUE, SCHEDULER_EXCHANGE, SCHEDULER_REQUESTS_QUEUE);
     }
 
