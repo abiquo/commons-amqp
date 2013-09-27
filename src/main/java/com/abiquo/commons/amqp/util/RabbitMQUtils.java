@@ -6,48 +6,45 @@
  */
 package com.abiquo.commons.amqp.util;
 
-import java.io.IOException;
-
-import com.abiquo.commons.amqp.config.PingConfiguration;
-import com.abiquo.commons.amqp.producer.AMQPProducer;
+import com.abiquo.commons.amqp.AMQPProperties;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
 
 /**
  * A set of utility methods related to RabbitMQ server.
  * 
  * @author eruiz@abiquo.com
  */
-// TODO
 public class RabbitMQUtils
 {
-    private static final AMQPProducer<String> pinger = new AMQPProducer<String>(new PingConfiguration())
-    {
-        @Override
-        public void publish(final String message) throws IOException
-        {
-            try
-            {
-                openChannelAndConnection();
-            }
-            finally
-            {
-                closeChannelAndConnection();
-            }
-        }
-    };
+    private static final ConnectionFactory connectionFactory = new ConnectionFactory();
 
-    /**
-     * Ping RabbitMQ server using the configuration in rabbitmq.properties file.
-     * 
-     * @return True on a successful ping. Otherwise false.
-     */
+    static
+    {
+        connectionFactory.setHost(AMQPProperties.getBrokerHost());
+        connectionFactory.setPort(AMQPProperties.getBrokerPort());
+        connectionFactory.setUsername(AMQPProperties.getUserName());
+        connectionFactory.setPassword(AMQPProperties.getPassword());
+        connectionFactory.setVirtualHost(AMQPProperties.getVirtualHost());
+        connectionFactory.setConnectionTimeout(AMQPProperties.getConnectionTimeout());
+        connectionFactory.setRequestedHeartbeat(AMQPProperties.getRequestedHeartbeat());
+    }
+
     public static boolean pingRabbitMQ()
     {
         try
         {
-            pinger.publish("");
-            return true;
+            final Connection connection = connectionFactory.newConnection();
+            try
+            {
+                return connection.isOpen();
+            }
+            finally
+            {
+                connection.close();
+            }
         }
-        catch (IOException e)
+        catch (Exception e)
         {
             return false;
         }
