@@ -73,11 +73,11 @@ public class SchedulerConfiguration extends AMQPConfiguration
 
     public String getSlowRoutingKey()
     {
-        return SCHEDULER_FAST_QUEUE;
+        return SCHEDULER_SLOW_QUEUE;
     }
 
     public String getSlowQueue()
     {
-        return SCHEDULER_FAST_QUEUE;
+        return SCHEDULER_SLOW_QUEUE;
     }
 }
