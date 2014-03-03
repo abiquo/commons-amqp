@@ -15,7 +15,7 @@ public class VMDefinitionSyncConfiguration extends AMQPConfiguration
 {
     private static final String VM_DEF_SYNC_EXCHANGE = "abiquo.virtualmachines";
 
-    private static final String VM_DEF_SYNC_QUEUE = "abiquo.virtualmachines.defitionsyncs";
+    private static final String VM_DEF_SYNC_QUEUE = "abiquo.virtualmachines.definitionsyncs";
 
     private static final String VM_DEF_SUNC_ROUTING_KEY = "";
 
