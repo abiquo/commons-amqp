@@ -6,20 +6,18 @@
  */
 package com.abiquo.commons.amqp;
 
-import static java.lang.Integer.parseInt;
 import static java.lang.System.getProperty;
 
 public class AMQPProperties
 {
     public static String getBrokerHost()
     {
-
         return getProperty("abiquo.rabbitmq.host", "localhost");
     }
 
     public static int getBrokerPort()
     {
-        return parseInt(getProperty("abiquo.rabbitmq.port", "5672"));
+        return Integer.getInteger("abiquo.rabbitmq.port", 5672);
     }
 
     public static String getUserName()
@@ -39,16 +37,16 @@ public class AMQPProperties
 
     public static Integer getConnectionTimeout()
     {
-        return parseInt(getProperty("abiquo.rabbitmq.connectionTimeout", "0"));
+        return Integer.getInteger("abiquo.rabbitmq.connectionTimeout", 0);
     }
 
     public static Integer getRequestedHeartbeat()
     {
-        return parseInt(getProperty("abiquo.rabbitmq.requestedHeartbeat", "0"));
+        return Integer.getInteger("abiquo.rabbitmq.requestedHeartbeat", 0);
     }
 
     public static Integer getNetworkRecoveryInterval()
     {
-        return parseInt(getProperty("abiquo.rabbitmq.networkRecoveryInterval", "5000"));
+        return Integer.getInteger("abiquo.rabbitmq.networkRecoveryInterval", 5000);
     }
 }

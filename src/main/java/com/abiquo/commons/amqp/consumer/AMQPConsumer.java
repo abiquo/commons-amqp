@@ -33,31 +33,22 @@ public class AMQPConsumer<C extends Serializable> implements Closeable
 {
     private final static Logger log = LoggerFactory.getLogger(AMQPConsumer.class);
 
-    protected AMQPConfiguration configuration;
+    protected final AMQPConfiguration configuration;
 
-    protected QueueSubscriber<AMQPConsumer<C>> subscriber;
+    protected final QueueSubscriber<AMQPConsumer<C>> subscriber;
 
-    protected AMQPCallback<C> callback;
+    protected final AMQPCallback<C> callback;
 
-    protected Class<C> messageClass;
+    protected final Class<C> messageClass;
 
-    protected Channel channel;
+    protected final Channel channel;
 
-    protected AMQPDeserializer<C> deserializer;
+    protected final AMQPDeserializer<C> deserializer;
 
     public AMQPConsumer(final AMQPConfiguration configuration, final Class<C> messageClass,
         final AMQPCallback<C> callback, final Channel channel)
     {
-        checkNotNull(configuration, "AMQPConfiguration for an AMQPConsumer can not be null");
-        checkNotNull(messageClass, "Class of message for an AMQPConsumer can not be null");
-        checkNotNull(callback, "AMQPCallback for an AMQPConsumer can not be null");
-        checkNotNull(channel, "Channel for an AMQPConsumer can not be null");
-
-        this.configuration = configuration;
-        this.messageClass = messageClass;
-        this.callback = callback;
-        this.channel = channel;
-        this.deserializer = new DefaultDeserializer<C>();
+        this(configuration, messageClass, callback, channel, new DefaultDeserializer<C>());
     }
 
     public AMQPConsumer(final AMQPConfiguration configuration, final Class<C> messageClass,
@@ -68,13 +59,14 @@ public class AMQPConsumer<C extends Serializable> implements Closeable
         checkNotNull(messageClass, "Class of message for an AMQPConsumer can not be null");
         checkNotNull(callback, "AMQPCallback for an AMQPConsumer can not be null");
         checkNotNull(channel, "Channel for an AMQPConsumer can not be null");
-        checkNotNull(deserializer, "Message serializer cannot be null");
+        checkNotNull(deserializer, "Message deserializer cannot be null");
 
         this.configuration = configuration;
         this.messageClass = messageClass;
         this.callback = callback;
         this.channel = channel;
         this.deserializer = deserializer;
+        this.subscriber = new QueueSubscriber<AMQPConsumer<C>>(channel, this);
     }
 
     public void start() throws IOException
@@ -87,7 +79,6 @@ public class AMQPConsumer<C extends Serializable> implements Closeable
         log.trace("Declaring queues for {}", this);
         configuration.declareQueues(channel);
 
-        subscriber = new QueueSubscriber<AMQPConsumer<C>>(channel, this);
         channel.basicConsume(configuration.getQueue(), false, subscriber);
     }
 

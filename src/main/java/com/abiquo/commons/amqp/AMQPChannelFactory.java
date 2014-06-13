@@ -65,7 +65,7 @@ public class AMQPChannelFactory implements Closeable
     @Override
     public void close() throws IOException
     {
-        if (connection != null && connection.isOpen())
+        if (connection != null)
         {
             log.debug("Closing AMQP connection and all its channels");
             connection.close();

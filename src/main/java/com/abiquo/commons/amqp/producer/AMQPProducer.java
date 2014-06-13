@@ -33,22 +33,17 @@ public class AMQPProducer<T extends Serializable> implements Closeable
 {
     private final static Logger log = LoggerFactory.getLogger(AMQPProducer.class);
 
-    protected AMQPConfiguration configuration;
+    protected final AMQPConfiguration configuration;
 
-    protected Channel channel;
+    protected final Channel channel;
 
-    protected AMQPSerializer<T> serializer;
+    protected final AMQPSerializer<T> serializer;
 
     protected boolean declareExchanges = true;
 
     public AMQPProducer(final AMQPConfiguration configuration, final Channel channel)
     {
-        checkNotNull(configuration, "AMQPConfiguration for an AMQPProducer cannot be null");
-        checkNotNull(channel, "Channel for an AMQPProducer cannot be null");
-
-        this.configuration = configuration;
-        this.channel = channel;
-        this.serializer = new DefaultSerializer<T>();
+        this(configuration, channel, new DefaultSerializer<T>());
     }
 
     public AMQPProducer(final AMQPConfiguration configuration, final Channel channel,
