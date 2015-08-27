@@ -19,9 +19,9 @@ import com.rabbitmq.client.Channel;
  */
 public class PublicCloudRegionSyncConfiguration extends AMQPConfiguration
 {
-    private static final String PCR_SYNC_EXCHANGE = "abiquo.pcrsync";
+    protected static final String PCR_SYNC_EXCHANGE = "abiquo.pcrsync";
 
-    private static final String PCR_SYNC_ROUTING_KEY = "abiquo.pcrsync.messages";
+    protected static final String PCR_SYNC_ROUTING_KEY = "abiquo.pcrsync.messages";
 
     private static final String PCR_SYNC_QUEUE = PCR_SYNC_ROUTING_KEY;
 
