@@ -11,11 +11,11 @@ import java.io.IOException;
 import com.abiquo.commons.amqp.AMQPConfiguration;
 import com.rabbitmq.client.Channel;
 
-public class VirtualMachineActionPlanExecutionRequestConfiguration extends AMQPConfiguration
+public class VirtualMachineActionPlanExecutionConfiguration extends AMQPConfiguration
 {
-    private static final String EXCHANGE = "abiquo.vm.actionplan";
+    private static final String EXCHANGE = "abiquo.vmactionplan.executions";
 
-    private static final String ROUTING_KEY = "abiquo.vm.actionplans";
+    private static final String ROUTING_KEY = "abiquo.vmactionplan.execution";
 
     private static final String QUEUE = ROUTING_KEY;
 
