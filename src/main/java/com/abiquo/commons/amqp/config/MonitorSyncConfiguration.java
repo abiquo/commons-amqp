@@ -11,12 +11,7 @@ import java.io.IOException;
 import com.abiquo.commons.amqp.AMQPConfiguration;
 import com.rabbitmq.client.Channel;
 
-/**
- * Common RabbitMQ Broker configuration for node collector consumer and producer.
- * 
- * @author eruiz@abiquo.com
- */
-public class NodeCollectorConfiguration extends AMQPConfiguration
+public class MonitorSyncConfiguration extends AMQPConfiguration
 {
     private static final String NODE_COLLECTOR_EXCHANGE = "abiquo.nodecollector";
 
