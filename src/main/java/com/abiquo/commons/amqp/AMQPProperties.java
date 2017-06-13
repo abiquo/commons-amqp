@@ -49,4 +49,9 @@ public class AMQPProperties
     {
         return Integer.getInteger("abiquo.rabbitmq.networkRecoveryInterval", 5000);
     }
+
+    public static boolean isMultitenantEnabled()
+    {
+        return Boolean.getBoolean("abiquo.rabbitmq.multitenant");
+    }
 }

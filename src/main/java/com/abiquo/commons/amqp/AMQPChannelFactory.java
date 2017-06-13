@@ -8,10 +8,12 @@ package com.abiquo.commons.amqp;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Strings;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
@@ -26,19 +28,35 @@ public class AMQPChannelFactory implements Closeable
 
     private Connection connection = null;
 
+    private String virtualHost;
+
+    /**
+     * Builds a new {@link AMQPChannelFactory} setting the virtual host specified in system property
+     * {@link AMQPProperties#getVirtualHost()}
+     */
     public AMQPChannelFactory()
     {
+        this(AMQPProperties.getVirtualHost());
+    }
+
+    public AMQPChannelFactory(final String virtualHost)
+    {
+        Objects.requireNonNull(Strings.emptyToNull(virtualHost),
+            "virtualHost should not be null or empty");
+
         connectionFactory = new com.rabbitmq.client.ConnectionFactory();
         connectionFactory.setHost(AMQPProperties.getBrokerHost());
         connectionFactory.setPort(AMQPProperties.getBrokerPort());
         connectionFactory.setUsername(AMQPProperties.getUserName());
         connectionFactory.setPassword(AMQPProperties.getPassword());
-        connectionFactory.setVirtualHost(AMQPProperties.getVirtualHost());
+        connectionFactory.setVirtualHost(virtualHost);
         connectionFactory.setAutomaticRecoveryEnabled(true);
         connectionFactory.setTopologyRecoveryEnabled(true);
         connectionFactory.setNetworkRecoveryInterval(AMQPProperties.getNetworkRecoveryInterval());
         connectionFactory.setConnectionTimeout(AMQPProperties.getConnectionTimeout());
         connectionFactory.setRequestedHeartbeat(AMQPProperties.getRequestedHeartbeat());
+
+        this.virtualHost = virtualHost;
     }
 
     public Channel createChannel() throws IOException
@@ -101,5 +119,10 @@ public class AMQPChannelFactory implements Closeable
                 }
             });
         }
+    }
+
+    public String getVirtualHost()
+    {
+        return virtualHost;
     }
 }
