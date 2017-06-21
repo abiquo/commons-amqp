@@ -6,10 +6,8 @@
  */
 package com.abiquo.commons.amqp.config;
 
-import java.io.IOException;
-
 import com.abiquo.commons.amqp.AMQPConfiguration;
-import com.rabbitmq.client.Channel;
+import com.abiquo.commons.amqp.AMQPFlags;
 
 public abstract class DatacenterRequestConfiguration extends AMQPConfiguration
 {
@@ -30,16 +28,14 @@ public abstract class DatacenterRequestConfiguration extends AMQPConfiguration
     }
 
     @Override
-    public void declareExchanges(final Channel channel) throws IOException
+    public AMQPFlags getFlags()
     {
-        channel.exchangeDeclare(getExchange(), TopicExchange, Durable);
-    }
-
-    @Override
-    public void declareQueues(final Channel channel) throws IOException
-    {
-        channel.queueDeclare(getQueue(), Durable, !Exclusive, !Autodelete, null);
-        channel.queueBind(getQueue(), getExchange(), getRoutingKey());
+        return AMQPFlags.topic() //
+            .exchangeDurable(true) //
+            .queueDurable(true) //
+            .queueExclusive(false) //
+            .queueAutoDelete(false) //
+            .build();
     }
 
     @Override

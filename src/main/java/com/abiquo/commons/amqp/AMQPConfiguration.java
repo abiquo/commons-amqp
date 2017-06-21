@@ -25,21 +25,38 @@ public abstract class AMQPConfiguration
 
     protected static final String TopicExchange = "topic";
 
-    protected static final boolean Durable = true;
-
-    protected static final boolean Exclusive = true;
-
-    protected static final boolean Autodelete = true;
-
-    public abstract void declareExchanges(Channel channel) throws IOException;
-
-    public abstract void declareQueues(Channel channel) throws IOException;
-
     public abstract String getExchange();
 
     public abstract String getRoutingKey();
 
     public abstract String getQueue();
+
+    public abstract AMQPFlags getFlags();
+
+    public void declareExchanges(final Channel channel) throws IOException
+    {
+        AMQPFlags flags = getFlags();
+
+        // Some configurations, such as teh PCR delayed queues don't require an exchange
+        if (flags.exchangeType() != null)
+        {
+            channel.exchangeDeclare(getExchange(), flags.exchangeType(), flags.exchangeDurable());
+        }
+    }
+
+    public void declareQueues(final Channel channel) throws IOException
+    {
+        AMQPFlags flags = getFlags();
+
+        channel.queueDeclare(getQueue(), flags.queueDurable(), flags.queueExclusive(),
+            flags.queueAutoDelete(), flags.queueArguments());
+
+        // No need to bind the queue if there is no exchange
+        if (flags.exchangeType() != null)
+        {
+            channel.queueBind(getQueue(), getExchange(), getRoutingKey());
+        }
+    }
 
     public int getPrefetchCount()
     {

@@ -6,52 +6,38 @@
  */
 package com.abiquo.commons.amqp.config;
 
-import java.io.IOException;
-
-import com.abiquo.commons.amqp.AMQPConfiguration;
-import com.rabbitmq.client.Channel;
+import com.abiquo.commons.amqp.AMQPFanoutConfiguration;
+import com.abiquo.commons.amqp.AMQPFlags;
 
 /**
  * Common RabbitMQ Broker configuration for Tracer consumer and producer.
  * 
  * @author eruiz@abiquo.com
  */
-public class TracerConfiguration extends AMQPConfiguration
+public class TracerConfiguration extends AMQPFanoutConfiguration
 {
     private static final String TRACER_EXCHANGE = "abiquo.tracer";
 
-    private static final String TRACER_ROUTING_KEY = "abiquo.tracer.traces";
+    private static final String TRACER_QUEUE = "abiquo.tracer.traces";
 
-    private static final String TRACER_QUEUE = TRACER_ROUTING_KEY;
-
-    @Override
-    public void declareExchanges(final Channel channel) throws IOException
+    public TracerConfiguration()
     {
-        channel.exchangeDeclare(getExchange(), DirectExchange, Durable);
+        super(TRACER_QUEUE);
     }
 
     @Override
-    public void declareQueues(final Channel channel) throws IOException
+    public AMQPFlags getFlags()
     {
-        channel.queueDeclare(getQueue(), Durable, !Exclusive, !Autodelete, null);
-        channel.queueBind(getQueue(), getExchange(), getRoutingKey());
+        return AMQPFlags.fanout() //
+            .exchangeDurable(true) //
+            .queueExclusive(false) //
+            .queueAutoDelete(false) //
+            .build();
     }
 
     @Override
     public String getExchange()
     {
         return TRACER_EXCHANGE;
-    }
-
-    @Override
-    public String getRoutingKey()
-    {
-        return TRACER_ROUTING_KEY;
-    }
-
-    @Override
-    public String getQueue()
-    {
-        return TRACER_QUEUE;
     }
 }

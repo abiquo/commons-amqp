@@ -9,12 +9,11 @@ package com.abiquo.commons.amqp.config;
 import static com.abiquo.commons.amqp.config.VirtualApplianceSpecConfiguration.VAPP_SPEC_EXCHANGE;
 import static com.abiquo.commons.amqp.config.VirtualApplianceSpecConfiguration.VAPP_SPEC_ROUTING_KEY;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import com.abiquo.commons.amqp.AMQPConfiguration;
-import com.rabbitmq.client.Channel;
+import com.abiquo.commons.amqp.AMQPFlags;
 
 /**
  * Delayed queue to {@link VirutalApplianceSpecConfiguration}
@@ -41,15 +40,14 @@ public class VirtualApplianceSpecDelayedConfiguration extends AMQPConfiguration
     }
 
     @Override
-    public void declareExchanges(final Channel channel) throws IOException
+    public AMQPFlags getFlags()
     {
-        // no exchange
-    }
-
-    @Override
-    public void declareQueues(final Channel channel) throws IOException
-    {
-        channel.queueDeclare(getQueue(), Durable, !Exclusive, !Autodelete, DELAYED_TO);
+        return AMQPFlags.noExchange() //
+            .queueDurable(true) //
+            .queueExclusive(false) //
+            .queueAutoDelete(false) //
+            .queueArguments(DELAYED_TO) //
+            .build();
     }
 
     @Override
