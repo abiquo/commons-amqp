@@ -11,6 +11,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.concurrent.TimeoutException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +22,10 @@ import com.abiquo.commons.amqp.serialization.DefaultDeserializer;
 import com.google.common.base.Objects;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Envelope;
+import com.rabbitmq.client.Recoverable;
+import com.rabbitmq.client.RecoveryListener;
+import com.rabbitmq.client.ShutdownSignalException;
+import com.rabbitmq.client.impl.recovery.AutorecoveringChannel;
 
 /**
  * The base consumer, it handles the creation and configuration of AMQP entities, the callback
@@ -104,17 +109,49 @@ public class AMQPConsumer<C extends Serializable> implements Closeable
     @Override
     public void close() throws IOException
     {
-        log.trace("Trying to close {}", this);
-
-        if (channel.isOpen())
+        try
         {
+            log.trace("Trying to close {}", this);
             channel.close();
             log.trace("{} closed", this);
         }
-        else
+        catch (TimeoutException e)
         {
-            log.trace("{} is already closed", this);
+            log.error("Timeout while closing " + this, e);
+            throw new ShutdownSignalException(true, true, null, channel);
         }
+    }
+
+    public void abortOnRecovery()
+    {
+        ((AutorecoveringChannel) channel).addRecoveryListener(new RecoveryListener()
+        {
+            @Override
+            public void handleRecoveryStarted(Recoverable recoverable)
+            {
+                // noop
+            }
+
+            @Override
+            public void handleRecovery(Recoverable recoverable)
+            {
+                try
+                {
+                    log.trace("Aborting channel {}...", this);
+                    ((Channel) recoverable).abort();
+                    log.trace("Aborted");
+                }
+                catch (ShutdownSignalException e)
+                {
+                    log.trace("Channel {} is already closed", this);
+                }
+                catch (IOException e)
+                {
+                    log.error("Unable to abort channel {}, please restart this abiquo " //
+                        + "API instance to avoid malfunction", this);
+                }
+            }
+        });
     }
 
     @Override

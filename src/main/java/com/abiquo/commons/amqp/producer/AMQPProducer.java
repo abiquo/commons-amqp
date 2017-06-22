@@ -11,6 +11,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.concurrent.TimeoutException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +22,7 @@ import com.abiquo.commons.amqp.serialization.DefaultSerializer;
 import com.google.common.base.Objects;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.MessageProperties;
+import com.rabbitmq.client.ShutdownSignalException;
 
 /**
  * The base producer, it handles the creation and configuration of AMQP entities and the connection
@@ -76,16 +78,16 @@ public class AMQPProducer<T extends Serializable> implements Closeable
     @Override
     public void close() throws IOException
     {
-        log.trace("Trying to close {}", this);
-
-        if (channel.isOpen())
+        try
         {
+            log.trace("Trying to close {}", this);
             channel.close();
             log.trace("{} closed", this);
         }
-        else
+        catch (TimeoutException e)
         {
-            log.trace("{} is already closed", this);
+            log.error("Timeout while closing " + this, e);
+            throw new ShutdownSignalException(true, true, null, channel);
         }
     }
 
