@@ -9,6 +9,7 @@ package com.abiquo.commons.amqp;
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.Objects;
+import java.util.concurrent.TimeoutException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,7 @@ import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.ShutdownListener;
 import com.rabbitmq.client.ShutdownSignalException;
+import com.rabbitmq.client.impl.StrictExceptionHandler;
 
 public class AMQPChannelFactory implements Closeable
 {
@@ -55,11 +57,11 @@ public class AMQPChannelFactory implements Closeable
         connectionFactory.setNetworkRecoveryInterval(AMQPProperties.getNetworkRecoveryInterval());
         connectionFactory.setConnectionTimeout(AMQPProperties.getConnectionTimeout());
         connectionFactory.setRequestedHeartbeat(AMQPProperties.getRequestedHeartbeat());
-
+        connectionFactory.setExceptionHandler(new StrictExceptionHandler());
         this.virtualHost = virtualHost;
     }
 
-    public Channel createChannel() throws IOException
+    public Channel createChannel() throws IOException, TimeoutException
     {
         final Channel channel = newChannel();
 
@@ -92,7 +94,7 @@ public class AMQPChannelFactory implements Closeable
         log.debug("AMQP connection closed");
     }
 
-    private Channel newChannel() throws IOException
+    private Channel newChannel() throws IOException, TimeoutException
     {
         if (connection == null)
         {
@@ -102,7 +104,7 @@ public class AMQPChannelFactory implements Closeable
         return connection.createChannel();
     }
 
-    private synchronized void initializeConnection() throws IOException
+    private synchronized void initializeConnection() throws IOException, TimeoutException
     {
         if (connection == null)
         {
