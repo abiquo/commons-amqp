@@ -49,27 +49,22 @@ public class AMQPFlags
 
     public static Builder direct()
     {
-        return builder().exchangeType(DirectExchange);
+        return new Builder(DirectExchange);
     }
 
     public static Builder topic()
     {
-        return builder().exchangeType(TopicExchange);
+        return new Builder(TopicExchange);
     }
 
     public static Builder fanout()
     {
-        return builder().exchangeType(FanoutExchange).queueDurable(false);
+        return new Builder(FanoutExchange).queueDurable(false);
     }
 
     public static Builder noExchange()
     {
-        return builder();
-    }
-
-    private static Builder builder()
-    {
-        return new Builder();
+        return new Builder(null);
     }
 
     public String exchangeType()
@@ -116,10 +111,9 @@ public class AMQPFlags
 
         private Map<String, Object> queueArguments;
 
-        public AMQPFlags.Builder exchangeType(final String exchangeType)
+        private Builder(final String exchangeType)
         {
             this.exchangeType = exchangeType;
-            return this;
         }
 
         public AMQPFlags.Builder exchangeDurable(final boolean exchangeDurable)
