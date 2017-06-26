@@ -6,7 +6,13 @@
  */
 package com.abiquo.commons.amqp;
 
-import java.util.UUID;
+import static com.google.common.base.Preconditions.checkState;
+import static java.util.Objects.requireNonNull;
+
+import java.io.IOException;
+
+import com.google.common.base.Strings;
+import com.rabbitmq.client.Channel;
 
 /**
  * Base class for all fanout configurations.
@@ -21,9 +27,29 @@ public abstract class AMQPFanoutConfiguration extends AMQPConfiguration
     /** Unique name for each queue that participates in the fanout configuration. */
     private final String queueName;
 
-    public AMQPFanoutConfiguration(final String baseQueueName)
+    /**
+     * Constructor to be used by producers, as they don't need to configure a queue name.
+     */
+    protected AMQPFanoutConfiguration()
     {
-        this.queueName = baseQueueName + "." + UUID.randomUUID().toString();
+        this.queueName = null;
+    }
+
+    /**
+     * Constructor to be used by consumers, as they need to configure unique queue names.
+     */
+    protected AMQPFanoutConfiguration(final String queueName)
+    {
+        this.queueName = requireNonNull(queueName, "queue name must not be null");
+    }
+
+    @Override
+    public void declareQueues(final Channel channel) throws IOException
+    {
+        checkState(!Strings.isNullOrEmpty(queueName),
+            "queue name must be set when configuring fanout consumers");
+
+        super.declareQueues(channel);
     }
 
     @Override
