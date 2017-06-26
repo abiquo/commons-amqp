@@ -14,7 +14,9 @@ import java.util.concurrent.TimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.abiquo.commons.amqp.util.SystemPropertyAddressResolver;
 import com.google.common.base.Strings;
+import com.rabbitmq.client.AddressResolver;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
@@ -32,6 +34,8 @@ public class AMQPChannelFactory implements Closeable
 
     private String virtualHost;
 
+    private AddressResolver addressResolver;
+
     /**
      * Builds a new {@link AMQPChannelFactory} setting the virtual host specified in system property
      * {@link AMQPProperties#getVirtualHost()}
@@ -46,9 +50,9 @@ public class AMQPChannelFactory implements Closeable
         Objects.requireNonNull(Strings.emptyToNull(virtualHost),
             "virtualHost should not be null or empty");
 
+        this.virtualHost = virtualHost;
+
         connectionFactory = new com.rabbitmq.client.ConnectionFactory();
-        connectionFactory.setHost(AMQPProperties.getBrokerHost());
-        connectionFactory.setPort(AMQPProperties.getBrokerPort());
         connectionFactory.setUsername(AMQPProperties.getUserName());
         connectionFactory.setPassword(AMQPProperties.getPassword());
         connectionFactory.setVirtualHost(virtualHost);
@@ -58,7 +62,8 @@ public class AMQPChannelFactory implements Closeable
         connectionFactory.setConnectionTimeout(AMQPProperties.getConnectionTimeout());
         connectionFactory.setRequestedHeartbeat(AMQPProperties.getRequestedHeartbeat());
         connectionFactory.setExceptionHandler(new StrictExceptionHandler());
-        this.virtualHost = virtualHost;
+
+        addressResolver = new SystemPropertyAddressResolver();
     }
 
     public Channel createChannel() throws IOException, TimeoutException
@@ -108,7 +113,7 @@ public class AMQPChannelFactory implements Closeable
     {
         if (connection == null)
         {
-            connection = connectionFactory.newConnection();
+            connection = connectionFactory.newConnection(addressResolver);
             connection.addShutdownListener(new ShutdownListener()
             {
                 @Override

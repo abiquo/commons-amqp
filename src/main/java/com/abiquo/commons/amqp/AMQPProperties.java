@@ -8,18 +8,13 @@ package com.abiquo.commons.amqp;
 
 import static java.lang.System.getProperty;
 
+import java.util.Arrays;
+import java.util.List;
+
+import com.rabbitmq.client.Address;
+
 public class AMQPProperties
 {
-    public static String getBrokerHost()
-    {
-        return getProperty("abiquo.rabbitmq.host", "localhost");
-    }
-
-    public static int getBrokerPort()
-    {
-        return Integer.getInteger("abiquo.rabbitmq.port", 5672);
-    }
-
     public static String getUserName()
     {
         return getProperty("abiquo.rabbitmq.username", "guest");
@@ -53,5 +48,11 @@ public class AMQPProperties
     public static boolean isMultitenantEnabled()
     {
         return Boolean.getBoolean("abiquo.rabbitmq.multitenant");
+    }
+
+    public static List<Address> getAddresses()
+    {
+        final String value = System.getProperty("abiquo.rabbitmq.addresses", "localhost:5672");
+        return Arrays.asList(Address.parseAddresses(value));
     }
 }
