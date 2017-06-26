@@ -6,7 +6,7 @@
  */
 package com.abiquo.commons.amqp;
 
-import java.util.UUID;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Base class for all fanout configurations.
@@ -21,9 +21,9 @@ public abstract class AMQPFanoutConfiguration extends AMQPConfiguration
     /** Unique name for each queue that participates in the fanout configuration. */
     private final String queueName;
 
-    public AMQPFanoutConfiguration(final String baseQueueName)
+    public AMQPFanoutConfiguration(final String queueName)
     {
-        this.queueName = baseQueueName + "." + UUID.randomUUID().toString();
+        this.queueName = requireNonNull(queueName, "queueName must not be null");
     }
 
     @Override

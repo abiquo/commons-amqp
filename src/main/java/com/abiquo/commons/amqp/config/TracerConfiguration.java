@@ -20,9 +20,9 @@ public class TracerConfiguration extends AMQPFanoutConfiguration
 
     private static final String TRACER_QUEUE = "abiquo.tracer.traces";
 
-    public TracerConfiguration()
+    public TracerConfiguration(final String queueSuffix)
     {
-        super(TRACER_QUEUE);
+        super(TRACER_QUEUE + "." + queueSuffix);
     }
 
     @Override
