@@ -61,6 +61,7 @@ public abstract class TracerConfiguration extends AMQPFanoutConfiguration
     {
         return AMQPFlags.fanout() //
             .exchangeDurable(true) //
+            .queueDurable(true) //
             .queueExclusive(false) //
             .queueAutoDelete(false) //
             .build();

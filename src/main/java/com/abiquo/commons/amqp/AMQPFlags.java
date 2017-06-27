@@ -59,7 +59,7 @@ public class AMQPFlags
 
     public static Builder fanout()
     {
-        return new Builder(FanoutExchange).queueDurable(false);
+        return new Builder(FanoutExchange);
     }
 
     public static Builder noExchange()
