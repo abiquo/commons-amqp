@@ -9,7 +9,6 @@ package com.abiquo.commons.amqp;
 import static com.abiquo.commons.amqp.AMQPConfiguration.DirectExchange;
 import static com.abiquo.commons.amqp.AMQPConfiguration.FanoutExchange;
 import static com.abiquo.commons.amqp.AMQPConfiguration.TopicExchange;
-import static com.google.common.base.Preconditions.checkArgument;
 
 import java.util.Map;
 
@@ -36,9 +35,6 @@ public class AMQPFlags
         final boolean queueDurable, final boolean queueExclusive, final boolean queueAutoDelete,
         final Map<String, Object> queueArguments)
     {
-        checkArgument(!(FanoutExchange.equals(exchangeType) && queueDurable),
-            "Fanout configurations cannot have durable queues");
-
         this.exchangeType = exchangeType;
         this.exchangeDurable = exchangeDurable;
         this.queueDurable = queueDurable;
