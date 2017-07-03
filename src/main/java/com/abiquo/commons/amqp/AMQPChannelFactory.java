@@ -8,6 +8,9 @@ package com.abiquo.commons.amqp;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeoutException;
 
@@ -20,9 +23,11 @@ import com.rabbitmq.client.AddressResolver;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.RecoveryListener;
 import com.rabbitmq.client.ShutdownListener;
 import com.rabbitmq.client.ShutdownSignalException;
 import com.rabbitmq.client.impl.StrictExceptionHandler;
+import com.rabbitmq.client.impl.recovery.AutorecoveringConnection;
 
 public class AMQPChannelFactory implements Closeable
 {
@@ -36,21 +41,35 @@ public class AMQPChannelFactory implements Closeable
 
     private AddressResolver addressResolver;
 
+    private List<RecoveryListener> recoveryListeners = new ArrayList<>();
+
     /**
      * Builds a new {@link AMQPChannelFactory} setting the virtual host specified in system property
      * {@link AMQPProperties#getVirtualHost()}
      */
     public AMQPChannelFactory()
     {
-        this(AMQPProperties.getVirtualHost());
+        this(AMQPProperties.getVirtualHost(), Collections.emptyList());
+    }
+
+    public AMQPChannelFactory(final List<RecoveryListener> recoveryListeners)
+    {
+        this(AMQPProperties.getVirtualHost(), recoveryListeners);
     }
 
     public AMQPChannelFactory(final String virtualHost)
+    {
+        this(virtualHost, Collections.emptyList());
+    }
+
+    public AMQPChannelFactory(final String virtualHost,
+        final List<RecoveryListener> recoveryListeners)
     {
         Objects.requireNonNull(Strings.emptyToNull(virtualHost),
             "virtualHost should not be null or empty");
 
         this.virtualHost = virtualHost;
+        this.recoveryListeners.addAll(recoveryListeners);
 
         connectionFactory = new com.rabbitmq.client.ConnectionFactory();
         connectionFactory.setUsername(AMQPProperties.getUserName());
@@ -99,6 +118,17 @@ public class AMQPChannelFactory implements Closeable
         log.debug("AMQP connection closed");
     }
 
+    public void addRecoveryListener(final RecoveryListener recoveryListener) throws IOException,
+        TimeoutException
+    {
+        if (connection == null)
+        {
+            initializeConnection();
+        }
+
+        ((AutorecoveringConnection) connection).addRecoveryListener(recoveryListener);
+    }
+
     private Channel newChannel() throws IOException, TimeoutException
     {
         if (connection == null)
@@ -114,6 +144,7 @@ public class AMQPChannelFactory implements Closeable
         if (connection == null)
         {
             connection = connectionFactory.newConnection(addressResolver);
+
             connection.addShutdownListener(new ShutdownListener()
             {
                 @Override
@@ -125,6 +156,8 @@ public class AMQPChannelFactory implements Closeable
                     }
                 }
             });
+
+            recoveryListeners.forEach(((AutorecoveringConnection) connection)::addRecoveryListener);
         }
     }
 
