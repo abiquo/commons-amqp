@@ -11,6 +11,8 @@ import static java.lang.System.getProperty;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.net.ssl.KeyManagerFactory;
+
 import com.rabbitmq.client.Address;
 
 public class AMQPProperties
@@ -54,5 +56,51 @@ public class AMQPProperties
     {
         final String value = System.getProperty("abiquo.rabbitmq.addresses", "localhost:5672");
         return Arrays.asList(Address.parseAddresses(value));
+    }
+
+    public static boolean isTLSEnabled()
+    {
+        return Boolean.getBoolean("abiquo.rabbitmq.tls");
+    }
+
+    /**
+     * If true, client will not enforce any server authentication (peer certificate chain
+     * verification), "trust all certificates" TrustManager will be used. Convenient for local
+     * development
+     */
+    public static boolean trustAllCertificates()
+    {
+        return Boolean.getBoolean("abiquo.rabbitmq.tls.trustallcertificates");
+    }
+
+    public static String sslProtocol()
+    {
+        return getProperty("abiquo.rabbitmq.tls.sslprotocol", "TLSv1.2");
+    }
+
+    public static final String TrustStoreKey = "abiquo.rabbitmq.tls.truststore";
+
+    public static String trustStore()
+    {
+        return getProperty(TrustStoreKey, null);
+    }
+
+    public static final String TrustStorePassphraseKey =
+        "abiquo.rabbitmq.tls.truststore.passphrase";
+
+    public static String trustStorePassphrase()
+    {
+        return getProperty(TrustStorePassphraseKey, null);
+    }
+
+    public static String trustStoreType()
+    {
+        return getProperty("abiquo.rabbitmq.tls.truststore.type", "JKS");
+    }
+
+    public static String trustManagerAlgorithm()
+    {
+        return getProperty("abiquo.rabbitmq.tls.trustmanager.algorithm",
+            KeyManagerFactory.getDefaultAlgorithm());
     }
 }

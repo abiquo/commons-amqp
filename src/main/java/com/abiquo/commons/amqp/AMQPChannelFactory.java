@@ -6,6 +6,8 @@
  */
 package com.abiquo.commons.amqp;
 
+import static com.abiquo.commons.amqp.AMQPSSLContext.buildSSLContext;
+
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,6 +19,7 @@ import java.util.concurrent.TimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.abiquo.commons.amqp.exception.SSLException;
 import com.abiquo.commons.amqp.util.SystemPropertyAddressResolver;
 import com.google.common.base.Strings;
 import com.rabbitmq.client.AddressResolver;
@@ -85,7 +88,7 @@ public class AMQPChannelFactory implements Closeable
         addressResolver = new SystemPropertyAddressResolver();
     }
 
-    public Channel createChannel() throws IOException, TimeoutException
+    public Channel createChannel() throws SSLException, IOException, TimeoutException
     {
         final Channel channel = newChannel();
 
@@ -118,8 +121,8 @@ public class AMQPChannelFactory implements Closeable
         log.debug("AMQP connection closed");
     }
 
-    public void addRecoveryListener(final RecoveryListener recoveryListener) throws IOException,
-        TimeoutException
+    public void addRecoveryListener(final RecoveryListener recoveryListener) throws SSLException,
+        IOException, TimeoutException
     {
         if (connection == null)
         {
@@ -129,7 +132,7 @@ public class AMQPChannelFactory implements Closeable
         ((AutorecoveringConnection) connection).addRecoveryListener(recoveryListener);
     }
 
-    private Channel newChannel() throws IOException, TimeoutException
+    private Channel newChannel() throws SSLException, IOException, TimeoutException
     {
         if (connection == null)
         {
@@ -139,12 +142,13 @@ public class AMQPChannelFactory implements Closeable
         return connection.createChannel();
     }
 
-    private synchronized void initializeConnection() throws IOException, TimeoutException
+    private synchronized void initializeConnection() throws SSLException, IOException,
+        TimeoutException
     {
         if (connection == null)
         {
+            buildSSLContext().ifPresent(connectionFactory::useSslProtocol);
             connection = connectionFactory.newConnection(addressResolver);
-
             connection.addShutdownListener(new ShutdownListener()
             {
                 @Override
