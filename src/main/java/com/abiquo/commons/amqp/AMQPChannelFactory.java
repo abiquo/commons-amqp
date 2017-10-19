@@ -6,8 +6,6 @@
  */
 package com.abiquo.commons.amqp;
 
-import static com.abiquo.commons.amqp.AMQPSSLContext.buildSSLContext;
-
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,6 +13,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeoutException;
+
+import javax.net.ssl.SSLContext;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -147,7 +147,7 @@ public class AMQPChannelFactory implements Closeable
     {
         if (connection == null)
         {
-            buildSSLContext().ifPresent(connectionFactory::useSslProtocol);
+            initializeSSL(connectionFactory);
             connection = connectionFactory.newConnection(addressResolver);
             connection.addShutdownListener(new ShutdownListener()
             {
@@ -162,6 +162,32 @@ public class AMQPChannelFactory implements Closeable
             });
 
             recoveryListeners.forEach(((AutorecoveringConnection) connection)::addRecoveryListener);
+        }
+    }
+
+    public static void initializeSSL(final ConnectionFactory connectionFactory)
+        throws SSLException
+    {
+        if (!AMQPProperties.isTLSEnabled())
+        {
+            return;
+        }
+
+        try
+        {
+            if (AMQPProperties.trustAllCertificates())
+            {
+                // By default a TrustEverythingTrustManager is used
+                connectionFactory.useSslProtocol();
+            }
+            else
+            {
+                connectionFactory.useSslProtocol(SSLContext.getDefault());
+            }
+        }
+        catch (Exception e)
+        {
+            throw new SSLException(e);
         }
     }
 
