@@ -46,46 +46,96 @@ public class AMQPChannelFactory implements Closeable
 
     private List<RecoveryListener> recoveryListeners = new ArrayList<>();
 
+    private boolean sslEnabled;
+    
+    private boolean trustAllCertificates;
+    
     /**
      * Builds a new {@link AMQPChannelFactory} setting the virtual host specified in system property
      * {@link AMQPProperties#getVirtualHost()}
      */
     public AMQPChannelFactory()
     {
-        this(AMQPProperties.getVirtualHost(), Collections.emptyList());
+        this(AMQPProperties.getUserName(), //
+            AMQPProperties.getPassword(), //
+            AMQPProperties.getVirtualHost(), //
+            Collections.emptyList(), //
+            AMQPProperties.getNetworkRecoveryInterval(), //
+            AMQPProperties.getConnectionTimeout(), //
+            AMQPProperties.getRequestedHeartbeat(), //
+            new SystemPropertyAddressResolver(), 
+            AMQPProperties.isTLSEnabled(), //
+            AMQPProperties.trustAllCertificates());
     }
 
     public AMQPChannelFactory(final List<RecoveryListener> recoveryListeners)
     {
-        this(AMQPProperties.getVirtualHost(), recoveryListeners);
+        this(AMQPProperties.getUserName(), //
+            AMQPProperties.getPassword(), //
+            AMQPProperties.getVirtualHost(), //
+            recoveryListeners, //
+            AMQPProperties.getNetworkRecoveryInterval(), //
+            AMQPProperties.getConnectionTimeout(), //
+            AMQPProperties.getRequestedHeartbeat(), //
+            new SystemPropertyAddressResolver(), //
+            AMQPProperties.isTLSEnabled(), //
+            AMQPProperties.trustAllCertificates());
     }
 
     public AMQPChannelFactory(final String virtualHost)
     {
-        this(virtualHost, Collections.emptyList());
+        this(AMQPProperties.getUserName(), //
+            AMQPProperties.getPassword(), //
+            virtualHost, //
+            Collections.emptyList(), //
+            AMQPProperties.getNetworkRecoveryInterval(), //
+            AMQPProperties.getConnectionTimeout(), //
+            AMQPProperties.getRequestedHeartbeat(), //
+            new SystemPropertyAddressResolver(), //
+            AMQPProperties.isTLSEnabled(), //
+            AMQPProperties.trustAllCertificates());
     }
 
     public AMQPChannelFactory(final String virtualHost,
         final List<RecoveryListener> recoveryListeners)
+    {
+        this(AMQPProperties.getUserName(), //
+            AMQPProperties.getPassword(), //
+            virtualHost, //
+            recoveryListeners, //
+            AMQPProperties.getNetworkRecoveryInterval(), //
+            AMQPProperties.getConnectionTimeout(), //
+            AMQPProperties.getRequestedHeartbeat(), //
+            new SystemPropertyAddressResolver(), //
+            AMQPProperties.isTLSEnabled(), //
+            AMQPProperties.trustAllCertificates());
+    }
+
+    public AMQPChannelFactory(final String username, final String password,
+        final String virtualHost, final List<RecoveryListener> recoveryListeners,
+        final int networkRecoveryInterval, final int connectionTimeout,
+        final int requestedHeartbeat, final AddressResolver addressResolver,
+        final boolean sslEnabled, final boolean trustAllCertificates)
     {
         Objects.requireNonNull(Strings.emptyToNull(virtualHost),
             "virtualHost should not be null or empty");
 
         this.virtualHost = virtualHost;
         this.recoveryListeners.addAll(recoveryListeners);
-
+        this.addressResolver = addressResolver;
+        this.sslEnabled = sslEnabled;
+        this.trustAllCertificates = trustAllCertificates;
+        
         connectionFactory = new com.rabbitmq.client.ConnectionFactory();
-        connectionFactory.setUsername(AMQPProperties.getUserName());
-        connectionFactory.setPassword(AMQPProperties.getPassword());
+        connectionFactory.setUsername(username);
+        connectionFactory.setPassword(password);
         connectionFactory.setVirtualHost(virtualHost);
         connectionFactory.setAutomaticRecoveryEnabled(true);
         connectionFactory.setTopologyRecoveryEnabled(true);
-        connectionFactory.setNetworkRecoveryInterval(AMQPProperties.getNetworkRecoveryInterval());
-        connectionFactory.setConnectionTimeout(AMQPProperties.getConnectionTimeout());
-        connectionFactory.setRequestedHeartbeat(AMQPProperties.getRequestedHeartbeat());
+        connectionFactory.setNetworkRecoveryInterval(networkRecoveryInterval);
+        connectionFactory.setConnectionTimeout(connectionTimeout);
+        connectionFactory.setRequestedHeartbeat(requestedHeartbeat);
         connectionFactory.setExceptionHandler(new StrictExceptionHandler());
-
-        addressResolver = new SystemPropertyAddressResolver();
     }
 
     public Channel createChannel() throws SSLException, IOException, TimeoutException
@@ -165,17 +215,16 @@ public class AMQPChannelFactory implements Closeable
         }
     }
 
-    public static void initializeSSL(final ConnectionFactory connectionFactory)
-        throws SSLException
+    public void initializeSSL(final ConnectionFactory connectionFactory) throws SSLException
     {
-        if (!AMQPProperties.isTLSEnabled())
+        if (!sslEnabled)
         {
             return;
         }
 
         try
         {
-            if (AMQPProperties.trustAllCertificates())
+            if (trustAllCertificates)
             {
                 // By default a TrustEverythingTrustManager is used
                 connectionFactory.useSslProtocol();
