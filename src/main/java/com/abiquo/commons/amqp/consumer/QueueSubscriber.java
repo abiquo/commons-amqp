@@ -38,9 +38,9 @@ public class QueueSubscriber<T extends AMQPConsumer< ? >> extends DefaultConsume
         }
         catch (Throwable t)
         {
-            log.error(
-                "Unhandled exception captured, trying to reject {} to prevent consumer crash",
-                envelope, t);
+            log.error(String.format(
+                "Unhandled exception captured, trying to reject %s to prevent consumer crash",
+                envelope), t);
 
             try
             {
