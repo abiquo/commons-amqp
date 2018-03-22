@@ -39,18 +39,8 @@ public class QueueSubscriber<T extends AMQPConsumer< ? >> extends DefaultConsume
         catch (Throwable t)
         {
             log.error(String.format(
-                "Unhandled exception captured, trying to reject %s to prevent consumer crash",
+                "Unhandled exception captured to prevent consumer crash while processing %s",
                 envelope), t);
-
-            try
-            {
-                // Reject message and do not requeue
-                getChannel().basicReject(envelope.getDeliveryTag(), false);
-            }
-            catch (IOException io)
-            {
-                log.error("Unable to reject {}", envelope, io);
-            }
         }
     }
 }

@@ -94,16 +94,22 @@ public class AMQPConsumer<C extends Serializable> implements Closeable
 
         final C message = deserializer.deserialize(body, messageClass);
 
-        if (message != null)
-        {
-            callback.process(message);
-            channel.basicAck(envelope.getDeliveryTag(), false);
-        }
-        else
+        if (message == null)
         {
             log.error("Rejecting message {} and body {}", envelope, body);
             channel.basicReject(envelope.getDeliveryTag(), false);
         }
+
+        try
+        {
+            callback.process(message);
+        }
+        catch (Throwable t)
+        {
+            channel.basicReject(envelope.getDeliveryTag(), false);
+        }
+
+        channel.basicAck(envelope.getDeliveryTag(), false);
     }
 
     @Override
