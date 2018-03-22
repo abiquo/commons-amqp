@@ -50,6 +50,8 @@ public class AMQPConsumer<C extends Serializable> implements Closeable
 
     protected final AMQPDeserializer<C> deserializer;
 
+    protected String consumerTag;
+
     public AMQPConsumer(final AMQPConfiguration configuration, final Class<C> messageClass,
         final AMQPCallback<C> callback, final Channel channel)
     {
@@ -84,7 +86,7 @@ public class AMQPConsumer<C extends Serializable> implements Closeable
         log.trace("Declaring queues for {}", this);
         configuration.declareQueues(channel);
 
-        channel.basicConsume(configuration.getQueue(), false, subscriber);
+        consumerTag = channel.basicConsume(configuration.getQueue(), false, subscriber);
     }
 
     protected void consume(final Envelope envelope, final byte[] body) throws IOException
@@ -92,24 +94,62 @@ public class AMQPConsumer<C extends Serializable> implements Closeable
         checkNotNull(envelope, "Cannot consume a null envelope");
         checkNotNull(body, "Cannot consume a null body message");
 
+        Channel arc = ((AutorecoveringChannel) channel).getDelegate();
+
         final C message = deserializer.deserialize(body, messageClass);
 
         if (message == null)
         {
             log.error("Rejecting message {} and body {}", envelope, body);
-            channel.basicReject(envelope.getDeliveryTag(), false);
+
+            try
+            {
+                channel.basicReject(envelope.getDeliveryTag(), false);
+            }
+            catch (Throwable tt)
+            {
+                log.error("failed basicreject", tt);
+            }
         }
 
         try
         {
+
             callback.process(message);
         }
         catch (Throwable t)
         {
-            channel.basicReject(envelope.getDeliveryTag(), false);
+            try
+            {
+                channel.basicReject(envelope.getDeliveryTag(), false);
+            }
+            catch (Throwable tt)
+            {
+                log.error("failed basicreject", tt);
+            }
         }
 
-        channel.basicAck(envelope.getDeliveryTag(), false);
+        Channel arc2 = ((AutorecoveringChannel) channel).getDelegate();
+
+        try
+        {
+            // channel.isOpen();
+            // channel.basicCancel(consumerTag);
+
+            if (arc == arc2)
+            {
+                channel.basicAck(envelope.getDeliveryTag(), false);
+            }
+            else
+            {
+                // channel.basicCancel(consumerTag);
+            }
+        }
+        catch (Throwable t)
+        {
+            log.error("failed basicack", t);
+        }
+
     }
 
     @Override
@@ -133,13 +173,13 @@ public class AMQPConsumer<C extends Serializable> implements Closeable
         ((AutorecoveringChannel) channel).addRecoveryListener(new RecoveryListener()
         {
             @Override
-            public void handleRecoveryStarted(Recoverable recoverable)
+            public void handleRecoveryStarted(final Recoverable recoverable)
             {
                 // noop
             }
 
             @Override
-            public void handleRecovery(Recoverable recoverable)
+            public void handleRecovery(final Recoverable recoverable)
             {
                 try
                 {
