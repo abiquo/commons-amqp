@@ -9,11 +9,11 @@ package com.abiquo.commons.amqp.config;
 import com.abiquo.commons.amqp.AMQPConfiguration;
 import com.abiquo.commons.amqp.AMQPFlags;
 
-public class VirtualMachineActionPlanScheduleConfiguration extends AMQPConfiguration
+public class ActionPlanExecutionConfiguration extends AMQPConfiguration
 {
-    private static final String EXCHANGE = "abiquo.vmactionplan.schedules";
+    private static final String EXCHANGE = "abiquo.actionplan.executions";
 
-    private static final String ROUTING_KEY = "abiquo.vmactionplan.schedule";
+    private static final String ROUTING_KEY = "abiquo.actionplan.execution";
 
     private static final String QUEUE = ROUTING_KEY;
 
