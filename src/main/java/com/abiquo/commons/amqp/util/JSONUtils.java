@@ -40,8 +40,8 @@ public class JSONUtils
         }
         catch (Exception e)
         {
-            log.error(String.format("Can not serialize %s to byte array.", value.getClass()
-                .getSimpleName()), e);
+            log.error(String.format("Can not serialize %s to byte array.",
+                value.getClass().getSimpleName()), e);
             return null;
         }
     }
@@ -71,8 +71,8 @@ public class JSONUtils
 
     private static ObjectMapper createObjectMapper()
     {
-        return new ObjectMapper()
-            .setAnnotationIntrospector(new AnnotationIntrospectorPair(new JacksonAnnotationIntrospector(),
+        return new ObjectMapper().setAnnotationIntrospector(
+            new AnnotationIntrospectorPair(new JacksonAnnotationIntrospector(),
                 new JaxbAnnotationIntrospector(TypeFactory.defaultInstance())));
     }
 }

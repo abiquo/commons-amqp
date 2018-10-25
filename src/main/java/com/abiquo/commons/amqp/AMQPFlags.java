@@ -144,12 +144,8 @@ public class AMQPFlags
 
         public AMQPFlags build()
         {
-            return new AMQPFlags(this.exchangeType,
-                this.exchangeDurable,
-                this.queueDurable,
-                this.queueExclusive,
-                this.queueAutoDelete,
-                this.queueArguments);
+            return new AMQPFlags(this.exchangeType, this.exchangeDurable, this.queueDurable,
+                this.queueExclusive, this.queueAutoDelete, this.queueArguments);
         }
     }
 }
