@@ -121,8 +121,8 @@ public class AMQPChannelFactory implements Closeable
         log.debug("AMQP connection closed");
     }
 
-    public void addRecoveryListener(final RecoveryListener recoveryListener) throws SSLException,
-        IOException, TimeoutException
+    public void addRecoveryListener(final RecoveryListener recoveryListener)
+        throws SSLException, IOException, TimeoutException
     {
         if (connection == null)
         {
@@ -142,8 +142,8 @@ public class AMQPChannelFactory implements Closeable
         return connection.createChannel();
     }
 
-    private synchronized void initializeConnection() throws SSLException, IOException,
-        TimeoutException
+    private synchronized void initializeConnection()
+        throws SSLException, IOException, TimeoutException
     {
         if (connection == null)
         {
@@ -165,8 +165,7 @@ public class AMQPChannelFactory implements Closeable
         }
     }
 
-    public static void initializeSSL(final ConnectionFactory connectionFactory)
-        throws SSLException
+    public static void initializeSSL(final ConnectionFactory connectionFactory) throws SSLException
     {
         if (!AMQPProperties.isTLSEnabled())
         {

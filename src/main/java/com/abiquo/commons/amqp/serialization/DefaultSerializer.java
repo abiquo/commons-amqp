@@ -33,8 +33,8 @@ public class DefaultSerializer<T extends Serializable> implements AMQPSerializer
 
     private static ObjectMapper createObjectMapper()
     {
-        return new ObjectMapper()
-            .setAnnotationIntrospector(new AnnotationIntrospectorPair(new JacksonAnnotationIntrospector(),
+        return new ObjectMapper().setAnnotationIntrospector(
+            new AnnotationIntrospectorPair(new JacksonAnnotationIntrospector(),
                 new JaxbAnnotationIntrospector(TypeFactory.defaultInstance())));
     }
 }

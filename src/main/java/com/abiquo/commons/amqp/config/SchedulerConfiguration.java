@@ -49,8 +49,8 @@ public class SchedulerConfiguration extends AMQPConfiguration
         channel.queueBind(SCHEDULER_SLOW_QUEUE, SCHEDULER_EXCHANGE, SCHEDULER_SLOW_QUEUE);
 
         // Declare the main scheduler queue
-        channel.queueDeclare(SCHEDULER_REQUESTS_QUEUE, flags.queueDurable(),
-            flags.queueExclusive(), flags.queueAutoDelete(), flags.queueArguments());
+        channel.queueDeclare(SCHEDULER_REQUESTS_QUEUE, flags.queueDurable(), flags.queueExclusive(),
+            flags.queueAutoDelete(), flags.queueArguments());
         channel.queueBind(SCHEDULER_REQUESTS_QUEUE, SCHEDULER_EXCHANGE, SCHEDULER_REQUESTS_QUEUE);
     }
 
