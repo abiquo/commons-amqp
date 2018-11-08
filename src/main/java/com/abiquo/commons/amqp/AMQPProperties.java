@@ -70,4 +70,21 @@ public class AMQPProperties
     {
         return Boolean.getBoolean("abiquo.rabbitmq.tls.trustallcertificates");
     }
+
+    @Override
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append("abiquo.rabbitmq.username=" + getUserName() + "\n");
+        sb.append("abiquo.rabbitmq.password=<masked>\n"); // getPassword()
+        sb.append("abiquo.rabbitmq.virtualHost=" + getVirtualHost() + "\n");
+        sb.append("abiquo.rabbitmq.connectionTimeout=" + getConnectionTimeout() + "\n");
+        sb.append("abiquo.rabbitmq.requestedHeartbeat=" + getRequestedHeartbeat() + "\n");
+        sb.append("abiquo.rabbitmq.networkRecoveryInterval=" + getNetworkRecoveryInterval() + "\n");
+        sb.append("abiquo.rabbitmq.multitenant=" + isMultitenantEnabled() + "\n");
+        sb.append("abiquo.rabbitmq.tls=" + isTLSEnabled() + "\n");
+        sb.append("abiquo.rabbitmq.tls.trustallcertificates=" + trustAllCertificates() + "\n");
+        sb.append("abiquo.rabbitmq.addresses=" + getAddresses() + "\n");
+        return sb.toString();
+    }
 }
