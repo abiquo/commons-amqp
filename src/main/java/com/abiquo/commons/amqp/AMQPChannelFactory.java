@@ -194,4 +194,10 @@ public class AMQPChannelFactory implements Closeable
     {
         return virtualHost;
     }
+
+    public ConnectionFactory getConnectionFactory()
+    {
+        return connectionFactory;
+    }
+
 }
