@@ -20,6 +20,7 @@ import com.abiquo.commons.amqp.AMQPConfiguration;
 import com.abiquo.commons.amqp.serialization.AMQPDeserializer;
 import com.abiquo.commons.amqp.serialization.DefaultDeserializer;
 import com.google.common.base.Objects;
+import com.rabbitmq.client.AMQP.BasicProperties;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Envelope;
 import com.rabbitmq.client.Recoverable;
@@ -30,7 +31,7 @@ import com.rabbitmq.client.impl.recovery.AutorecoveringChannel;
 /**
  * The base consumer, it handles the creation and configuration of AMQP entities, the callback
  * collection by consumer and the retry strategy when RabbitMQ goes down.
- * 
+ *
  * @param <C> the type of the objects to consume
  * @author Enric Ruiz
  */
@@ -71,7 +72,7 @@ public class AMQPConsumer<C extends Serializable> implements Closeable
         this.callback = callback;
         this.channel = channel;
         this.deserializer = deserializer;
-        this.subscriber = new QueueSubscriber<AMQPConsumer<C>>(channel, this);
+        this.subscriber = new QueueSubscriber<>(channel, this);
     }
 
     public void start() throws IOException
@@ -87,7 +88,8 @@ public class AMQPConsumer<C extends Serializable> implements Closeable
         channel.basicConsume(configuration.getQueue(), false, subscriber);
     }
 
-    protected void consume(final Envelope envelope, final byte[] body) throws IOException
+    protected void consume(final Envelope envelope, final BasicProperties basicProperties,
+        final byte[] body) throws IOException
     {
         checkNotNull(envelope, "Cannot consume a null envelope");
         checkNotNull(body, "Cannot consume a null body message");
@@ -96,7 +98,7 @@ public class AMQPConsumer<C extends Serializable> implements Closeable
 
         if (message != null)
         {
-            callback.process(message);
+            callback.process(message, basicProperties.getHeaders());
             channel.basicAck(envelope.getDeliveryTag(), false);
         }
         else
@@ -127,13 +129,13 @@ public class AMQPConsumer<C extends Serializable> implements Closeable
         ((AutorecoveringChannel) channel).addRecoveryListener(new RecoveryListener()
         {
             @Override
-            public void handleRecoveryStarted(Recoverable recoverable)
+            public void handleRecoveryStarted(final Recoverable recoverable)
             {
                 // noop
             }
 
             @Override
-            public void handleRecovery(Recoverable recoverable)
+            public void handleRecovery(final Recoverable recoverable)
             {
                 try
                 {
