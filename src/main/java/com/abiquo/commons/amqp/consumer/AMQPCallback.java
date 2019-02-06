@@ -7,8 +7,14 @@
 package com.abiquo.commons.amqp.consumer;
 
 import java.io.Serializable;
+import java.util.Map;
 
 public interface AMQPCallback<T extends Serializable>
 {
-    public void process(T message);
+    default void process(final T message, final Map<String, Object> headers)
+    {
+        process(message);
+    }
+
+    void process(T message);
 }

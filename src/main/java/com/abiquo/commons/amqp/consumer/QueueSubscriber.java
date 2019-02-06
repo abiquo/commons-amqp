@@ -34,7 +34,7 @@ public class QueueSubscriber<T extends AMQPConsumer< ? >> extends DefaultConsume
     {
         try
         {
-            consumer.consume(envelope, body);
+            consumer.consume(envelope, properties, body);
         }
         catch (Throwable t)
         {
