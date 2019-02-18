@@ -42,7 +42,7 @@ public class NARSConfiguration
         @Override
         public String getRoutingKey()
         {
-            return EXCHANGE.concat(".requests").concat(".").concat(datacenterId);
+            return EXCHANGE.concat(".requests.").concat(datacenterId);
         }
 
         @Override
