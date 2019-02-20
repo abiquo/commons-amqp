@@ -27,7 +27,7 @@ import com.rabbitmq.client.ShutdownSignalException;
 /**
  * The base producer, it handles the creation and configuration of AMQP entities and the connection
  * and disconnection to RabbitMQ.
- * 
+ *
  * @param <T> the type of the objects to publish
  * @author Enric Ruiz
  */
@@ -37,7 +37,7 @@ public class AMQPProducer<T extends Serializable> implements Closeable
 
     protected final AMQPConfiguration configuration;
 
-    protected final Channel channel;
+    protected Channel channel;
 
     protected final AMQPSerializer<T> serializer;
 
@@ -89,6 +89,11 @@ public class AMQPProducer<T extends Serializable> implements Closeable
             log.error("Timeout while closing " + this, e);
             throw new ShutdownSignalException(true, true, null, channel);
         }
+    }
+
+    public void setChannel(final Channel channel)
+    {
+        this.channel = channel;
     }
 
     @Override
