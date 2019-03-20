@@ -11,6 +11,7 @@ import java.util.Map;
 
 public interface AMQPCallback<T extends Serializable>
 {
+    /** Implement this when using a AMQPConsumer using ackAfterProcess=false */
     default void process(final T message, final Map<String, Object> headers)
     {
         process(message);

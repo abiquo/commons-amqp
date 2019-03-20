@@ -11,6 +11,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
 import org.slf4j.Logger;
@@ -51,6 +52,12 @@ public class AMQPConsumer<C extends Serializable> implements Closeable
 
     protected final AMQPDeserializer<C> deserializer;
 
+    protected final boolean ackAfterProcess;
+
+    private final static String DeliveryTag = "DeliveryTag";
+
+    private final static String Redeliver = "Redeliver";
+
     public AMQPConsumer(final AMQPConfiguration configuration, final Class<C> messageClass,
         final AMQPCallback<C> callback, final Channel channel)
     {
@@ -60,6 +67,13 @@ public class AMQPConsumer<C extends Serializable> implements Closeable
     public AMQPConsumer(final AMQPConfiguration configuration, final Class<C> messageClass,
         final AMQPCallback<C> callback, final Channel channel,
         final AMQPDeserializer<C> deserializer)
+    {
+        this(configuration, messageClass, callback, channel, deserializer, true);
+    }
+
+    public AMQPConsumer(final AMQPConfiguration configuration, final Class<C> messageClass,
+        final AMQPCallback<C> callback, final Channel channel,
+        final AMQPDeserializer<C> deserializer, final boolean ackAfterProcess)
     {
         checkNotNull(configuration, "AMQPConfiguration for an AMQPConsumer can not be null");
         checkNotNull(messageClass, "Class of message for an AMQPConsumer can not be null");
@@ -73,6 +87,7 @@ public class AMQPConsumer<C extends Serializable> implements Closeable
         this.channel = channel;
         this.deserializer = deserializer;
         this.subscriber = new QueueSubscriber<>(channel, this);
+        this.ackAfterProcess = ackAfterProcess;
     }
 
     public void start() throws IOException
@@ -98,14 +113,30 @@ public class AMQPConsumer<C extends Serializable> implements Closeable
 
         if (message != null)
         {
+            basicProperties.getHeaders().put(DeliveryTag, envelope.getDeliveryTag());
+            basicProperties.getHeaders().put(Redeliver, envelope.isRedeliver());
+
             callback.process(message, basicProperties.getHeaders());
-            channel.basicAck(envelope.getDeliveryTag(), false);
+            if (ackAfterProcess)
+            {
+                channel.basicAck(envelope.getDeliveryTag(), false);
+            }
         }
         else
         {
             log.error("Rejecting message {} and body {}", envelope, body);
             channel.basicReject(envelope.getDeliveryTag(), false);
         }
+    }
+
+    public static long getDeliveryTag(final Map<String, Object> headers)
+    {
+        return (long) headers.get(DeliveryTag);
+    }
+
+    public static boolean isRedeliver(final Map<String, Object> headers)
+    {
+        return (boolean) headers.get(Redeliver);
     }
 
     @Override
