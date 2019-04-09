@@ -88,7 +88,7 @@ public class AMQPProducer<T extends Serializable> implements Closeable
     {
         try
         {
-            log.error("Failed to publish\nmessage: {}\nconfiguration: {}\nbroker: {}\n",
+            log.error("Failed to publish\nmessage: {}\nconfiguration: {}\nbroker: {}",
                 new String(serializer.serialize(message)), configuration.toString(),
                 new AMQPProperties().toString());
         }
