@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.abiquo.commons.amqp.AMQPConfiguration;
+import com.abiquo.commons.amqp.AMQPProperties;
 import com.abiquo.commons.amqp.serialization.AMQPSerializer;
 import com.abiquo.commons.amqp.serialization.DefaultSerializer;
 import com.google.common.base.Objects;
@@ -64,15 +65,36 @@ public class AMQPProducer<T extends Serializable> implements Closeable
     {
         checkNotNull(message, "Message to publish can not be null");
 
-        if (declareExchanges)
+        try
         {
-            log.trace("Declaring exchanges for {}", this);
-            configuration.declareExchanges(channel);
-            declareExchanges = false;
-        }
+            if (declareExchanges)
+            {
+                log.trace("Declaring exchanges for {}", this);
+                configuration.declareExchanges(channel);
+                declareExchanges = false;
+            }
 
-        channel.basicPublish(configuration.getExchange(), configuration.getRoutingKey(),
-            MessageProperties.PERSISTENT_TEXT_PLAIN, serializer.serialize(message));
+            channel.basicPublish(configuration.getExchange(), configuration.getRoutingKey(),
+                MessageProperties.PERSISTENT_TEXT_PLAIN, serializer.serialize(message));
+        }
+        catch (IOException e)
+        {
+            logFailedPublish(message);
+            throw e;
+        }
+    }
+
+    private void logFailedPublish(final T message)
+    {
+        try
+        {
+            log.error("Failed to publish\nmessage: {}\nconfiguration: {}\nbroker: {}\n",
+                new String(serializer.serialize(message)), configuration.toString(),
+                new AMQPProperties().toString());
+        }
+        catch (Throwable e)
+        {
+        }
     }
 
     @Override
