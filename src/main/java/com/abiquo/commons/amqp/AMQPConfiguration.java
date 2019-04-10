@@ -14,7 +14,7 @@ import com.rabbitmq.client.Channel;
 /**
  * Generic broker configuration, each module configuration must extend this class and fill the
  * abstract methods.
- * 
+ *
  * @author eruiz@abiquo.com
  */
 public abstract class AMQPConfiguration

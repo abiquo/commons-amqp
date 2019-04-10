@@ -8,31 +8,35 @@ package com.abiquo.commons.amqp.producer;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.io.Closeable;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Optional;
 import java.util.concurrent.TimeoutException;
+import java.util.function.Consumer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.abiquo.commons.amqp.AMQPConfiguration;
-import com.abiquo.commons.amqp.AMQPProperties;
 import com.abiquo.commons.amqp.serialization.AMQPSerializer;
 import com.abiquo.commons.amqp.serialization.DefaultSerializer;
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.MessageProperties;
 import com.rabbitmq.client.ShutdownSignalException;
 
 /**
- * The base producer, it handles the creation and configuration of AMQP entities and the connection
- * and disconnection to RabbitMQ.
+ * The base producer, it handles the creation and configuration of: AMQP exchanges, queues and
+ * bindings. Optionally a fallback can be specified to handle the not published messages due to
+ * connection errors.
+ * <h2>Concurrency Considerations</h2>
+ * <p>
+ * Remember that AMQP {@link Channel} instances must not be shared between threads.
+ * </p>
  *
  * @param <T> the type of the objects to publish
- * @author Enric Ruiz
  */
-public class AMQPProducer<T extends Serializable> implements Closeable
+public class AMQPProducer<T extends Serializable> implements AutoCloseable
 {
     private final static Logger log = LoggerFactory.getLogger(AMQPProducer.class);
 
@@ -44,13 +48,30 @@ public class AMQPProducer<T extends Serializable> implements Closeable
 
     protected boolean declareExchanges = true;
 
+    protected final Consumer<T> notPublishedMessagesFallback;
+
+    protected final Consumer<T> NOOP = message -> {
+    };
+
     public AMQPProducer(final AMQPConfiguration configuration, final Channel channel)
     {
-        this(configuration, channel, new DefaultSerializer<T>());
+        this(configuration, channel, new DefaultSerializer<T>(), null);
     }
 
     public AMQPProducer(final AMQPConfiguration configuration, final Channel channel,
         final AMQPSerializer<T> serializer)
+    {
+        this(configuration, channel, serializer, null);
+    }
+
+    public AMQPProducer(final AMQPConfiguration configuration, final Channel channel,
+        final Consumer<T> fallback)
+    {
+        this(configuration, channel, new DefaultSerializer<T>(), fallback);
+    }
+
+    public AMQPProducer(final AMQPConfiguration configuration, final Channel channel,
+        final AMQPSerializer<T> serializer, final Consumer<T> fallback)
     {
         checkNotNull(configuration, "AMQPConfiguration for an AMQPProducer cannot be null");
         checkNotNull(channel, "Channel for an AMQPProducer cannot be null");
@@ -59,6 +80,7 @@ public class AMQPProducer<T extends Serializable> implements Closeable
         this.configuration = configuration;
         this.channel = channel;
         this.serializer = serializer;
+        this.notPublishedMessagesFallback = Optional.ofNullable(fallback).orElse(NOOP);
     }
 
     public void publish(final T message) throws IOException
@@ -71,6 +93,10 @@ public class AMQPProducer<T extends Serializable> implements Closeable
             {
                 log.trace("Declaring exchanges for {}", this);
                 configuration.declareExchanges(channel);
+
+                log.trace("Declaring queues for {}", this);
+                configuration.declareQueues(channel);
+
                 declareExchanges = false;
             }
 
@@ -79,21 +105,8 @@ public class AMQPProducer<T extends Serializable> implements Closeable
         }
         catch (IOException e)
         {
-            logFailedPublish(message);
+            notPublishedMessagesFallback.accept(message);
             throw e;
-        }
-    }
-
-    private void logFailedPublish(final T message)
-    {
-        try
-        {
-            log.error("Failed to publish\nmessage: {}\nconfiguration: {}\nbroker: {}",
-                new String(serializer.serialize(message)), configuration.toString(),
-                new AMQPProperties().toString());
-        }
-        catch (Throwable e)
-        {
         }
     }
 
@@ -121,9 +134,8 @@ public class AMQPProducer<T extends Serializable> implements Closeable
     @Override
     public String toString()
     {
-        return Objects.toStringHelper(this.getClass()).omitNullValues() //
-            .addValue(configuration.toString()) //
-            .add("Channel", channel.getChannelNumber()) //
+        return MoreObjects.toStringHelper(this.getClass()).omitNullValues()
+            .addValue(configuration.toString()).add("Channel", channel.getChannelNumber())
             .toString();
     }
 }

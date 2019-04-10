@@ -80,8 +80,9 @@ public class AMQPConsumer<C extends Serializable> implements Closeable
         log.trace("Setting Qos to {} for {}", configuration.getPrefetchCount(), this);
         channel.basicQos(configuration.getPrefetchCount());
 
-        log.trace("Declaring exhanges for {}", this);
+        log.trace("Declaring exchanges for {}", this);
         configuration.declareExchanges(channel);
+
         log.trace("Declaring queues for {}", this);
         configuration.declareQueues(channel);
 
