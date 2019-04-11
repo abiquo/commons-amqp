@@ -71,12 +71,7 @@ public class AMQPProducerConfirm<T extends Serializable> extends AMQPProducer<T>
 
                 unpublished.add(notConfirmedMessages.remove(deliveryTag));
 
-                if (!multiple)
-                {
-                    return;
-                }
-
-                for (long i = 0; i < deliveryTag; i++)
+                for (long i = 0; multiple && i < deliveryTag; i++)
                 {
                     T message = notConfirmedMessages.remove(deliveryTag);
                     if (message != null)
