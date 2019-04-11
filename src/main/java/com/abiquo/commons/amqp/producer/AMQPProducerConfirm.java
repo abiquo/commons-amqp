@@ -110,10 +110,10 @@ public class AMQPProducerConfirm<T extends Serializable> extends AMQPProducer<T>
         {
             super.publish(message);
         }
-        catch (IOException e)
+        catch (Throwable throwable)
         {
             notConfirmedMessages.remove(nextSeqNo);
-            throw e;
+            propagate(throwable);
         }
     }
 }

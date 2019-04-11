@@ -21,6 +21,7 @@ import com.abiquo.commons.amqp.AMQPConfiguration;
 import com.abiquo.commons.amqp.serialization.AMQPSerializer;
 import com.abiquo.commons.amqp.serialization.DefaultSerializer;
 import com.google.common.base.MoreObjects;
+import com.google.common.base.Throwables;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.MessageProperties;
 import com.rabbitmq.client.ShutdownSignalException;
@@ -103,11 +104,17 @@ public class AMQPProducer<T extends Serializable> implements AutoCloseable
             channel.basicPublish(configuration.getExchange(), configuration.getRoutingKey(),
                 MessageProperties.PERSISTENT_TEXT_PLAIN, serializer.serialize(message));
         }
-        catch (IOException e)
+        catch (Throwable throwable)
         {
             notPublishedMessagesFallback.accept(message);
-            throw e;
+            propagate(throwable);
         }
+    }
+
+    protected void propagate(final Throwable throwable) throws IOException
+    {
+        Throwables.propagateIfInstanceOf(throwable, IOException.class);
+        Throwables.propagate(throwable);
     }
 
     @Override
