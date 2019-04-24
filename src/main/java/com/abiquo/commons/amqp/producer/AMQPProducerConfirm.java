@@ -63,7 +63,6 @@ public class AMQPProducerConfirm<T extends Serializable> extends AMQPProducer<T>
         {
             @Override
             public void handleNack(final long deliveryTag, final boolean multiple)
-                throws IOException
             {
                 log.trace("NACK message with delivery tag: {} multiple: {}", deliveryTag, multiple);
 
@@ -84,7 +83,7 @@ public class AMQPProducerConfirm<T extends Serializable> extends AMQPProducer<T>
             }
 
             @Override
-            public void handleAck(final long deliveryTag, final boolean multiple) throws IOException
+            public void handleAck(final long deliveryTag, final boolean multiple)
             {
                 log.trace("ACK message with delivery tag: {} multiple: {}", deliveryTag, multiple);
 
