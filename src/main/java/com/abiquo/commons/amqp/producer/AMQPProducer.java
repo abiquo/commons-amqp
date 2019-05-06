@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.abiquo.commons.amqp.AMQPConfiguration;
+import com.abiquo.commons.amqp.AMQPFanoutConfiguration;
 import com.abiquo.commons.amqp.serialization.AMQPSerializer;
 import com.abiquo.commons.amqp.serialization.DefaultSerializer;
 import com.google.common.base.MoreObjects;
@@ -95,8 +96,11 @@ public class AMQPProducer<T extends Serializable> implements AutoCloseable
                 log.trace("Declaring exchanges for {}", this);
                 configuration.declareExchanges(channel);
 
-                log.trace("Declaring queues for {}", this);
-                configuration.declareQueues(channel);
+                if (!AMQPFanoutConfiguration.class.isAssignableFrom(configuration.getClass()))
+                {
+                    log.trace("Declaring queues for {}", this);
+                    configuration.declareQueues(channel);
+                }
 
                 declareExchanges = false;
             }
