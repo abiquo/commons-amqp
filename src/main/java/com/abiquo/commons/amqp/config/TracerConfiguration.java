@@ -6,60 +6,21 @@
  */
 package com.abiquo.commons.amqp.config;
 
-import com.abiquo.commons.amqp.AMQPFanoutConfiguration;
+import com.abiquo.commons.amqp.AMQPConfiguration;
 import com.abiquo.commons.amqp.AMQPFlags;
 
-/**
- * Common RabbitMQ Broker configuration for Tracer consumer and producer.
- * 
- * @author eruiz@abiquo.com
- */
-public abstract class TracerConfiguration extends AMQPFanoutConfiguration
+public class TracerConfiguration extends AMQPConfiguration
 {
-    private static final String TRACER_EXCHANGE = "abiquo.tracer";
+    private static final String EXCHANGE = "abiquo.tracer.direct";
 
-    private static final String TRACER_QUEUE = "abiquo.tracer.traces";
+    private static final String QUEUE = "abiquo.tracer.direct.traces";
 
-    /**
-     * Faount consumers need to configure unique queue names.
-     */
-    public static class Consumer extends TracerConfiguration
-    {
-        public Consumer(final String queueSuffix)
-        {
-            super(queueSuffix);
-        }
-    }
-
-    /**
-     * Fanout producers don't need to configure the queues. They can be created without queue
-     * specific information.
-     */
-    public static class Producer extends TracerConfiguration
-    {
-
-    }
-
-    /**
-     * Constructor to be used by producers, as they don't need to configure a queue name.
-     */
-    protected TracerConfiguration()
-    {
-        super();
-    }
-
-    /**
-     * Constructor to be used by consumers, as they need to configure unique queue names.
-     */
-    protected TracerConfiguration(final String queueSuffix)
-    {
-        super(TRACER_QUEUE + "." + queueSuffix);
-    }
+    private static final String ROUTING_KEY = QUEUE;
 
     @Override
     public AMQPFlags getFlags()
     {
-        return AMQPFlags.fanout() //
+        return AMQPFlags.direct() //
             .exchangeDurable(true) //
             .queueDurable(true) //
             .queueExclusive(false) //
@@ -70,6 +31,18 @@ public abstract class TracerConfiguration extends AMQPFanoutConfiguration
     @Override
     public String getExchange()
     {
-        return TRACER_EXCHANGE;
+        return EXCHANGE;
+    }
+
+    @Override
+    public String getRoutingKey()
+    {
+        return ROUTING_KEY;
+    }
+
+    @Override
+    public String getQueue()
+    {
+        return QUEUE;
     }
 }

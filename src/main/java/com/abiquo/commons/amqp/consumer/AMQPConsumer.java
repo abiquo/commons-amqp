@@ -6,6 +6,8 @@
  */
 package com.abiquo.commons.amqp.consumer;
 
+import static com.abiquo.commons.amqp.util.LongStringUtils.makeString;
+import static com.abiquo.commons.amqp.util.LongStringUtils.isLongStringAssignableFrom;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.Closeable;
@@ -14,6 +16,7 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.TimeoutException;
 
 import org.slf4j.Logger;
@@ -26,6 +29,7 @@ import com.google.common.base.Objects;
 import com.rabbitmq.client.AMQP.BasicProperties;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Envelope;
+import com.rabbitmq.client.LongString;
 import com.rabbitmq.client.Recoverable;
 import com.rabbitmq.client.RecoveryListener;
 import com.rabbitmq.client.ShutdownSignalException;
@@ -116,12 +120,27 @@ public class AMQPConsumer<C extends Serializable> implements Closeable
 
         if (message != null)
         {
-            Map<String, Object> headers = basicProperties.getHeaders() == null ? new HashMap<>()
-                : new HashMap<>(basicProperties.getHeaders());
+            Map<String, Object> headers = new HashMap<>();
             headers.put(DeliveryTag, envelope.getDeliveryTag());
             headers.put(Redeliver, envelope.isRedeliver());
 
+            if (basicProperties.getHeaders() != null)
+            {
+                for (Entry<String, Object> entry : basicProperties.getHeaders().entrySet())
+                {
+                    if (isLongStringAssignableFrom(entry.getValue()))
+                    {
+                        headers.put(entry.getKey(), makeString((LongString) entry.getValue()));
+                    }
+                    else
+                    {
+                        headers.put(entry.getKey(), entry.getValue());
+                    }
+                }
+            }
+
             callback.process(message, Collections.unmodifiableMap(headers));
+
             if (ackAfterProcess)
             {
                 channel.basicAck(envelope.getDeliveryTag(), false);

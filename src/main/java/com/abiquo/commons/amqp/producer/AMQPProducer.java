@@ -10,9 +10,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.TimeoutException;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +26,7 @@ import com.abiquo.commons.amqp.serialization.AMQPSerializer;
 import com.abiquo.commons.amqp.serialization.DefaultSerializer;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Throwables;
+import com.rabbitmq.client.AMQP.BasicProperties;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.MessageProperties;
 import com.rabbitmq.client.ShutdownSignalException;
@@ -54,6 +58,11 @@ public class AMQPProducer<T extends Serializable> implements AutoCloseable
 
     protected final Consumer<T> NOOP = message -> {
     };
+
+    /** Content-type "text/plain", deliveryMode 2 (persistent), priority zero, empty headers map */
+    protected static final Function<Map<String, Object>, BasicProperties> PersistentTextPlainWithHeaders =
+        headers -> new BasicProperties("text/plain", null, headers, 2, 0, null, null, null, null,
+            null, null, null, null, null);
 
     public AMQPProducer(final AMQPConfiguration configuration, final Channel channel)
     {
@@ -87,6 +96,11 @@ public class AMQPProducer<T extends Serializable> implements AutoCloseable
 
     public void publish(final T message) throws IOException
     {
+        publish(message, Collections.emptyMap());
+    }
+
+    public void publish(final T message, final Map<String, Object> headers) throws IOException
+    {
         checkNotNull(message, "Message to publish can not be null");
 
         try
@@ -105,8 +119,18 @@ public class AMQPProducer<T extends Serializable> implements AutoCloseable
                 declareExchanges = false;
             }
 
+            BasicProperties properties = null;
+            if (headers != null && !headers.isEmpty())
+            {
+                properties = PersistentTextPlainWithHeaders.apply(headers);
+            }
+            else
+            {
+                properties = MessageProperties.PERSISTENT_TEXT_PLAIN;
+            }
+
             channel.basicPublish(configuration.getExchange(), configuration.getRoutingKey(),
-                MessageProperties.PERSISTENT_TEXT_PLAIN, serializer.serialize(message));
+                properties, serializer.serialize(message));
         }
         catch (Throwable throwable)
         {
