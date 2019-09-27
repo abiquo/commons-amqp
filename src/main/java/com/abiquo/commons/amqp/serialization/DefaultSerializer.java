@@ -18,23 +18,21 @@ import com.fasterxml.jackson.module.jaxb.JaxbAnnotationIntrospector;
 
 public class DefaultSerializer<T extends Serializable> implements AMQPSerializer<T>
 {
+    protected final static ObjectMapper objectMapper = new ObjectMapper()//
+        .setAnnotationIntrospector(new AnnotationIntrospectorPair(//
+            new JacksonAnnotationIntrospector(),
+            new JaxbAnnotationIntrospector(TypeFactory.defaultInstance())));
+
     @Override
     public byte[] serialize(final T value) throws IOException
     {
         try
         {
-            return createObjectMapper().writeValueAsBytes(value);
+            return objectMapper.writeValueAsBytes(value);
         }
         catch (JsonProcessingException e)
         {
             throw new IOException(e);
         }
-    }
-
-    private static ObjectMapper createObjectMapper()
-    {
-        return new ObjectMapper().setAnnotationIntrospector(
-            new AnnotationIntrospectorPair(new JacksonAnnotationIntrospector(),
-                new JaxbAnnotationIntrospector(TypeFactory.defaultInstance())));
     }
 }
