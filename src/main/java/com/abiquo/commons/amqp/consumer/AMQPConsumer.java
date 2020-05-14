@@ -6,8 +6,8 @@
  */
 package com.abiquo.commons.amqp.consumer;
 
-import static com.abiquo.commons.amqp.util.LongStringUtils.makeString;
 import static com.abiquo.commons.amqp.util.LongStringUtils.isLongStringAssignableFrom;
+import static com.abiquo.commons.amqp.util.LongStringUtils.makeString;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.Closeable;
@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 import com.abiquo.commons.amqp.AMQPConfiguration;
 import com.abiquo.commons.amqp.serialization.AMQPDeserializer;
 import com.abiquo.commons.amqp.serialization.DefaultDeserializer;
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.rabbitmq.client.AMQP.BasicProperties;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Envelope;
@@ -214,7 +214,7 @@ public class AMQPConsumer<C extends Serializable> implements Closeable
     @Override
     public String toString()
     {
-        return Objects.toStringHelper(this.getClass()).omitNullValues() //
+        return MoreObjects.toStringHelper(this.getClass()).omitNullValues() //
             .addValue(configuration.toString()) //
             .add("MessageClass", messageClass.getSimpleName()) //
             .add("Channel", channel.getChannelNumber()) //
