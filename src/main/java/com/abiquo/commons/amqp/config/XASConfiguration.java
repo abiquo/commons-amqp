@@ -16,11 +16,10 @@ public class XASConfiguration
     {
         private static final String EXCHANGE = "abiquo.xas";
 
-        private String datacenterId;
-
-        public RequestConfiguration(final String datacenterId)
+        // FIXME final String datacenterId;
+        // see ServiceAsyncClientService fakeXasDatacenterId
+        public RequestConfiguration()
         {
-            this.datacenterId = datacenterId;
         }
 
         @Override
@@ -43,7 +42,8 @@ public class XASConfiguration
         @Override
         public String getRoutingKey()
         {
-            return EXCHANGE.concat(".requests.").concat(datacenterId);
+            // FIXME return EXCHANGE.concat(".requests.").concat(datacenterId);
+            return EXCHANGE.concat(".requests");
         }
 
         @Override
