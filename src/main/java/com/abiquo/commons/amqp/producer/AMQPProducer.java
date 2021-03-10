@@ -9,7 +9,6 @@ package com.abiquo.commons.amqp.producer;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
@@ -24,7 +23,6 @@ import com.abiquo.commons.amqp.AMQPConfiguration;
 import com.abiquo.commons.amqp.AMQPFanoutConfiguration;
 import com.abiquo.commons.amqp.serialization.AMQPSerializer;
 import com.abiquo.commons.amqp.serialization.DefaultSerializer;
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Throwables;
 import com.rabbitmq.client.AMQP.BasicProperties;
 import com.rabbitmq.client.Channel;
@@ -42,9 +40,9 @@ import com.rabbitmq.client.ShutdownSignalException;
  *
  * @param <T> the type of the objects to publish
  */
-public class AMQPProducer<T extends Serializable> implements AutoCloseable
+public class AMQPProducer<T> implements AutoCloseable
 {
-    private final static Logger log = LoggerFactory.getLogger(AMQPProducer.class);
+    private static final Logger log = LoggerFactory.getLogger(AMQPProducer.class);
 
     protected final AMQPConfiguration configuration;
 
@@ -156,7 +154,7 @@ public class AMQPProducer<T extends Serializable> implements AutoCloseable
         }
         catch (TimeoutException e)
         {
-            log.error("Timeout while closing " + this, e);
+            log.error(String.format("Timeout while closing %s", this), e);
             throw new ShutdownSignalException(true, true, null, channel);
         }
     }
@@ -169,8 +167,12 @@ public class AMQPProducer<T extends Serializable> implements AutoCloseable
     @Override
     public String toString()
     {
-        return MoreObjects.toStringHelper(this.getClass()).omitNullValues()
-            .addValue(configuration.toString()).add("Channel", channel.getChannelNumber())
-            .toString();
+        return "AMQPProducer ["
+            + (configuration != null ? "configuration=" + configuration + ", " : "")
+            + (channel != null ? "channel=" + channel + ", " : "")
+            + (serializer != null ? "serializer=" + serializer + ", " : "") + "declareExchanges="
+            + declareExchanges + ", " + (notPublishedMessagesFallback != null
+                ? "notPublishedMessagesFallback=" + notPublishedMessagesFallback : "")
+            + "]";
     }
 }

@@ -6,13 +6,12 @@
  */
 package com.abiquo.commons.amqp.consumer;
 
-import static com.abiquo.commons.amqp.util.LongStringUtils.makeString;
 import static com.abiquo.commons.amqp.util.LongStringUtils.isLongStringAssignableFrom;
+import static com.abiquo.commons.amqp.util.LongStringUtils.makeString;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +24,6 @@ import org.slf4j.LoggerFactory;
 import com.abiquo.commons.amqp.AMQPConfiguration;
 import com.abiquo.commons.amqp.serialization.AMQPDeserializer;
 import com.abiquo.commons.amqp.serialization.DefaultDeserializer;
-import com.google.common.base.Objects;
 import com.rabbitmq.client.AMQP.BasicProperties;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Envelope;
@@ -40,11 +38,10 @@ import com.rabbitmq.client.impl.recovery.AutorecoveringChannel;
  * collection by consumer and the retry strategy when RabbitMQ goes down.
  *
  * @param <C> the type of the objects to consume
- * @author Enric Ruiz
  */
-public class AMQPConsumer<C extends Serializable> implements Closeable
+public class AMQPConsumer<C> implements Closeable
 {
-    private final static Logger log = LoggerFactory.getLogger(AMQPConsumer.class);
+    private static final Logger log = LoggerFactory.getLogger(AMQPConsumer.class);
 
     protected final AMQPConfiguration configuration;
 
@@ -60,9 +57,9 @@ public class AMQPConsumer<C extends Serializable> implements Closeable
 
     protected final boolean ackAfterProcess;
 
-    private final static String DeliveryTag = "DeliveryTag";
+    private static final String DELIVERY_TAG = "DeliveryTag";
 
-    private final static String Redeliver = "Redeliver";
+    private static final String REDELIVER = "Redeliver";
 
     public AMQPConsumer(final AMQPConfiguration configuration, final Class<C> messageClass,
         final AMQPCallback<C> callback, final Channel channel)
@@ -121,8 +118,8 @@ public class AMQPConsumer<C extends Serializable> implements Closeable
         if (message != null)
         {
             Map<String, Object> headers = new HashMap<>();
-            headers.put(DeliveryTag, envelope.getDeliveryTag());
-            headers.put(Redeliver, envelope.isRedeliver());
+            headers.put(DELIVERY_TAG, envelope.getDeliveryTag());
+            headers.put(REDELIVER, envelope.isRedeliver());
 
             if (basicProperties.getHeaders() != null)
             {
@@ -155,12 +152,12 @@ public class AMQPConsumer<C extends Serializable> implements Closeable
 
     public static long getDeliveryTag(final Map<String, Object> headers)
     {
-        return (long) headers.get(DeliveryTag);
+        return (long) headers.get(DELIVERY_TAG);
     }
 
     public static boolean isRedeliver(final Map<String, Object> headers)
     {
-        return (boolean) headers.get(Redeliver);
+        return (boolean) headers.get(REDELIVER);
     }
 
     @Override
@@ -174,7 +171,7 @@ public class AMQPConsumer<C extends Serializable> implements Closeable
         }
         catch (TimeoutException e)
         {
-            log.error("Timeout while closing " + this, e);
+            log.error(String.format("Timeout while closing %s", this), e);
             throw new ShutdownSignalException(true, true, null, channel);
         }
     }
@@ -214,10 +211,13 @@ public class AMQPConsumer<C extends Serializable> implements Closeable
     @Override
     public String toString()
     {
-        return Objects.toStringHelper(this.getClass()).omitNullValues() //
-            .addValue(configuration.toString()) //
-            .add("MessageClass", messageClass.getSimpleName()) //
-            .add("Channel", channel.getChannelNumber()) //
-            .toString();
+        return "AMQPConsumer ["
+            + (configuration != null ? "configuration=" + configuration + ", " : "")
+            + (subscriber != null ? "subscriber=" + subscriber + ", " : "")
+            + (callback != null ? "callback=" + callback + ", " : "")
+            + (messageClass != null ? "messageClass=" + messageClass + ", " : "")
+            + (channel != null ? "channel=" + channel + ", " : "")
+            + (deserializer != null ? "deserializer=" + deserializer + ", " : "")
+            + "ackAfterProcess=" + ackAfterProcess + "]";
     }
 }

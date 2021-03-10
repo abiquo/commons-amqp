@@ -7,9 +7,8 @@
 package com.abiquo.commons.amqp.serialization;
 
 import java.io.IOException;
-import java.io.Serializable;
 
-public interface AMQPDeserializer<T extends Serializable>
+public interface AMQPDeserializer<T>
 {
-    public T deserialize(final byte[] bytes, final Class<T> type) throws IOException;
+    T deserialize(final byte[] bytes, final Class<T> type) throws IOException;
 }
