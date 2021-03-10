@@ -10,6 +10,10 @@ import com.rabbitmq.client.LongString;
 
 public class LongStringUtils
 {
+    private LongStringUtils()
+    {
+    }
+
     public static boolean isLongStringAssignableFrom(final Object object)
     {
         return LongString.class.isAssignableFrom(object.getClass());

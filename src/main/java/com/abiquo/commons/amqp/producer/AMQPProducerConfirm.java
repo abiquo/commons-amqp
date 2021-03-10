@@ -9,7 +9,6 @@ package com.abiquo.commons.amqp.producer;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -46,9 +45,9 @@ import com.rabbitmq.client.ConfirmListener;
  *
  * @param <T> the type of the objects to publish
  */
-public class AMQPProducerConfirm<T extends Serializable> extends AMQPProducer<T>
+public class AMQPProducerConfirm<T> extends AMQPProducer<T>
 {
-    private final static Logger log = LoggerFactory.getLogger(AMQPProducerConfirm.class);
+    private static final Logger log = LoggerFactory.getLogger(AMQPProducerConfirm.class);
 
     private final Map<Long, T> notConfirmedMessages = new ConcurrentHashMap<>();
 

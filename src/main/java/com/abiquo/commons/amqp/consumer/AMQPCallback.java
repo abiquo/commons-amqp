@@ -6,10 +6,9 @@
  */
 package com.abiquo.commons.amqp.consumer;
 
-import java.io.Serializable;
 import java.util.Map;
 
-public interface AMQPCallback<T extends Serializable>
+public interface AMQPCallback<T>
 {
     /** Implement this when using a AMQPConsumer using ackAfterProcess=false */
     default void process(final T message, final Map<String, Object> headers)

@@ -18,7 +18,7 @@ import com.rabbitmq.client.Envelope;
 
 public class QueueSubscriber<T extends AMQPConsumer< ? >> extends DefaultConsumer
 {
-    private final static Logger log = LoggerFactory.getLogger(QueueSubscriber.class);
+    private static final Logger log = LoggerFactory.getLogger(QueueSubscriber.class);
 
     private T consumer;
 

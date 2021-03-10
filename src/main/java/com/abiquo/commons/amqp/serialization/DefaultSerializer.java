@@ -7,7 +7,6 @@
 package com.abiquo.commons.amqp.serialization;
 
 import java.io.IOException;
-import java.io.Serializable;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,9 +15,9 @@ import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationIntrospector;
 
-public class DefaultSerializer<T extends Serializable> implements AMQPSerializer<T>
+public class DefaultSerializer<T> implements AMQPSerializer<T>
 {
-    protected final static ObjectMapper objectMapper = new ObjectMapper()//
+    protected static final ObjectMapper objectMapper = new ObjectMapper()//
         .setAnnotationIntrospector(new AnnotationIntrospectorPair(//
             new JacksonAnnotationIntrospector(),
             new JaxbAnnotationIntrospector(TypeFactory.defaultInstance())));

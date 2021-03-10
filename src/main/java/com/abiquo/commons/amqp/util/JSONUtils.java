@@ -18,16 +18,18 @@ import com.fasterxml.jackson.module.jaxb.JaxbAnnotationIntrospector;
 /**
  * A collection of helper methods to wrap the use of Jackson. Serialize JSON to/from POJOs annotated
  * with JAXB or Jackson specific
- * 
- * @author eruiz@abiquo.com
  */
 public class JSONUtils
 {
-    private final static Logger log = LoggerFactory.getLogger(JSONUtils.class);
+    private static final Logger log = LoggerFactory.getLogger(JSONUtils.class);
+
+    private JSONUtils()
+    {
+    }
 
     /**
      * Serializes the given Object to JSON and returns the result in array of bytes.
-     * 
+     *
      * @param value The object to serialize.
      * @return A "" array representing the JSON serialization of the object. A null value if the
      *         serialization fails.
@@ -48,7 +50,7 @@ public class JSONUtils
 
     /**
      * Deserializes the given byte array JSON serialization.
-     * 
+     *
      * @param bytes A byte array representing the JSON serialization of an object.
      * @param type The Class of the object to deserialize
      * @return The deserialized object or null if the process fails.
