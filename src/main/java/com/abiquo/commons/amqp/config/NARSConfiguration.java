@@ -6,12 +6,19 @@
  */
 package com.abiquo.commons.amqp.config;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Strings.isNullOrEmpty;
+
 import com.abiquo.commons.amqp.AMQPConfiguration;
 import com.abiquo.commons.amqp.AMQPFlags;
 
 public class NARSConfiguration
 {
-    private static final String EXCHANGE = "abiquo.nars";
+    private NARSConfiguration()
+    {
+    }
+
+    private static final String REQUEST_EXCHANGE = "abiquo.nars";
 
     public static class RequestConfiguration extends AMQPConfiguration
     {
@@ -36,13 +43,13 @@ public class NARSConfiguration
         @Override
         public String getExchange()
         {
-            return EXCHANGE;
+            return REQUEST_EXCHANGE;
         }
 
         @Override
         public String getRoutingKey()
         {
-            return EXCHANGE.concat(".requests.").concat(datacenterId);
+            return REQUEST_EXCHANGE.concat(".requests.").concat(datacenterId);
         }
 
         @Override
@@ -52,12 +59,27 @@ public class NARSConfiguration
         }
     }
 
+    private static final String RESPONSE_EXCHANGE = REQUEST_EXCHANGE.concat(".asyncresponses");
+
+    public static final String DEFAULT_ROUTING_KEY = "default";
+
+    public static final String BILLING_ROUTING_KEY = "billing";
+
     public static class ResponseConfiguration extends AMQPConfiguration
     {
+        private final String routingKey;
+
+        public ResponseConfiguration(final String routingKey)
+        {
+            checkArgument(!isNullOrEmpty(routingKey),
+                "NARS response consumer requires a non null and non empty routing key");
+            this.routingKey = routingKey;
+        }
+
         @Override
         public AMQPFlags getFlags()
         {
-            return AMQPFlags.direct() //
+            return AMQPFlags.topic() //
                 .exchangeDurable(true) //
                 .queueDurable(true) //
                 .queueExclusive(false) //
@@ -68,13 +90,13 @@ public class NARSConfiguration
         @Override
         public String getExchange()
         {
-            return EXCHANGE;
+            return RESPONSE_EXCHANGE;
         }
 
         @Override
         public String getRoutingKey()
         {
-            return EXCHANGE.concat(".responses");
+            return String.format("%s.%s", REQUEST_EXCHANGE, routingKey);
         }
 
         @Override
