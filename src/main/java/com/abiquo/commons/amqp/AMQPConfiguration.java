@@ -8,7 +8,7 @@ package com.abiquo.commons.amqp;
 
 import java.io.IOException;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.rabbitmq.client.Channel;
 
 /**
@@ -66,7 +66,7 @@ public abstract class AMQPConfiguration
     @Override
     public String toString()
     {
-        return Objects.toStringHelper(this.getClass()).omitNullValues() //
+        return MoreObjects.toStringHelper(this.getClass()).omitNullValues() //
             .add("Exchange", getExchange()) //
             .add("RoutingKey", getRoutingKey()) //
             .add("Queue", getQueue()) //
