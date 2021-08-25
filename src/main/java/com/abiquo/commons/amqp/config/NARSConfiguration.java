@@ -15,7 +15,7 @@ public class NARSConfiguration
 
     public static class RequestConfiguration extends AMQPConfiguration
     {
-        private String datacenterId;
+        private final String datacenterId;
 
         public RequestConfiguration(final String datacenterId)
         {
@@ -42,7 +42,7 @@ public class NARSConfiguration
         @Override
         public String getRoutingKey()
         {
-            return EXCHANGE.concat(".requests.").concat(datacenterId);
+            return getExchange().concat(".requests.").concat(datacenterId);
         }
 
         @Override
@@ -74,7 +74,7 @@ public class NARSConfiguration
         @Override
         public String getRoutingKey()
         {
-            return EXCHANGE.concat(".responses");
+            return getExchange().concat(".responses");
         }
 
         @Override
