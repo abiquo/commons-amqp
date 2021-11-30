@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
 
 import com.abiquo.commons.amqp.AMQPConfiguration;
 import com.abiquo.commons.amqp.serialization.AMQPDeserializer;
-import com.abiquo.commons.amqp.serialization.DefaultDeserializer;
+import com.abiquo.commons.amqp.util.JSONUtils;
 import com.rabbitmq.client.AMQP.BasicProperties;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Envelope;
@@ -64,7 +64,7 @@ public class AMQPConsumer<C> implements Closeable
     public AMQPConsumer(final AMQPConfiguration configuration, final Class<C> messageClass,
         final AMQPCallback<C> callback, final Channel channel)
     {
-        this(configuration, messageClass, callback, channel, new DefaultDeserializer<C>());
+        this(configuration, messageClass, callback, channel, JSONUtils.DEFAULT_DESERIALIZER());
     }
 
     public AMQPConsumer(final AMQPConfiguration configuration, final Class<C> messageClass,
