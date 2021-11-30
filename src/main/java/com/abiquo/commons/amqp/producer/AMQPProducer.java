@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 import com.abiquo.commons.amqp.AMQPConfiguration;
 import com.abiquo.commons.amqp.AMQPFanoutConfiguration;
 import com.abiquo.commons.amqp.serialization.AMQPSerializer;
-import com.abiquo.commons.amqp.serialization.DefaultSerializer;
+import com.abiquo.commons.amqp.util.JSONUtils;
 import com.google.common.base.Throwables;
 import com.rabbitmq.client.AMQP.BasicProperties;
 import com.rabbitmq.client.Channel;
@@ -64,7 +64,7 @@ public class AMQPProducer<T> implements AutoCloseable
 
     public AMQPProducer(final AMQPConfiguration configuration, final Channel channel)
     {
-        this(configuration, channel, new DefaultSerializer<T>(), null);
+        this(configuration, channel, JSONUtils.DEFAULT_SERIALIZER(), null);
     }
 
     public AMQPProducer(final AMQPConfiguration configuration, final Channel channel,
@@ -76,7 +76,7 @@ public class AMQPProducer<T> implements AutoCloseable
     public AMQPProducer(final AMQPConfiguration configuration, final Channel channel,
         final Consumer<T> fallback)
     {
-        this(configuration, channel, new DefaultSerializer<T>(), fallback);
+        this(configuration, channel, JSONUtils.DEFAULT_SERIALIZER(), fallback);
     }
 
     public AMQPProducer(final AMQPConfiguration configuration, final Channel channel,
