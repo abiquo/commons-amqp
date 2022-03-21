@@ -9,19 +9,13 @@ package com.abiquo.commons.amqp.config;
 import com.abiquo.commons.amqp.AMQPConfiguration;
 import com.abiquo.commons.amqp.AMQPFlags;
 
-/**
- * Common RabbitMQ Broker configuration for conversion manager response consumer and producer.
- *
- * @author eruiz@abiquo.com
- */
-public class TarantinoResponseConfiguration extends AMQPConfiguration
+public class SchedulerAsyncConfiguration extends AMQPConfiguration
 {
-    private static final String TARANTINO_RESPONSE_EXCHANGE = "abiquo.virtualfactory";
+    private static final String EXCHANGE = "abiquo.schedulerasync";
 
-    private static final String TARANTINO_RESPONSE_ROUTING_KEY =
-        "abiquo.virtualfactory.notifications";
+    private static final String QUEUE = "abiquo.schedulerasync.requests";
 
-    private static final String TARANTINO_RESPONSE_QUEUE = TARANTINO_RESPONSE_ROUTING_KEY;
+    private static final String ROUTING_KEY = QUEUE;
 
     @Override
     public AMQPFlags getFlags()
@@ -37,18 +31,18 @@ public class TarantinoResponseConfiguration extends AMQPConfiguration
     @Override
     public String getExchange()
     {
-        return TARANTINO_RESPONSE_EXCHANGE;
+        return EXCHANGE;
     }
 
     @Override
     public String getRoutingKey()
     {
-        return TARANTINO_RESPONSE_ROUTING_KEY;
+        return ROUTING_KEY;
     }
 
     @Override
     public String getQueue()
     {
-        return TARANTINO_RESPONSE_QUEUE;
+        return QUEUE;
     }
 }
