@@ -14,12 +14,12 @@ import com.abiquo.commons.amqp.AMQPFlags;
  *
  * @author eruiz@abiquo.com
  */
-public class TarantinoResponseConfiguration extends AMQPConfiguration
+public class AsyncTarantinoResponseConfiguration extends AMQPConfiguration
 {
-    private static final String TARANTINO_RESPONSE_EXCHANGE = "abiquo.virtualfactory";
+    private static final String TARANTINO_RESPONSE_EXCHANGE = "abiquo.virtualfactory.async";
 
     private static final String TARANTINO_RESPONSE_ROUTING_KEY =
-        "abiquo.virtualfactory.notifications";
+        "abiquo.virtualfactory.async.notifications";
 
     private static final String TARANTINO_RESPONSE_QUEUE = TARANTINO_RESPONSE_ROUTING_KEY;
 
