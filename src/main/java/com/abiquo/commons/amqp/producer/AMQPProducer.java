@@ -101,6 +101,24 @@ public class AMQPProducer<T> implements AutoCloseable
     {
         checkNotNull(message, "Message to publish can not be null");
 
+        byte[] serialization = null;
+
+        try
+        {
+            serialization = serializer.serialize(message);
+        }
+        catch (Throwable throwable)
+        {
+            notPublishedMessagesFallback.accept(message);
+            propagate(throwable);
+        }
+
+        publish(message, serialization, headers);
+    }
+
+    public void publish(final T message, final byte[] messageSerialization,
+        final Map<String, Object> headers) throws IOException
+    {
         try
         {
             if (declareExchanges)
@@ -128,7 +146,7 @@ public class AMQPProducer<T> implements AutoCloseable
             }
 
             channel.basicPublish(configuration.getExchange(), configuration.getRoutingKey(),
-                properties, serializer.serialize(message));
+                properties, messageSerialization);
         }
         catch (Throwable throwable)
         {
