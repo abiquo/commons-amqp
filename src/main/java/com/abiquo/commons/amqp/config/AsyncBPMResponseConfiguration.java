@@ -14,11 +14,11 @@ import com.abiquo.commons.amqp.AMQPFlags;
  * 
  * @author eruiz@abiquo.com
  */
-public class BPMResponseConfiguration extends AMQPConfiguration
+public class AsyncBPMResponseConfiguration extends AMQPConfiguration
 {
-    private static final String BPM_RESPONSE_EXCHANGE = "abiquo.bpm";
+    private static final String BPM_RESPONSE_EXCHANGE = "abiquo.bpm.async";
 
-    private static final String BPM_RESPONSE_ROUTING_KEY = "abiquo.bpm.notifications";
+    private static final String BPM_RESPONSE_ROUTING_KEY = "abiquo.bpm.async.notifications";
 
     private static final String BPM_RESPONSE_QUEUE = BPM_RESPONSE_ROUTING_KEY;
 
