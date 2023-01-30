@@ -9,13 +9,13 @@ package com.abiquo.commons.amqp.config;
 import com.abiquo.commons.amqp.AMQPConfiguration;
 import com.abiquo.commons.amqp.AMQPFlags;
 
-public class AsyncBPMResponseConfiguration extends AMQPConfiguration
+public class AsyncAMResponseConfiguration extends AMQPConfiguration
 {
-    private static final String BPM_RESPONSE_EXCHANGE = "abiquo.bpm.async";
+    private static final String AM_EXCHANGE = "abiquo.am.async";
 
-    private static final String BPM_RESPONSE_ROUTING_KEY = "abiquo.bpm.async.notifications";
+    private static final String AM_NOTIFICATIONS_QUEUE = "abiquo.am.async.notifications";
 
-    private static final String BPM_RESPONSE_QUEUE = BPM_RESPONSE_ROUTING_KEY;
+    private static final String AM_ROUTING_KEY = "";
 
     @Override
     public AMQPFlags getFlags()
@@ -31,18 +31,18 @@ public class AsyncBPMResponseConfiguration extends AMQPConfiguration
     @Override
     public String getExchange()
     {
-        return BPM_RESPONSE_EXCHANGE;
+        return AM_EXCHANGE;
     }
 
     @Override
     public String getRoutingKey()
     {
-        return BPM_RESPONSE_ROUTING_KEY;
+        return AM_ROUTING_KEY;
     }
 
     @Override
     public String getQueue()
     {
-        return BPM_RESPONSE_QUEUE;
+        return AM_NOTIFICATIONS_QUEUE;
     }
 }
