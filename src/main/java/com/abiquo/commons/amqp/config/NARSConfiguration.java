@@ -65,6 +65,8 @@ public class NARSConfiguration
 
     public static final String BILLING_ROUTING_KEY = "billing";
 
+    public static final String COST_USAGE_REPORT_FILE_ROUTING_KEY = "costusagereportfile";
+
     public static class ResponseConfiguration extends AMQPConfiguration
     {
         private final String routingKey;
