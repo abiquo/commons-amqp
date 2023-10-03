@@ -8,6 +8,12 @@
     </parent>
     <artifactId>commons-amqp</artifactId>
     <name>Commons AMQP</name>
+    <properties>
+        <!--
+        java 1.8 compatible (used in watchtower)
+        -->
+        <jdk.version>1.8</jdk.version>
+    </properties>
     <dependencies>
         <!-- RabbitMQ -->
         <dependency>
@@ -68,4 +74,19 @@
             </plugin>
         </plugins>
     </build>
+    <profiles>
+        <profile>
+            <id>bugs</id>
+            <build>
+                <plugins>
+                    <!-- disable errorprone when using java 1.8 -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <configuration combine.self="override"/>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
