@@ -105,7 +105,7 @@ public class AMQPChannelFactory implements Closeable
             }
         });
 
-        log.debug("Channel number {} created", channel.getChannelNumber());
+        log.trace("Channel number {} created", channel.getChannelNumber());
         return channel;
     }
 
@@ -114,11 +114,11 @@ public class AMQPChannelFactory implements Closeable
     {
         if (connection != null)
         {
-            log.debug("Closing AMQP connection and all its channels");
+            log.trace("Closing AMQP connection and all its channels");
             connection.close();
         }
 
-        log.debug("AMQP connection closed");
+        log.trace("AMQP connection closed");
     }
 
     public void addRecoveryListener(final RecoveryListener recoveryListener)
