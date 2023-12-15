@@ -83,7 +83,22 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-compiler-plugin</artifactId>
-                        <configuration combine.self="override"/>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>compile</goal>
+                                </goals>
+                                <configuration combine.self="override">
+                                    <compilerArgs combine.children="append">
+                                        <arg>-Xlint:all</arg>
+                                        <arg>-Xlint:-options</arg>
+                                        <arg>-Xlint:-deprecation</arg>
+                                        <arg>-Xlint:-this-escape</arg>
+                                        <arg>-Werror</arg>
+                                    </compilerArgs>
+                                </configuration>
+                            </execution>
+                        </executions>
                     </plugin>
                 </plugins>
             </build>
