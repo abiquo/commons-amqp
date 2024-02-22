@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeoutException;
 
 import javax.net.ssl.SSLContext;
@@ -26,9 +27,8 @@ import com.rabbitmq.client.AddressResolver;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.ExceptionHandler;
 import com.rabbitmq.client.RecoveryListener;
-import com.rabbitmq.client.ShutdownListener;
-import com.rabbitmq.client.ShutdownSignalException;
 import com.rabbitmq.client.impl.StrictExceptionHandler;
 import com.rabbitmq.client.impl.recovery.AutorecoveringConnection;
 
@@ -45,6 +45,8 @@ public class AMQPChannelFactory implements Closeable
     private AddressResolver addressResolver;
 
     private List<RecoveryListener> recoveryListeners = new ArrayList<>();
+
+    private final ExecutorService executorService;
 
     /**
      * Builds a new {@link AMQPChannelFactory} setting the virtual host specified in system property
@@ -68,11 +70,33 @@ public class AMQPChannelFactory implements Closeable
     public AMQPChannelFactory(final String virtualHost,
         final List<RecoveryListener> recoveryListeners)
     {
+        this(virtualHost, recoveryListeners, /* executorService */ null,
+            /* exceptionHandler */ null);
+    }
+
+    public AMQPChannelFactory(final ExecutorService executorService)
+    {
+        this(AMQPProperties.getVirtualHost(), Collections.emptyList(), executorService,
+            /* exceptionHandler */ null);
+    }
+
+    public AMQPChannelFactory(final ExecutorService executorService,
+        final ExceptionHandler exceptionHandler)
+    {
+        this(AMQPProperties.getVirtualHost(), Collections.emptyList(), executorService,
+            exceptionHandler);
+    }
+
+    public AMQPChannelFactory(final String virtualHost,
+        final List<RecoveryListener> recoveryListeners, final ExecutorService executorService,
+        final ExceptionHandler exceptionHandler)
+    {
         Objects.requireNonNull(Strings.emptyToNull(virtualHost),
             "virtualHost should not be null or empty");
 
         this.virtualHost = virtualHost;
         this.recoveryListeners.addAll(recoveryListeners);
+        this.executorService = executorService;
 
         connectionFactory = new com.rabbitmq.client.ConnectionFactory();
         connectionFactory.setUsername(AMQPProperties.getUserName());
@@ -85,6 +109,11 @@ public class AMQPChannelFactory implements Closeable
         connectionFactory.setRequestedHeartbeat(AMQPProperties.getRequestedHeartbeat());
         connectionFactory.setExceptionHandler(new StrictExceptionHandler());
 
+        if (exceptionHandler != null)
+        {
+            connectionFactory.setExceptionHandler(exceptionHandler);
+        }
+
         addressResolver = new SystemPropertyAddressResolver();
     }
 
@@ -92,16 +121,11 @@ public class AMQPChannelFactory implements Closeable
     {
         final Channel channel = newChannel();
 
-        channel.addShutdownListener(new ShutdownListener()
-        {
-            @Override
-            public void shutdownCompleted(final ShutdownSignalException cause)
+        channel.addShutdownListener(cause -> {
+            if (!cause.isInitiatedByApplication())
             {
-                if (!cause.isInitiatedByApplication())
-                {
-                    log.error("Channel number {} was closed unexpectedly. {}",
-                        channel.getChannelNumber(), cause.getReason());
-                }
+                log.error("Channel number {} was closed unexpectedly. {}",
+                    channel.getChannelNumber(), cause.getReason());
             }
         });
 
@@ -148,16 +172,15 @@ public class AMQPChannelFactory implements Closeable
         if (connection == null)
         {
             initializeSSL(connectionFactory);
-            connection = connectionFactory.newConnection(addressResolver);
-            connection.addShutdownListener(new ShutdownListener()
-            {
-                @Override
-                public void shutdownCompleted(final ShutdownSignalException cause)
+
+            connection = executorService != null
+                ? connectionFactory.newConnection(executorService, addressResolver)
+                : connectionFactory.newConnection(addressResolver);
+
+            connection.addShutdownListener(cause -> {
+                if (!cause.isInitiatedByApplication())
                 {
-                    if (!cause.isInitiatedByApplication())
-                    {
-                        log.error("Connection was closed unexpectedly. {}", cause.getReason());
-                    }
+                    log.error("Connection was closed unexpectedly. {}", cause.getReason());
                 }
             });
 
