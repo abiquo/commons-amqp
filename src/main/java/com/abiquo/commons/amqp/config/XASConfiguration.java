@@ -30,6 +30,8 @@ public class XASConfiguration
 
         public static final String DEFAULT_ROUTING_KEY = "default";
 
+        public static final String BILLING_ROUTING_KEY = "billing";
+
         public ResponseConfiguration(final String routingKey)
         {
             super(routingKey);
